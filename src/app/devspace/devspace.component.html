@@ -27,7 +27,7 @@
                 <span>Channels</span>
               </div>
             </div>
-            <button class="addButton"><img src="./img/add.svg" alt="" /></button>
+            <button (click)="showChannelOverlay()" class="addButton"><img src="./img/add.svg" alt="" /></button>
           </div>
           <div [ngClass]="{ show: isActive() }" class="channellist">
             <div

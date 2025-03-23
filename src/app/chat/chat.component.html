@@ -1,29 +1,57 @@
 <section>
-<div class="header">
-    <img src="./img/1. Logo animation.svg" alt="">
-    <div class="search">
-        <input type="text" placeholder="Devspace durchsuchen">
-        <button><img src="./img/search.svg" alt=""></button>
+    <div class="header">
+        <img src="./img/1. Logo animation.svg" alt="">
+        <div class="search">
+            <input type="text" placeholder="Devspace durchsuchen">
+            <button><img src="./img/search.svg" alt=""></button>
+        </div>
+
+        <div class="profile">
+            <span>{{currentUser?.name}}</span>
+            <div class="imageContainer">
+                <img class="profile-image" [src]="currentUser?.avatar" alt="" />
+                <div class="status-dot" [ngClass]="{ green: currentUser?.online }"></div>
+            </div>
+            <button><img src="./img/arrow_down.svg" alt=""></button>
+        </div>
     </div>
 
-    <div class="profile">
-        <span>{{currentUser?.name}}</span>
-        <div class="imageContainer">
-            <img class="profile-image" [src]="currentUser?.avatar" alt="" />
-            <div
-              class="status-dot"
-              [ngClass]="{ green: currentUser?.online }"
-            ></div>
-          </div>
-        <button><img src="./img/arrow_down.svg" alt=""></button>
+    <div class="content">
+        <div class="devspace">
+            <app-devspace></app-devspace>
+        </div>
+        <div class="chat"></div>
     </div>
-</div>
 
-<div class="content">
-    <div class="devspace">
-        <app-devspace></app-devspace>
+    <div *ngIf="showChannel"  class="channelOverlay">
+        <form class="createChannel" (ngSubmit)="createChannel()"  #newChannel="ngForm">
+            <div class="headline">
+                <span>Channel erstellen</span>
+                <button (click)="toggleChannelOverlay()"><img src="./img/close.svg" alt=""></button>
+            </div>
+            <div class="textfield">
+                <span>Channels dienen deinem Team zur Kommunikation. Am besten sollten sie themenbezogen sein #marketing
+                    zum Beispiel.</span>
+            </div>
+            <div class="inputContainer">
+                <span>Channel-Name</span>
+                <div>
+                    <img src="./img/tag.svg" alt="">
+                    <input #name="ngModel" [(ngModel)]="channelName" type="text" name="name" placeholder="z.B. Kooperationsprojekte" required>
+                </div>
+
+            </div>
+            <div class="inputContainer">
+                <span>Beschreibung (optional)</span>
+                <div>
+                    <input #description="ngModel" [(ngModel)]="channelDescription" name="description" type="text" placeholder="Dein Text hier">
+                </div>
+
+            </div>
+            <div class="buttonContainer">
+                <button [disabled]="newChannel.invalid" class="createButton">Erstellen</button>
+            </div>
+
+        </form>
     </div>
-    <div class="chat"></div>
-</div>
-
 </section>

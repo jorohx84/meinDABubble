@@ -110,4 +110,8 @@ sharedservice=inject(SharedService)
     }
   }
     */
+
+  showChannelOverlay(){
+    this.sharedservice.openOverlayChannel();
+  }
 }

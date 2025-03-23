@@ -97,7 +97,7 @@ input::placeholder {
 
 .content {
 height: calc(100% - 115px);
-    border: solid;
+   
     box-sizing: border-box;
     padding: 20px;
     display: flex;
@@ -115,3 +115,90 @@ height: 100%;
 
 }
 
+.channelOverlay{
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.31);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.createChannel{
+    width: 100%;
+    max-width: 872px;
+    height: 100%;
+    max-height: 539px;
+    background-color: white;
+    border-radius: 30px;
+    box-sizing: border-box;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+}
+.headline{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    >button{
+        width: 40px;
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+    }
+    >span{
+        font-size: 24px;
+    }
+}
+
+.textfield{
+    width: 100%;
+    height: 50px;
+}
+
+.inputContainer{
+    width: 100%;
+    height: 105px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    >div{
+        width: 100%;
+        height: 60px;
+        border: solid;
+        border-width: 1px;
+        border-color: var(--border-light);
+        border-radius: 40px;
+        box-sizing: border-box;
+        padding: 18px 20px;
+        display: flex;
+        align-items: center;
+
+    }
+
+
+}
+.buttonContainer{
+width: 100%;
+display: flex;
+justify-content: flex-end;
+
+}
+.createButton{
+    width: 125px;
+    height: 49px;
+    background-color: var(--purple1);
+    color: white;
+    border-radius: 25px;
+    &:active{
+        transform: scale(0.95);
+    }
+
+}
