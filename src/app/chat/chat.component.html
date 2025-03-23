@@ -1,0 +1,22 @@
+<section>
+<div class="header">
+    <img src="./img/1. Logo animation.svg" alt="">
+    <div class="search">
+        <input type="text" placeholder="Devspace durchsuchen">
+        <button><img src="./img/search.svg" alt=""></button>
+    </div>
+
+    <div class="profile">
+        <span>{{currentUser?.name || 'Gast'}}</span>
+        <div class="imageContainer">
+            <img class="profile-image" [src]="currentUser?.avatar" alt="" />
+            <div
+              class="status-dot"
+              [ngClass]="{ green: currentUser.online }"
+            ></div>
+          </div>
+        <button><img src="./img/arrow_down.svg" alt=""></button>
+    </div>
+</div>
+
+</section>

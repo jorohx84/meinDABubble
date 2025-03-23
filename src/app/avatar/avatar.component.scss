@@ -1,0 +1,136 @@
+section {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    background-color: var(--bg-color);
+    font-family: 'Nunito';
+}
+
+.logo {
+    position: absolute;
+    top: 75px;
+    left: 75px;
+}
+
+.selection {
+    width: 100%;
+    max-width: 606px;
+    height: 100%;
+    max-height: 669px;
+    background-color: white;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 30px;
+    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.08);
+}
+
+.goback {
+    position: absolute;
+    top: 45px;
+    left: 32px;
+    background-color: transparent;
+    border: none;
+    padding: 0;
+}
+
+.header {
+    width: 100%;
+    max-width: 486px;
+    height: 100%;
+    max-height: 136px;
+    position: absolute;
+    top: 40px;
+    left: 67px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+
+    >h1 {
+        margin: 0;
+        color: var(--purple1);
+        font-weight: 700;
+        font-size: 40px;
+    }
+}
+
+.profile {
+    position: absolute;
+    top: 151px;
+    left: 67px;
+    width: 100%;
+    max-width: 472px;
+    height: 100%;
+    max-height: 367px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.avatarContainer {
+    width: 100%;
+    max-width: 472px;
+    height: 100%;
+    max-height: 167px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    >p {
+        width: 100%;
+        height: 44px;
+        text-align: center;
+        font-size: 32px;
+        font-weight: 500;
+        margin: 0;
+
+    }
+
+}
+
+.avatare {
+    width: 100%;
+    max-width: 472px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+
+    >div {
+        width: 64px;
+        height: 64px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+
+        >img {
+            width: 64px;
+            height: 64px;
+            border-radius: 41px;
+        }
+    }
+
+}
+
+.createButton {
+    width: 107px;
+    height: 48px;
+    position: absolute;
+    top: 580px;
+    right: 60px;
+    background-color: var(--purple1);
+    border: none;
+    padding: 12px 25px;
+    border-radius: 25px;
+    color: white;
+    font-size: 16px;
+    font-weight: 500;
+
+    &:active {
+        transform: scale(0.95);
+    }
+}

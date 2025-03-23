@@ -1,0 +1,32 @@
+<section>
+    <div class="logo">
+        <img src="./img/1. Logo animation.svg" alt="">
+    </div>
+    <span>Neu bei DABubble?</span>
+    <button (click)="routeToSignin('/signin')">Konto erstellen</button>
+
+    <form class="login" #userauth="ngForm" (ngSubmit)="login()">
+        <div class="header">
+            <h1>Anmeldung</h1>
+            <span>Wir empfehlen dir, die E-Mail-Adresse zu nutzen, die du bei der Arbeit verwendest.</span>
+        </div>
+        <div class="inputfields">
+            <div>
+                <img src="./img/mail.svg" alt="">
+                <input #email="ngModel" [(ngModel)]="user.email" type="email" name="email" placeholder="beispielname@email.com" required >
+            </div>
+
+            <div>
+                <img src="./img/lock.svg" alt="">
+                <input #password="ngModel" [(ngModel)]="user.password" type="password" placeholder="Passwort" name="password" required>
+                   
+            </div>
+            <button>Passwort vergessen?</button>
+        </div>
+        <div class="buttons">
+            <button [disabled]="userauth.invalid" class="loginButton">Anmelden</button>
+            <button class="guestButton">Gäste-Login</button>
+        </div>
+
+    </form>
+</section>
