@@ -3,6 +3,7 @@ import { Component, inject, Injectable } from '@angular/core';
 import { UserService } from '../user.service';
 import { SharedService } from '../shared.service';
 import { user } from '@angular/fire/auth';
+import { DevspaceComponent } from '../devspace/devspace.component';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +11,7 @@ import { user } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-chat',
-  imports: [CommonModule],
+  imports: [CommonModule, DevspaceComponent],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.scss'
 })

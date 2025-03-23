@@ -7,16 +7,23 @@
     </div>
 
     <div class="profile">
-        <span>{{currentUser?.name || 'Gast'}}</span>
+        <span>{{currentUser?.name}}</span>
         <div class="imageContainer">
             <img class="profile-image" [src]="currentUser?.avatar" alt="" />
             <div
               class="status-dot"
-              [ngClass]="{ green: currentUser.online }"
+              [ngClass]="{ green: currentUser?.online }"
             ></div>
           </div>
         <button><img src="./img/arrow_down.svg" alt=""></button>
     </div>
+</div>
+
+<div class="content">
+    <div class="devspace">
+        <app-devspace></app-devspace>
+    </div>
+    <div class="chat"></div>
 </div>
 
 </section>

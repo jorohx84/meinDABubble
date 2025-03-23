@@ -4,9 +4,11 @@ section {
     position: relative;
     background-color: var(--bg-color);
     font-family: 'Nunito';
+    display: flex;
+    flex-direction: column;
 }
 
-.header{
+.header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -14,64 +16,69 @@ section {
     height: 115px;
     gap: 30px;
     box-sizing: border-box;
-    padding:25px 45px;
-    >img{
+    padding: 25px 45px;
+
+    >img {
         width: 242px;
     }
 }
 
-.search{
+.search {
     width: 100%;
     max-width: 989px;
     height: 70px;
     box-sizing: border-box;
     padding: 17.5px 45px;
-border-radius: 42px;
+    border-radius: 42px;
     background-color: white;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
-input{
+
+input {
     min-height: 33px;
 }
-input::placeholder{
+
+input::placeholder {
     font-size: 18px;
 }
 
-.profile{
-   display: flex;
-   justify-content: space-between;
-   align-items: center;
-   width: 100%;
-   max-width: 342px;
-   height: 70px;
-   >span{
-    font-size: 28px;
-    font-weight: 600;
-   }
-   >button{
-    >img{
-        
+.profile {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 342px;
+    height: 70px;
+
+    >span {
+        font-size: 28px;
+        font-weight: 600;
     }
-   }
+
+    >button {
+        width: 30px;
+        height: 30px;
+
+    }
 }
 
 .profile-image {
     width: 70px;
     border-radius: 42px;
-  }
-  
-  .imageContainer {
+}
+
+.imageContainer {
     position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
     width: 70px;
     height: 70px;
-  }
-  
-  .status-dot {
+}
+
+.status-dot {
     position: absolute;
     bottom: 0;
     right: -2px;
@@ -82,8 +89,29 @@ input::placeholder{
     border-radius: 50%;
     border-color: #eceefe;
     border-width: 2px;
-  }
-  
-  .green {
+}
+
+.green {
     background-color: #92c83e;
-  }
+}
+
+.content {
+height: calc(100% - 115px);
+    border: solid;
+    box-sizing: border-box;
+    padding: 20px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 30px;
+    
+}
+
+.devspace {
+    display: flex;
+    width: 100%;
+    max-width: 366px;
+height: 100%;
+
+}
+
