@@ -49,18 +49,14 @@ export class ChatwindowComponent {
 
 
   async ngOnInit() {
-   
+
     await this.loadChannels();
     await this.loadUsers();
     this.loadDataSubscription = this.sharedservice.loadChatWindow$.subscribe(() => {
       this.getDataFromDevspace();
       this.loadCurrentWindow();
-
+      console.log(this.currentReciever);
     });
-
-
-
-
   }
 
 
@@ -128,13 +124,9 @@ export class ChatwindowComponent {
       this.isChannel = false;
       this.isNewMessage = true
       this.currentMessages = [];
+      this.isEmpty = false;
+
     }
-
-    console.log('newMessage ist ' + this.isNewMessage);
-    console.log('channel ist ' + this.isChannel);
-    console.log('personalchat ist ' + this.isPersonalChat);
-
-
   }
 
 
@@ -196,20 +188,27 @@ export class ChatwindowComponent {
     const messageDate = new Date(date);
     return today === messageDate.toDateString();
   }
+  
 
   async sendMessage() {
 
     let collection;
     if (this.message === '' || !this.currentReciever.id || !this.currentUser.id) {
+      console.log('kein Sender oder Empfänger');
       return;
     }
-
     if (this.currentChat === 'channel') {
       collection = 'channels'
     }
     if (this.currentChat === 'user') {
       collection = 'users'
     }
+    this.saveMessages(collection);
+    this.isEmpty = false;
+    this.message = '';
+  }
+
+  async saveMessages(collection: any) {
     const message = new Message(this.currentUser.name || '', this.currentUser.avatar || '', this.message, this.currentUser.id, this.currentReciever.id);
     const messageData = this.createMessageData(message);
     const currentUserRef = doc(this.firestore, `${collection}/${this.currentUser.id}`);
@@ -223,11 +222,7 @@ export class ChatwindowComponent {
       await updateDoc(currentUserRef, {
         messages: arrayUnion(messageData),
       });
-
     }
-
-    this.isEmpty = false;
-    this.message = '';
   }
 
   createMessageData(message: Message) {
@@ -241,6 +236,8 @@ export class ChatwindowComponent {
       thread: [],
     };
   }
+
+
   checkReciever() {
     if (this.currentReciever.id === this.currentUser.id) {
       this.isYou = true;
@@ -251,7 +248,6 @@ export class ChatwindowComponent {
 
 
   loadMessages() {
-
     if (this.currentChat === 'user') {
       this.loadUserMessages();
     }
@@ -259,6 +255,7 @@ export class ChatwindowComponent {
       this.loadChannelMessages();
     }
   }
+
 
   loadChannelMessages() {
     const channelMessagesRef = doc(this.firestore, `channels/${this.currentReciever.id}`);
@@ -275,44 +272,34 @@ export class ChatwindowComponent {
         console.log('Dokument existiert nicht');
       }
     });
-
-
   }
 
-
-
-
   loadUserMessages() {
-    console.log(this.currentUser);
-
     const messagesRef = doc(this.firestore, `users/${this.currentUser.id}`);
     onSnapshot(messagesRef, (docSnapshot) => {
       if (docSnapshot.exists()) {
         const messageData = docSnapshot.data();
         const messages = messageData['messages'] || [];
         this.currentMessages = [];
-        messages.forEach((message: any) => {
-          if (this.currentUser.id === this.currentReciever.id) {
-            if (
-              message['to'] === this.currentReciever.id &&
-              message['from'] === this.currentReciever.id
-            ) {
-              this.currentMessages.push(message);
-            }
-          } else {
-            if (
-              message['to'] === this.currentReciever.id ||
-              message['from'] === this.currentReciever.id
-            ) {
-              this.currentMessages.push(message);
-            }
-          }
-        });
-
+        this.buildCurrentMessages(messages);
         this.sortMessages();
         this.checkMessages();
       } else {
         console.log('Benutzerdokument existiert nicht.');
+      }
+    });
+  }
+
+  buildCurrentMessages(messages: any) {
+    messages.forEach((message: any) => {
+      if (this.currentUser.id === this.currentReciever.id) {
+        if (message['to'] === this.currentReciever.id && message['from'] === this.currentReciever.id) {
+          this.currentMessages.push(message);
+        }
+      } else {
+        if (message['to'] === this.currentReciever.id || message['from'] === this.currentReciever.id) {
+          this.currentMessages.push(message);
+        }
       }
     });
   }
@@ -333,9 +320,9 @@ export class ChatwindowComponent {
     }
   }
 
-openThread(message:any[]){
- this.sharedservice.setMessage(message);
-this.sharedservice.initializeThread();
-}
+  openThread(message: any[]) {
+    this.sharedservice.setMessage(message);
+    this.sharedservice.initializeThread();
+  }
 
 }

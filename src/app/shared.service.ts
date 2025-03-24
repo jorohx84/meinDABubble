@@ -86,4 +86,7 @@ export class SharedService {
         
         this.openThread.next();
     }
+
+
+    
 }
