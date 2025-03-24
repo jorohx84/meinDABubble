@@ -9,14 +9,14 @@ import { Subscription } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { Channel } from '../models/channel.class';
 import { Firestore, collection, addDoc } from '@angular/fire/firestore';
-
+import { ThreadComponent } from '../thread/thread.component';
 @Injectable({
   providedIn: 'root',
 })
 
 @Component({
   selector: 'app-chat',
-  imports: [CommonModule, DevspaceComponent, ChatwindowComponent, FormsModule],
+  imports: [CommonModule, DevspaceComponent, ChatwindowComponent, ThreadComponent, FormsModule],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.scss'
 })

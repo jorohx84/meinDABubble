@@ -2,6 +2,7 @@ import { inject, Injectable } from "@angular/core";
 import { User } from "./models/user.class";
 import { Auth, onAuthStateChanged } from "@angular/fire/auth";
 import { Firestore, doc, getDocs, collection, updateDoc } from "@angular/fire/firestore";
+import { runTransaction } from "firebase/firestore";
 
 
 @Injectable({
@@ -12,7 +13,6 @@ export class UserService {
     auth = inject(Auth);
     user: any = new User;
     users: any[] = [];
-    currentUser: any;
     constructor() {
         this.setCurrentUser();
         this.getCurrentUser(this.user.uid);
@@ -83,10 +83,9 @@ export class UserService {
         this.users = await this.getUsers();
         const user = this.users.find(user => user.id === id);
         if (user) {
-            this.currentUser = user;
-            console.log(this.currentUser);
+           
             localStorage.setItem('user', JSON.stringify(user));
-            return this.currentUser;
+          return user
         }
 
 

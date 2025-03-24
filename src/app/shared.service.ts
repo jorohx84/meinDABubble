@@ -7,16 +7,18 @@ import { Subject, subscribeOn } from "rxjs";
 export class SharedService {
     router = inject(Router)
     user: any;
-    data:any;
+    data: any;
     private openChannelOverlay = new Subject<void>();
     openChannelOverlay$ = this.openChannelOverlay.asObservable();
     private reloadChannel = new Subject<void>();
     reloadChannel$ = this.reloadChannel.asObservable();
     private loadChatWindow = new Subject<void>();
     loadChatWindow$ = this.loadChatWindow.asObservable();
+    private openThread = new Subject<void>();
+    openThread$ = this.openThread.asObservable();
     reciever: any;
     chat: string = '';
-
+    message: any;
 
     navigateToPath(path: string) {
         this.router.navigate([path]);
@@ -36,14 +38,14 @@ export class SharedService {
 
     getDataFromLocalStorage(data: any) {
         const storedData = localStorage.getItem(data);
-    
+
         if (storedData) {
             try {
-               
+
                 this.data = JSON.parse(storedData);
                 console.log('Daten aus localStorage wiederhergestellt (als JSON):', this.data);
             } catch (e) {
-               
+
                 this.data = storedData;
                 console.log('Daten aus localStorage wiederhergestellt (als String):', this.data);
             }
@@ -71,5 +73,17 @@ export class SharedService {
         this.reciever = reciever;
         this.user = user;
 
+    }
+
+    setMessage(message: any) {
+        console.log(message);
+        this.message = message;
+    }
+
+    initializeThread() {
+        console.log('initialisieren');
+        console.log(this.message);
+        
+        this.openThread.next();
     }
 }

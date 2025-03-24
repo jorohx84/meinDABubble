@@ -39,12 +39,12 @@ export class ChatwindowComponent {
   userID: string = '';
   constructor() {
 
-    
+
     this.getDataFromDevspace();
     this.loadCurrentWindow();
     //this.sharedservice.getUserFromLocalStorage();
     //this.userID = this.sharedservice.user.uid;
- 
+
   }
 
 
@@ -57,9 +57,9 @@ export class ChatwindowComponent {
       this.loadCurrentWindow();
 
     });
-    
-  
-    
+
+
+
 
   }
 
@@ -129,7 +129,7 @@ export class ChatwindowComponent {
       this.isPersonalChat = false;
       this.isChannel = false;
       this.isNewMessage = true
-      this.currentMessages=[];
+      this.currentMessages = [];
     }
 
     console.log('newMessage ist ' + this.isNewMessage);
@@ -200,7 +200,7 @@ export class ChatwindowComponent {
   }
 
   async sendMessage() {
-    
+
     let collection;
     if (this.message === '' || !this.currentReciever.id || !this.currentUser.id) {
       return;
@@ -240,6 +240,7 @@ export class ChatwindowComponent {
       time: message.time.toISOString(),
       from: message.from,
       to: message.to,
+      thread: [],
     };
   }
   checkReciever() {
@@ -251,39 +252,41 @@ export class ChatwindowComponent {
   }
 
 
- loadMessages(){
-  console.log('HAAAAAALLLLLLLLLOOOOOOOOO');
-  
-  console.log(this.currentChat);
-  
-  if (this.currentChat==='user') {
-    this.loadUserMessages();
-  } 
-  if (this.currentChat==='channel') {
-    this.loadChannelMessages();
-  }
-}
+  loadMessages() {
 
-loadChannelMessages() {
-  const channelMessagesRef = doc(this.firestore, `channels/${this.currentReciever.id}`);
-  onSnapshot(channelMessagesRef, (docSnapshot) => {
-    if (docSnapshot.exists()) {
-      const messageData = docSnapshot.data();
-      const messages = messageData['messages'] || [];
-      console.log(messages);
-      
-      this.currentMessages = messages;
-      this.sortMessages();
-      this.checkMessages();
-    } else {
-      console.log('Dokument existiert nicht');
+    if (this.currentChat === 'user') {
+      this.loadUserMessages();
     }
-  });
-}
+    if (this.currentChat === 'channel') {
+      this.loadChannelMessages();
+    }
+  }
+
+  loadChannelMessages() {
+    const channelMessagesRef = doc(this.firestore, `channels/${this.currentReciever.id}`);
+    onSnapshot(channelMessagesRef, (docSnapshot) => {
+      if (docSnapshot.exists()) {
+        const messageData = docSnapshot.data();
+        const messages = messageData['messages'] || [];
+        console.log(messages);
+
+        this.currentMessages = messages;
+        this.sortMessages();
+        this.checkMessages();
+      } else {
+        console.log('Dokument existiert nicht');
+      }
+    });
+
+
+  }
+
+
+
 
   loadUserMessages() {
     console.log(this.currentUser);
-    
+
     const messagesRef = doc(this.firestore, `users/${this.currentUser.id}`);
     onSnapshot(messagesRef, (docSnapshot) => {
       if (docSnapshot.exists()) {
@@ -324,12 +327,17 @@ loadChannelMessages() {
     });
   }
 
-checkMessages() {
-  if (this.currentMessages.length === 0) {
-    this.isEmpty = true;
-  } else {
-    this.isEmpty = false;
+  checkMessages() {
+    if (this.currentMessages.length === 0) {
+      this.isEmpty = true;
+    } else {
+      this.isEmpty = false;
+    }
   }
+
+openThread(message:any[]){
+ this.sharedservice.setMessage(message);
+this.sharedservice.initializeThread();
 }
 
 }

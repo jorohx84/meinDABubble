@@ -34,7 +34,7 @@
                     <p>{{isToday(message.time)? 'Heute' : (message.time | date:'EEEE, d MMMM')}}</p>
                 </div>
             </div>
-            <div [ngClass]="{'reverse': isUser(message)}" class="messagerow">
+            <div (click)="openThread(message)" [ngClass]="{'reverse': isUser(message)}" class="messagerow">
                 <div class="image">
                     <img [src]="message.photo" alt="">
                 </div>
@@ -46,7 +46,17 @@
                     <div [ngClass]="{'bubbleReverse': isUser(message)}" class="messageBubble">
                         <span>{{message.content}}</span>
                     </div>
-                    <div></div>
+                    <div [ngClass]="{'reverse': isUser(message)}" *ngIf="isChannel" class="threadlink">
+                        <a>
+                            <span>{{message.thread?.length}}</span>
+                            <span>Antworten</span>
+                        </a>
+                        <div>
+                            <span>Letzte Antwort</span>
+                            <span></span><!--{{message.thread[message.thread.length-1]?.time}}-->
+                        </div>
+                      
+                    </div>
                 </div>
 
             </div>
