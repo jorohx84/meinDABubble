@@ -6,6 +6,7 @@ export class User {
     messages: string[];
     online: boolean
     
+
     constructor(user?: any) {
         this.name = user ? user.name : '';
         this.email = user ? user.email : '';

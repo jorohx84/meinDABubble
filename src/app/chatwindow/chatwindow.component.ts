@@ -77,7 +77,7 @@ export class ChatwindowComponent {
 
   async loadChannels() {
     try {
-      this.channels = await this.channelService.getChannels();
+      this.channels = await this.channelService.getChannels(this.currentUser);
     } catch (error) {
       console.error('Error loading channels in component:', error);
     }

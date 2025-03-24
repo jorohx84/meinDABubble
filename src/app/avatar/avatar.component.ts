@@ -56,6 +56,7 @@ export class AvatarComponent {
             email: this.currentUser.email,
             avatar: this.currentUser.avatar,
             messages: [],
+            channels:[],
             online: false,
           });
         });

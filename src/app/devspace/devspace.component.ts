@@ -65,7 +65,14 @@ export class DevspaceComponent {
 
   async loadChannels() {
     try {
-      this.channels = await this.channelService.getChannels();
+      console.log(this.currentUser);
+      
+     // this.channels=this.currentUser.channels;
+      console.log(this.channels);
+      
+      console.log();
+      
+      this.channels = await this.channelService.getChannels(this.currentUser);
     } catch (error) {
       console.error('Error loading channels in component:', error);
     }
