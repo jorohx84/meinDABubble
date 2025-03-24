@@ -71,6 +71,8 @@ export class ChatComponent {
       this.channelName,
       this.channelDescription,
       this.currentUser.name,  // Setze den Creator des Channels als aktuellen Benutzer
+      this.currentUser.id,
+   
       [],  // Mitglieder, kann später hinzugefügt werden
       [],  // Nachrichten, anfangs leer
       new Date().toISOString()  // Timestamp setzen
@@ -83,6 +85,7 @@ export class ChatComponent {
         name: newChannel.name,
         description: newChannel.description,
         creator: newChannel.creator,
+        creatorID:newChannel.creatorID,
         timestamp: newChannel.timestamp,
         members: newChannel.members,
         messages: newChannel.messages
