@@ -49,7 +49,7 @@ export class ChatwindowComponent {
 
 
   async ngOnInit() {
-    await this.loadCurrentUser();
+   
     await this.loadChannels();
     await this.loadUsers();
     this.loadDataSubscription = this.sharedservice.loadChatWindow$.subscribe(() => {
@@ -63,9 +63,7 @@ export class ChatwindowComponent {
 
   }
 
-  async loadCurrentUser() {
-    //this.currentUser = await this.userService.getCurrentUser(this.userID);
-  }
+
 
   async loadUsers() {
     try {

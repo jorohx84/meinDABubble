@@ -66,19 +66,41 @@ export class DevspaceComponent {
   async loadChannels() {
     try {
       console.log(this.currentUser);
-      
-     // this.channels=this.currentUser.channels;
+
+      // this.channels=this.currentUser.channels;
       console.log(this.channels);
-      
+
       console.log();
-      
-      this.channels = await this.channelService.getChannels();
+
+      const channelData = await this.channelService.getChannels();
+
+      this.findChannels(channelData);
     } catch (error) {
       console.error('Error loading channels in component:', error);
     }
   }
 
+  findChannels(channel: any[]) {
+    console.log(channel);
+    channel.forEach((object:any) => {
+      if (object.creatorID === this.currentUser.id) {
+        this.channels.push(object);
+        console.log(this.channels);
 
+      } else {
+        object.members.forEach((member:any) => {
+          console.log(member);
+          
+          if (member.id === this.currentUser.id) {
+            this.channels.push(member);
+          }
+        })
+      }
+
+
+    })
+
+  }
 
   openChannel(index: any) {
     this.currentReceiver = this.channels[index];
