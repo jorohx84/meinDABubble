@@ -4,10 +4,11 @@ import { UserService } from '../user.service';
 import { SharedService } from '../shared.service';
 import { user } from '@angular/fire/auth';
 import { DevspaceComponent } from '../devspace/devspace.component';
+import { ChatwindowComponent } from '../chatwindow/chatwindow.component';
 import { Subscription } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { Channel } from '../models/channel.class';
-import { Firestore, collection, addDoc } from '@angular/fire/firestore'; 
+import { Firestore, collection, addDoc } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +16,7 @@ import { Firestore, collection, addDoc } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-chat',
-  imports: [CommonModule, DevspaceComponent, FormsModule],
+  imports: [CommonModule, DevspaceComponent, ChatwindowComponent, FormsModule],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.scss'
 })
@@ -23,7 +24,7 @@ export class ChatComponent {
   userID: string = '';
   currentUser: any;
   channel!: Channel;
-  firestore=inject(Firestore);
+  firestore = inject(Firestore);
   userservice = inject(UserService);
   sharedservice = inject(SharedService);
   showChannel: boolean = false;
@@ -34,12 +35,12 @@ export class ChatComponent {
 
   constructor() {
     this.sharedservice.getUserFromLocalStorage();
-    this.userID = this.sharedservice.user.uid;
+    this.currentUser = this.sharedservice.user
 
   }
 
   async ngOnInit() {
-    await this.loadCurrenUser();
+
     this.channelSubscription = this.sharedservice.openChannelOverlay$.subscribe(() => {
       this.toggleChannelOverlay();
     })
@@ -51,11 +52,6 @@ export class ChatComponent {
       this.channelSubscription.unsubscribe();
     }
   }
-
-  async loadCurrenUser() {
-    this.currentUser = await this.userservice.getCurrentUser(this.userID);
-  }
-
 
   toggleChannelOverlay() {
     this.showChannel = !this.showChannel;
@@ -96,8 +92,13 @@ export class ChatComponent {
       this.toggleChannelOverlay();  // Overlay schließen
       this.channelName = '';  // Eingabefelder zurücksetzen
       this.channelDescription = '';
+      this.reloadChannels();
     } catch (error) {
       console.error('Fehler beim Erstellen des Channels: ', error);
     }
   }
+  reloadChannels() {
+    this.sharedservice.reloadChannelData();
+  }
+
 }

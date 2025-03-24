@@ -15,7 +15,9 @@ export class UserService {
     currentUser: any;
     constructor() {
         this.setCurrentUser();
+        this.getCurrentUser(this.user.uid);
     }
+
 
 
     getUser(): User {
@@ -46,12 +48,12 @@ export class UserService {
         }
     }
 
-    setCurrentUser() {
+   setCurrentUser() {
         onAuthStateChanged(this.auth, (user) => {
             if (user) {
-                this.user = user;
-                console.log('User ist eingeloggt', user);
-                localStorage.setItem('user', JSON.stringify(user));
+               this.user=user;
+                console.log('User ist eingeloggt', this.user);
+               
             } else {
                 this.user = new User(null);
                 console.log('User ist ausgeloggt');
@@ -61,6 +63,8 @@ export class UserService {
 
         });
     }
+
+
     async getUsers() {
         try {
             const usersCollection = collection(this.firestore, 'users');
@@ -81,6 +85,7 @@ export class UserService {
         if (user) {
             this.currentUser = user;
             console.log(this.currentUser);
+            localStorage.setItem('user', JSON.stringify(user));
             return this.currentUser;
         }
 

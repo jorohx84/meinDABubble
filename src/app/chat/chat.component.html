@@ -20,8 +20,13 @@
         <div class="devspace">
             <app-devspace></app-devspace>
         </div>
-        <div class="chat"></div>
+    
+        <div class="chatwindow">
+            <app-chatwindow></app-chatwindow>
+        </div>
     </div>
+
+   
 
     <div *ngIf="showChannel"  class="channelOverlay">
         <form class="createChannel" (ngSubmit)="createChannel()"  #newChannel="ngForm">

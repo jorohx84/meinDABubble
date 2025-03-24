@@ -6,7 +6,7 @@ import { UserService } from '../user.service';
 import { ChannelService } from '../channel.service';
 import { SharedService } from '../shared.service';
 import { Router } from '@angular/router';
-
+import { Subscription } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
@@ -23,34 +23,36 @@ export class DevspaceComponent {
   active: boolean = false;
   message: boolean = false;
   userService = inject(UserService);
-  channelService=inject(ChannelService)
+  channelService = inject(ChannelService)
   firestore = inject(Firestore);
-sharedservice=inject(SharedService)
+  sharedservice = inject(SharedService)
+  relaodSubscription: Subscription | null = null
   router: Router = inject(Router);
   currentUser: any = [];
   currentReceiver: any;
   userID: string = '';
-  currentChannel: any;
+  currentChat: string = '';
+
 
   constructor() {
     this.sharedservice.getUserFromLocalStorage();
-    this.userID = this.sharedservice.user.uid;
+    this.currentUser = this.sharedservice.user;
 
   }
 
- 
 
-  async loadCurrenUser() {
-    this.currentUser = await this.userService.getCurrentUser(this.userID);
-  }
+
+
 
 
   async ngOnInit() {
     await this.loadUsers();
     await this.loadChannels();
-    await this.loadCurrenUser();
-    
-  
+    this.relaodSubscription = this.sharedservice.reloadChannel$.subscribe(() => {
+      this.loadChannels();
+    })
+
+
   }
 
   async loadUsers() {
@@ -70,17 +72,28 @@ sharedservice=inject(SharedService)
   }
 
 
-/*
+
   openChannel(index: any) {
-    this.currentChannel = this.channels[index];
-    this.userService.getChannel(this.currentChannel, this.currentUser);
+    this.currentReceiver = this.channels[index];
+    this.currentChat = 'channel';
+    this.sharedservice.getReciever(this.currentReceiver, this.currentUser, this.currentChat);
+    this.sharedservice.loadChat();
   }
 
   openPersonalChat(index: any) {
     this.currentReceiver = this.users[index];
-    this.userService.getReciepent(this.currentReceiver, this.currentUser);
+    this.currentChat = 'user';
+    this.sharedservice.getReciever(this.currentReceiver, this.currentUser, this.currentChat);
+    this.sharedservice.loadChat();
   }
-*/
+
+  openNewMessage() {
+
+    this.currentChat = 'new';
+    this.sharedservice.getReciever(this.currentReceiver, this.currentUser, this.currentChat);
+    this.sharedservice.loadChat();
+  }
+
   toggleActive() {
     this.active = !this.active;
   }
@@ -96,22 +109,23 @@ sharedservice=inject(SharedService)
   isActive() {
     return this.active === true;
   }
-/*
-  openWindow(window: string) {
-    this.userService.loadComponent(window);
-  }
-
-  openDropdown() {
-    if (this.userService.channelType === 'channel') {
-      this.active = true;
+  /*
+    openWindow(window: string) {
+      this.userService.loadComponent(window);
     }
-    if (this.userService.channelType === 'direct') {
-      this.message = true;
+  
+    openDropdown() {
+      if (this.userService.channelType === 'channel') {
+        this.active = true;
+      }
+      if (this.userService.channelType === 'direct') {
+        this.message = true;
+      }
     }
-  }
-    */
+      */
 
-  showChannelOverlay(){
+  showChannelOverlay() {
     this.sharedservice.openOverlayChannel();
   }
+
 }

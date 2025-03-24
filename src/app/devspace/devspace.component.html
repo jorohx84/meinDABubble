@@ -5,9 +5,7 @@
           <img src="./img/workspace-logo.svg" alt="" />
           <h1>Devspace</h1>
         </div>
-        <button >
-          <img src="./img/edit_square.svg" alt="" />
-        </button>
+        <button (click)="openNewMessage()"><img src="./img/edit_square.svg" alt="" /></button>
       </div>
   
       <div class="contactbar">
@@ -30,13 +28,8 @@
             <button (click)="showChannelOverlay()" class="addButton"><img src="./img/add.svg" alt="" /></button>
           </div>
           <div [ngClass]="{ show: isActive() }" class="channellist">
-            <div
-              class="channelrow"
-              *ngFor="let channel of channels; let index = index"
-            >
-              <div
-                
-              >
+            <div (click)="openChannel(index)" class="channelrow" *ngFor="let channel of channels; let index = index">
+              <div>
                 <img src="./img/tag.svg" alt="" />
                 <span>{{ channel.name }}</span>
               </div>
@@ -66,10 +59,8 @@
             </div>
           </div>
           <div [ngClass]="{ show: isOpen() }" class="contacts">
-            <div
-              *ngFor="let user of this.users; let index = index"
-              class="contactsrow">
-              <div>
+            <div (click)="openPersonalChat(index)" *ngFor="let user of this.users; let index = index" class="contactsrow">
+                <div>
                 <div class="imageContainer">
                   <img class="profile-image" [src]="user.avatar" alt="" />
                   <div

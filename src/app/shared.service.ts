@@ -1,22 +1,31 @@
 import { Router } from "@angular/router";
 import { Injectable, inject } from "@angular/core";
-import { Subject } from "rxjs";
+import { Subject, subscribeOn } from "rxjs";
 @Injectable({
     providedIn: 'root',
 })
 export class SharedService {
     router = inject(Router)
     user: any;
+    data:any;
     private openChannelOverlay = new Subject<void>();
     openChannelOverlay$ = this.openChannelOverlay.asObservable();
+    private reloadChannel = new Subject<void>();
+    reloadChannel$ = this.reloadChannel.asObservable();
+    private loadChatWindow = new Subject<void>();
+    loadChatWindow$ = this.loadChatWindow.asObservable();
+    reciever: any;
+    chat: string = '';
+
+
     navigateToPath(path: string) {
         this.router.navigate([path]);
     }
 
     getUserFromLocalStorage() {
-        const storedUser = localStorage.getItem('user');
-        if (storedUser) {
-            this.user = JSON.parse(storedUser);
+        const storedData = localStorage.getItem('user');
+        if (storedData) {
+            this.user = JSON.parse(storedData);
             console.log('Benutzer aus localStorage wiederhergestellt:', this.user);
 
         } else {
@@ -25,7 +34,42 @@ export class SharedService {
 
     }
 
+    getDataFromLocalStorage(data: any) {
+        const storedData = localStorage.getItem(data);
+    
+        if (storedData) {
+            try {
+               
+                this.data = JSON.parse(storedData);
+                console.log('Daten aus localStorage wiederhergestellt (als JSON):', this.data);
+            } catch (e) {
+               
+                this.data = storedData;
+                console.log('Daten aus localStorage wiederhergestellt (als String):', this.data);
+            }
+        } else {
+            console.log('Keine Daten im localStorage gefunden');
+        }
+    }
+
     openOverlayChannel() {
         this.openChannelOverlay.next();
+    }
+
+    reloadChannelData() {
+        this.reloadChannel.next();
+    }
+
+    loadChat() {
+        this.loadChatWindow.next();
+    }
+
+    getReciever(reciever: any, user: any, chat: string) {
+        localStorage.setItem('reciever', JSON.stringify(reciever));
+        localStorage.setItem('chat', chat);
+        this.chat = chat;
+        this.reciever = reciever;
+        this.user = user;
+
     }
 }
