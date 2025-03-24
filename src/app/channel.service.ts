@@ -6,7 +6,7 @@ import { Firestore, collection, getDocs } from "@angular/fire/firestore";
 })
 export class ChannelService{
     firestore=inject(Firestore)
-    async getChannels(user:any) {
+    async getChannels() {
         try {
           const channelCollection = collection(this.firestore, 'channels');
           const channelSnapshot = await getDocs(channelCollection);

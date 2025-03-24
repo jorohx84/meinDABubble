@@ -72,7 +72,7 @@ export class DevspaceComponent {
       
       console.log();
       
-      this.channels = await this.channelService.getChannels(this.currentUser);
+      this.channels = await this.channelService.getChannels();
     } catch (error) {
       console.error('Error loading channels in component:', error);
     }
