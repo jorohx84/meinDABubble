@@ -58,8 +58,12 @@ export class SharedService {
         this.openChannelOverlay.next();
     }
 
-    reloadChannelData() {
+    reloadChannelData(channel:any) {
+        console.log(channel);
         
+this.reciever=channel;
+console.log(this.reciever);
+
         this.reloadChannel.next();
     }
 

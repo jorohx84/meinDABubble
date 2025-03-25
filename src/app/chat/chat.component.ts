@@ -100,13 +100,15 @@ export class ChatComponent {
       this.toggleChannelOverlay();  // Overlay schließen
       this.channelName = '';  // Eingabefelder zurücksetzen
       this.channelDescription = '';
-      this.reloadChannels();
+      this.reloadChannels(newChannel);
     } catch (error) {
       console.error('Fehler beim Erstellen des Channels: ', error);
     }
   }
-  reloadChannels() {
-    this.sharedservice.reloadChannelData();
+  reloadChannels(newChannel:any) {
+    console.log(newChannel);
+    
+    this.sharedservice.reloadChannelData(newChannel);
   }
 
   getMember(){

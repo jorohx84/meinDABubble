@@ -1,6 +1,6 @@
 import { Component, inject, Injectable } from '@angular/core';
 import { SharedService } from '../shared.service';
-import { CommonModule } from '@angular/common';
+import { CommonModule, getLocaleFirstDayOfWeek } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../user.service';
@@ -46,6 +46,7 @@ export class ChatwindowComponent {
   openSearch: boolean = false;
   searchInput: string = '';
   searchSubscription: Subscription | null = null;
+  loadChannelSubscrition: Subscription | null = null;
   searchList: any[] = [];
   constructor() {
 
@@ -59,6 +60,11 @@ export class ChatwindowComponent {
 
 
   async ngOnInit() {
+    this.loadChannelSubscrition=this.sharedservice.reloadChannel$.subscribe(()=>{
+       this.currentReciever= this.sharedservice.reciever;
+       localStorage.setItem('reciever', JSON.stringify(this.currentReciever));
+       
+    });
 
     await this.loadChannels();
     await this.loadUsers();
@@ -70,6 +76,8 @@ export class ChatwindowComponent {
     this.searchSubscription = this.searchService.openSearchList$.subscribe(() => {
       this.showList();
     });
+
+   
 
   }
 
@@ -117,7 +125,7 @@ export class ChatwindowComponent {
       localStorage.setItem('chat', this.currentChat);
     }
     console.log(this.currentChat);
-  
+
     this.loadMessages()
   }
 
@@ -257,7 +265,7 @@ export class ChatwindowComponent {
       this.isYou = false;
     }
     console.log(this.isYou);
-    
+
   }
 
 
@@ -268,7 +276,7 @@ export class ChatwindowComponent {
     if (this.currentChat === 'channel') {
       this.loadChannelMessages();
     }
-      this.checkReciever();
+    this.checkReciever();
   }
 
 
@@ -353,23 +361,23 @@ export class ChatwindowComponent {
   showList() {
     this.openSearch = this.searchService.searchIsOpen;
     this.searchList = this.searchService.currentList;
-   
+
   }
 
   findMember(index: number) {
     this.searchService.setMember(index);
-    this.searchInput=this.searchService.currentMember.name;
-    this.openSearch=false;
+    this.searchInput = this.searchService.currentMember.name;
+    this.openSearch = false;
   }
   async addPerson() {
-   await this.searchService.addMember(this.currentReciever);
-    this.searchInput='';
-    this.isSearch=false;
+    await this.searchService.addMember(this.currentReciever);
+    this.searchInput = '';
+    this.isSearch = false;
     await this.loadChannels();
-    const currentChannel=this.channels.find(channel=>channel.id===this.currentReciever.id);
+    const currentChannel = this.channels.find(channel => channel.id === this.currentReciever.id);
     localStorage.setItem('reciever', JSON.stringify(currentChannel));
-    this.currentReciever=currentChannel;
+    this.currentReciever = currentChannel;
     console.log(currentChannel);
-    
+
   }
 }
