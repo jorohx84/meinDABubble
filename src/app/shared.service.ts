@@ -19,6 +19,7 @@ export class SharedService {
     reciever: any;
     chat: string = '';
     message: any;
+    channelID:string='';
 
     navigateToPath(path: string) {
         this.router.navigate([path]);
@@ -58,11 +59,11 @@ export class SharedService {
         this.openChannelOverlay.next();
     }
 
-    reloadChannelData(channel:any) {
-        console.log(channel);
+    reloadChannelData(newChannelID: any) {
         
-this.reciever=channel;
-console.log(this.reciever);
+
+        this.channelID=newChannelID;
+        console.log(this.reciever);
 
         this.reloadChannel.next();
     }
@@ -88,10 +89,10 @@ console.log(this.reciever);
     initializeThread() {
         console.log('initialisieren');
         console.log(this.message);
-        
+
         this.openThread.next();
     }
 
 
-    
+
 }

@@ -40,7 +40,7 @@ export class ChatComponent {
     this.currentUser = this.sharedservice.user
     this.currentReciever = this.sharedservice.data;
     console.log(this.currentReciever);
-    
+
   }
 
   async ngOnInit() {
@@ -70,7 +70,7 @@ export class ChatComponent {
       return; // Falls der Channel-Name leer ist, abbrechen
     }
 
-    const firstMember=this.getMember();
+    const firstMember = this.getMember();
     // Neues Channel-Objekt erstellen
     const newChannel = new Channel(
       this.channelName,
@@ -86,7 +86,7 @@ export class ChatComponent {
     try {
       // Channel-Objekt in Firestore speichern
       const channelsCollection = collection(this.firestore, 'channels');
-      await addDoc(channelsCollection, {
+      const channelDocRef = await addDoc(channelsCollection, {
         name: newChannel.name,
         description: newChannel.description,
         creator: newChannel.creator,
@@ -95,23 +95,23 @@ export class ChatComponent {
         members: newChannel.members,
         messages: newChannel.messages
       });
-     
+
       console.log('Channel erfolgreich erstellt!');
       this.toggleChannelOverlay();  // Overlay schließen
       this.channelName = '';  // Eingabefelder zurücksetzen
       this.channelDescription = '';
-      this.reloadChannels(newChannel);
+      this.reloadChannels(channelDocRef.id);
     } catch (error) {
       console.error('Fehler beim Erstellen des Channels: ', error);
     }
   }
-  reloadChannels(newChannel:any) {
-    console.log(newChannel);
-    
-    this.sharedservice.reloadChannelData(newChannel);
+  reloadChannels(newChannelID: any) {
+    console.log(newChannelID);
+
+    this.sharedservice.reloadChannelData(newChannelID);
   }
 
-  getMember(){
+  getMember() {
     const member = {
       name: this.currentUser.name,
       email: this.currentUser.email,

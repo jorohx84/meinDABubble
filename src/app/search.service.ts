@@ -45,7 +45,11 @@ console.log(this.currentMember);
     }
 
     async addMember(channel: any) {
+      
+        
         await this.loadChannels();
+        console.log(this.channels);
+        channel.id
         const currentChannel = this.channels.find((obj: any) => obj.id === channel.id)
         const memberData = this.currentMember;
         const members = currentChannel.members;
@@ -56,7 +60,7 @@ console.log(this.currentMember);
         }
         const member = this.getMember(memberData);
         await this.saveMemberInFirestore(member, channel)
-        
+
     }
 
     async saveMemberInFirestore(data: any, channel: any) {

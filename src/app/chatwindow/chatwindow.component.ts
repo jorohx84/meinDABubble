@@ -60,11 +60,7 @@ export class ChatwindowComponent {
 
 
   async ngOnInit() {
-    this.loadChannelSubscrition=this.sharedservice.reloadChannel$.subscribe(()=>{
-       this.currentReciever= this.sharedservice.reciever;
-       localStorage.setItem('reciever', JSON.stringify(this.currentReciever));
-       
-    });
+  
 
     await this.loadChannels();
     await this.loadUsers();
@@ -77,7 +73,22 @@ export class ChatwindowComponent {
       this.showList();
     });
 
-   
+    this.loadChannelSubscrition=this.sharedservice.reloadChannel$.subscribe(async()=>{
+      await this.loadChannels();
+     
+      
+        console.log(this.channels);
+  
+      const newChannelID=this.sharedservice.channelID;
+      
+      
+      this.currentReciever=this.channels.find((channel:any)=>channel.id===newChannelID);
+      console.log(newChannelID);
+      console.log(this.currentReciever);
+      
+      localStorage.setItem('reciever', JSON.stringify(this.currentReciever));
+      
+   });
 
   }
 
