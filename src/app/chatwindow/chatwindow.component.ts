@@ -117,7 +117,7 @@ export class ChatwindowComponent {
       localStorage.setItem('chat', this.currentChat);
     }
     console.log(this.currentChat);
-    //this.checkReciever();
+  
     this.loadMessages()
   }
 
@@ -256,6 +256,8 @@ export class ChatwindowComponent {
     } else {
       this.isYou = false;
     }
+    console.log(this.isYou);
+    
   }
 
 
@@ -266,6 +268,7 @@ export class ChatwindowComponent {
     if (this.currentChat === 'channel') {
       this.loadChannelMessages();
     }
+      this.checkReciever();
   }
 
 
