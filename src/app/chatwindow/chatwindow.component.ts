@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, Injectable } from '@angular/core';
 import { SharedService } from '../shared.service';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
@@ -7,7 +7,11 @@ import { UserService } from '../user.service';
 import { ChannelService } from '../channel.service';
 import { Message } from '../models/message.class';
 import { Firestore, doc, updateDoc, arrayUnion, onSnapshot } from '@angular/fire/firestore';
+import { SearchService } from '../search.service';
 
+@Injectable({
+  providedIn: 'root',
+})
 
 @Component({
   selector: 'app-chatwindow',
@@ -18,7 +22,8 @@ import { Firestore, doc, updateDoc, arrayUnion, onSnapshot } from '@angular/fire
 export class ChatwindowComponent {
   sharedservice = inject(SharedService);
   userService = inject(UserService)
-  channelService = inject(ChannelService)
+  channelService = inject(ChannelService);
+  searchService = inject(SearchService);
   firestore = inject(Firestore)
   currentReciever: any;
   currentUser: any;
@@ -37,6 +42,11 @@ export class ChatwindowComponent {
   isEmpty: boolean = true;
   isYou: boolean = false;
   userID: string = '';
+  isSearch: boolean = false;
+  openSearch: boolean = false;
+  searchInput: string = '';
+  searchSubscription: Subscription | null = null;
+  searchList: any[] = [];
   constructor() {
 
 
@@ -57,6 +67,10 @@ export class ChatwindowComponent {
       this.loadCurrentWindow();
       console.log(this.currentReciever);
     });
+    this.searchSubscription = this.searchService.openSearchList$.subscribe(() => {
+      this.showList();
+    });
+
   }
 
 
@@ -150,8 +164,6 @@ export class ChatwindowComponent {
   }
 
   getReciever(index: number) {
-
-
     if (this.isChannelList) {
       const currentChannel = this.currentList[index];
       this.message = this.message + currentChannel?.name;
@@ -188,7 +200,7 @@ export class ChatwindowComponent {
     const messageDate = new Date(date);
     return today === messageDate.toDateString();
   }
-  
+
 
   async sendMessage() {
 
@@ -325,4 +337,36 @@ export class ChatwindowComponent {
     this.sharedservice.initializeThread();
   }
 
+  toggleSearch() {
+    this.isSearch = !this.isSearch;
+    console.log(this.isSearch);
+
+  }
+
+  openList() {
+    this.searchService.openMemberList(this.searchInput, this.users);
+  }
+
+  showList() {
+    this.openSearch = this.searchService.searchIsOpen;
+    this.searchList = this.searchService.currentList;
+   
+  }
+
+  findMember(index: number) {
+    this.searchService.setMember(index);
+    this.searchInput=this.searchService.currentMember.name;
+    this.openSearch=false;
+  }
+  async addPerson() {
+   await this.searchService.addMember(this.currentReciever);
+    this.searchInput='';
+    this.isSearch=false;
+    await this.loadChannels();
+    const currentChannel=this.channels.find(channel=>channel.id===this.currentReciever.id);
+    localStorage.setItem('reciever', JSON.stringify(currentChannel));
+    this.currentReciever=currentChannel;
+    console.log(currentChannel);
+    
+  }
 }

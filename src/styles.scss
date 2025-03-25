@@ -12,6 +12,7 @@ button {
     cursor: pointer;
     border: none;
     background-color: transparent;
+    
 }
 
 input {
@@ -48,4 +49,5 @@ input:-webkit-autofill {
     --purple2: rgba(121, 126, 243, 1);
     --purple3: rgba(83, 90, 241, 1);
     --border-light: rgba(173, 176, 217, 1);
+    --text-grey: rgba(104, 104, 104, 1);
 }

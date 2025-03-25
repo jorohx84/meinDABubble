@@ -8,7 +8,7 @@ import { ChatwindowComponent } from '../chatwindow/chatwindow.component';
 import { Subscription } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { Channel } from '../models/channel.class';
-import { Firestore, collection, addDoc } from '@angular/fire/firestore';
+import { Firestore, collection, addDoc, updateDoc, doc, arrayUnion } from '@angular/fire/firestore';
 import { ThreadComponent } from '../thread/thread.component';
 @Injectable({
   providedIn: 'root',
@@ -23,6 +23,7 @@ import { ThreadComponent } from '../thread/thread.component';
 export class ChatComponent {
   userID: string = '';
   currentUser: any;
+  currentReciever: any;
   channel!: Channel;
   firestore = inject(Firestore);
   userservice = inject(UserService);
@@ -35,8 +36,11 @@ export class ChatComponent {
 
   constructor() {
     this.sharedservice.getUserFromLocalStorage();
+    this.sharedservice.getDataFromLocalStorage('reciever')
     this.currentUser = this.sharedservice.user
-
+    this.currentReciever = this.sharedservice.data;
+    console.log(this.currentReciever);
+    
   }
 
   async ngOnInit() {
@@ -66,14 +70,15 @@ export class ChatComponent {
       return; // Falls der Channel-Name leer ist, abbrechen
     }
 
+    const firstMember=this.getMember();
     // Neues Channel-Objekt erstellen
     const newChannel = new Channel(
       this.channelName,
       this.channelDescription,
       this.currentUser.name,  // Setze den Creator des Channels als aktuellen Benutzer
       this.currentUser.id,
-   
-      [],  // Mitglieder, kann später hinzugefügt werden
+
+      [firstMember],  // Mitglieder, kann später hinzugefügt werden
       [],  // Nachrichten, anfangs leer
       new Date().toISOString()  // Timestamp setzen
     );
@@ -85,12 +90,12 @@ export class ChatComponent {
         name: newChannel.name,
         description: newChannel.description,
         creator: newChannel.creator,
-        creatorID:newChannel.creatorID,
+        creatorID: newChannel.creatorID,
         timestamp: newChannel.timestamp,
         members: newChannel.members,
         messages: newChannel.messages
       });
-
+     
       console.log('Channel erfolgreich erstellt!');
       this.toggleChannelOverlay();  // Overlay schließen
       this.channelName = '';  // Eingabefelder zurücksetzen
@@ -104,4 +109,15 @@ export class ChatComponent {
     this.sharedservice.reloadChannelData();
   }
 
+  getMember(){
+    const member = {
+      name: this.currentUser.name,
+      email: this.currentUser.email,
+      avatar: this.currentUser.avatar,
+      online: this.currentUser.online,
+      id: this.currentUser.id,
+      messages: this.currentUser.messages,
+    }
+    return member
+  }
 }

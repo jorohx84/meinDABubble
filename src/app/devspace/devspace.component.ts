@@ -50,6 +50,7 @@ export class DevspaceComponent {
     await this.loadChannels();
     this.relaodSubscription = this.sharedservice.reloadChannel$.subscribe(() => {
       this.loadChannels();
+      
     })
 
 
@@ -83,6 +84,8 @@ export class DevspaceComponent {
   findChannels(channel: any[]) {
     console.log(channel);
     channel.forEach((object:any) => {
+      console.log(object);
+      
       if (object.creatorID === this.currentUser.id) {
         this.channels.push(object);
         console.log(this.channels);
@@ -92,7 +95,7 @@ export class DevspaceComponent {
           console.log(member);
           
           if (member.id === this.currentUser.id) {
-            this.channels.push(member);
+            this.channels.push(object);
           }
         })
       }

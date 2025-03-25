@@ -17,17 +17,56 @@
         </div>
         <div *ngIf="isChannel" class="members">
             <div class="memberAvatars">
-                <div></div>
-                <span></span>
+                <div class="memberImages">
+                    <div *ngFor="let member of currentReciever?.members?.slice(0,3)">
+                        <img [src]="member.avatar" alt="">
+                    </div>
+                    
+                </div>
+                <span *ngIf="currentReciever?.members.length - 3 > 0">+ {{currentReciever?.members.length - 3}}</span>
             </div>
-            <button><img src="./img/add_members.svg" alt=""></button>
+            <button (click)="toggleSearch()"><img src="./img/add_members.svg" alt=""></button>
         </div>
         <div *ngIf="isNewMessage" class="newMessage">
             <span>Neue Nachricht</span>
             <input type="text" placeholder="An: #channel, oder @jemand oder E-Mail Adresse">
         </div>
     </div>
-    <div id="chat"  class="chat-content">
+
+    <div *ngIf="isSearch" class="addMember">
+        <div>
+            <div>
+                <span>Leute hinzufügen</span>
+                <button (click)="toggleSearch()"><img src="./img/close.svg" alt=""></button>
+            </div>
+
+            <div class="nameOfChannel">
+                <img src="./img/tag_purple2.svg" alt="">
+                <span>{{currentReciever.name}}</span>
+            </div>
+        </div>
+        <input (input)="openList()" [(ngModel)]="searchInput" type="text" placeholder="Namen eingeben">
+        <div class="buttonCont">
+            <button (click)="addPerson()" >Hinzufügen</button>
+        </div>
+        <div *ngIf="openSearch" class="lists memberlist">
+            <div (click)="findMember(index)" [ngClass]="{'channelStyle': isChannelList}" class="listrow"
+                *ngFor="let object of searchList; let index = index">
+                <div *ngIf="!isChannelList" class="imageContainer">
+                    <img class="profile-image" [src]="object?.avatar" alt="">
+                    <div *ngIf="!isChannelList" class="status-dot" [ngClass]="{'green': object?.online}"></div>
+                </div>
+                <img class="tag" *ngIf="isChannelList" src="./img/tag.svg" alt="">
+                <div>
+                    <span>{{ object?.name}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div id="chat" class="chat-content">
         <div *ngFor="let message of currentMessages; let i=index" [ngClass]="{'change': isUser(message)}">
             <div class="divider" *ngIf="isNewDay(message, currentMessages[i - 1])">
                 <div>
@@ -55,7 +94,7 @@
                             <span>Letzte Antwort</span>
                             <span></span><!--{{message.thread[message.thread.length-1]?.time}}-->
                         </div>
-                      
+
                     </div>
                 </div>
 
@@ -69,18 +108,17 @@
                 <span>{{currentReciever?.name}}</span>
             </div>
             <div *ngIf="!isChannel" class="welcomeText">
-                <p *ngIf="!isYou">Diese Unterhaltung findet nur zwischen <a
-                        href="">&commat;{{currentReciever?.name}}
+                <p *ngIf="!isYou">Diese Unterhaltung findet nur zwischen <a href="">&commat;{{currentReciever?.name}}
                     </a>und dir statt.</p>
                 <p *ngIf="isYou"><span> Dieser Raum ist nur für dich da.</span> Mache dir Notizen, liste deine To-dos
                     auf oder bewahre Links und Dateien griffbereit auf. Du kannst hier auch gerne Dinge mit dir selbst
                     besprechen.</p>
             </div>
             <div *ngIf="isChannel" class="welcomeText">
-                <p *ngIf="!isYou">Du hast diesen Channel heute erstellt. Das ist der Anfang des Channels  <a
+                <p *ngIf="!isYou">Du hast diesen Channel heute erstellt. Das ist der Anfang des Channels <a
                         href="">&commat;{{currentReciever?.name}}
                     </a></p>
-             
+
             </div>
         </div>
 
@@ -89,7 +127,8 @@
 
 
     <div [ngClass]="{'show': isClicked }" class="lists">
-        <div (click)="getReciever(index)" [ngClass]="{'channelStyle': isChannelList}" class="listrow" *ngFor="let object of currentList; let index = index">
+        <div (click)="getReciever(index)" [ngClass]="{'channelStyle': isChannelList}" class="listrow"
+            *ngFor="let object of currentList; let index = index">
             <div *ngIf="!isChannelList" class="imageContainer">
                 <img class="profile-image" [src]="object?.avatar" alt="">
                 <div *ngIf="!isChannelList" class="status-dot" [ngClass]="{'green': object?.online}"></div>
@@ -104,12 +143,11 @@
 
     <div class="textContainer">
         <div>
-            <textarea (input)="getList()" [(ngModel)]="message"   name="" id=""
+            <textarea (input)="getList()" [(ngModel)]="message" name="" id=""
                 placeholder="Nachricht an {{currentReciever?.name}}"></textarea>
             <div>
                 <div class="left">
-                    <button ><img class="smiley" src="./img/smiley.svg"
-                            alt=""></button>
+                    <button><img class="smiley" src="./img/smiley.svg" alt=""></button>
                     <button (click)="toggleList($event)"><img class="at" src="./img/at.svg" alt=""></button>
                 </div>
                 <button (click)="sendMessage()" class="right"><img src="./img/send.svg" alt=""></button>

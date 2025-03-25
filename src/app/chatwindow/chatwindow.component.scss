@@ -116,6 +116,119 @@ section {
 .memberAvatars {
     width: 142px;
     height: 46px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+}
+
+.memberImages{
+    width: 100%;
+    max-width: 100px;
+    height: 40px;
+    display: flex;
+
+    >div{
+        width: 40px;
+        height: 40px;
+      
+        >img{
+            width: 40px;
+            height: 40px;
+            border-radius: 30px;
+            margin-right: -20px;
+        }
+    }
+}
+
+.addMember {
+    width: 100%;
+    max-width: 514px;
+    height: 100%;
+    max-height: 294px;
+    background-color: white;
+    position: absolute;
+    top: 100px;
+    right: 20px;
+    box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.2);
+    border-radius: 30px 0 30px 30px;
+    box-sizing: border-box;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    z-index: 1;
+
+    >div {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+
+        >div {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            >span {
+                font-size: 24px;
+                font-weight: 600;
+            }
+
+            >button {
+                width: 40px;
+                height: 40px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 0;
+
+                >img {
+                    width: 40px;
+                    height: 40px;
+                }
+            }
+        }
+
+    }
+}
+
+.memberlist {
+    top: 170px !important;
+    left: 50px !important;
+    z-index: 10;
+    border-radius: 0 30px 30px 30px !important;
+}
+
+.nameOfChannel {
+    justify-content: flex-start !important;
+    gap: 10px;
+
+    >span {
+        color: var(--purple2);
+        font-size: 20px !important;
+    }
+}
+
+.buttonCont {
+    width: 100%;
+    display: flex;
+    flex-direction: row !important;
+    justify-content: flex-end !important;
+
+    >button {
+        width: 147px;
+        height: 49px;
+        background-color: var(--text-grey);
+        color: white;
+        border-radius: 25px;
+
+
+        &:active {
+            transform: scale(0.95);
+        }
+    }
 }
 
 .newMessage {
@@ -200,7 +313,7 @@ input {
     align-items: center;
     box-sizing: border-box;
     padding: 10px 45px;
-cursor: pointer;
+    cursor: pointer;
     display: flex;
     gap: 30px;
 }
@@ -397,9 +510,11 @@ textarea:focus {
 
 }
 
+
+
 .listrow {
     display: flex;
-    justify-content: flex-start;
+    justify-content: flex-start !important;
     align-items: center;
     width: 100%;
     gap: 15px;

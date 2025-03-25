@@ -59,6 +59,7 @@ export class SharedService {
     }
 
     reloadChannelData() {
+        
         this.reloadChannel.next();
     }
 
