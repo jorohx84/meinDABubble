@@ -58,6 +58,7 @@ export class AvatarComponent {
             messages: [],
             channels:[],
             online: false,
+            logout:''
           });
         });
       })

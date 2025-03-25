@@ -35,7 +35,7 @@
         <form class="createChannel" (ngSubmit)="createChannel()"  #newChannel="ngForm">
             <div class="headline">
                 <span>Channel erstellen</span>
-                <button (click)="toggleChannelOverlay()"><img src="./img/close.svg" alt=""></button>
+                <div (click)="toggleChannelOverlay()"><img src="./img/close.svg" alt=""></div>
             </div>
             <div class="textfield">
                 <span>Channels dienen deinem Team zur Kommunikation. Am besten sollten sie themenbezogen sein #marketing
@@ -62,4 +62,6 @@
 
         </form>
     </div>
+
+   <div *ngIf="isOverlay" class="overlay"></div>
 </section>

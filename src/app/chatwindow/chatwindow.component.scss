@@ -313,7 +313,7 @@ input {
     align-items: center;
     box-sizing: border-box;
     padding: 10px 45px;
-    cursor: pointer;
+   
     display: flex;
     gap: 30px;
 }
@@ -552,7 +552,7 @@ textarea:focus {
 
     height: 151px;
     position: absolute;
-    bottom: 20px;
+    bottom: 50px;
     left: 45px;
 
 }
@@ -612,7 +612,7 @@ textarea:focus {
     display: flex;
     align-items: center;
     gap: 20px;
-
+cursor: pointer;
     >a {
         display: flex;
         align-items: center;

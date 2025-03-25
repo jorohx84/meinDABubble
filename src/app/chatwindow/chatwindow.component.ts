@@ -60,7 +60,7 @@ export class ChatwindowComponent {
 
 
   async ngOnInit() {
-  
+
 
     await this.loadChannels();
     await this.loadUsers();
@@ -73,25 +73,22 @@ export class ChatwindowComponent {
       this.showList();
     });
 
-    this.loadChannelSubscrition=this.sharedservice.reloadChannel$.subscribe(async()=>{
-      await this.loadChannels();
-     
-      
-        console.log(this.channels);
-  
-      const newChannelID=this.sharedservice.channelID;
-      
-      
-      this.currentReciever=this.channels.find((channel:any)=>channel.id===newChannelID);
-      console.log(newChannelID);
-      console.log(this.currentReciever);
-      
-      localStorage.setItem('reciever', JSON.stringify(this.currentReciever));
-      
-   });
+    this.loadChannelSubscrition = this.sharedservice.reloadChannel$.subscribe(async () => {
+      await this.reloadChannels();
+    });
 
   }
 
+  async reloadChannels() {
+    await this.loadChannels();
+    this.currentMessages = [];
+    this.currentChat = 'channel'
+    const newChannelID = this.sharedservice.channelID;
+    this.currentReciever = this.channels.find((channel: any) => channel.id === newChannelID);
+    localStorage.setItem('reciever', JSON.stringify(this.currentReciever));
+    this.loadMessages();
+
+  }
 
 
   async loadUsers() {
@@ -161,7 +158,6 @@ export class ChatwindowComponent {
 
     }
   }
-
 
   getList() {
     if (this.message.includes('#')) {
@@ -281,6 +277,10 @@ export class ChatwindowComponent {
 
 
   loadMessages() {
+    console.log(this.currentReciever);
+    console.log(this.currentChat);
+
+
     if (this.currentChat === 'user') {
       this.loadUserMessages();
     }
@@ -324,6 +324,7 @@ export class ChatwindowComponent {
     });
   }
 
+
   buildCurrentMessages(messages: any) {
     messages.forEach((message: any) => {
       if (this.currentUser.id === this.currentReciever.id) {
@@ -361,7 +362,7 @@ export class ChatwindowComponent {
 
   toggleSearch() {
     this.isSearch = !this.isSearch;
-    console.log(this.isSearch);
+    this.sharedservice.openOverlay();
 
   }
 
@@ -388,7 +389,7 @@ export class ChatwindowComponent {
     const currentChannel = this.channels.find(channel => channel.id === this.currentReciever.id);
     localStorage.setItem('reciever', JSON.stringify(currentChannel));
     this.currentReciever = currentChannel;
-    console.log(currentChannel);
+   
 
   }
 }

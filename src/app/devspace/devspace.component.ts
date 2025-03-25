@@ -50,7 +50,7 @@ export class DevspaceComponent {
     await this.loadChannels();
     this.relaodSubscription = this.sharedservice.reloadChannel$.subscribe(() => {
       this.loadChannels();
-      
+
     })
 
 
@@ -65,14 +65,8 @@ export class DevspaceComponent {
   }
 
   async loadChannels() {
+
     try {
-      console.log(this.currentUser);
-
-      // this.channels=this.currentUser.channels;
-      console.log(this.channels);
-
-      console.log();
-
       const channelData = await this.channelService.getChannels();
 
       this.findChannels(channelData);
@@ -82,25 +76,18 @@ export class DevspaceComponent {
   }
 
   findChannels(channel: any[]) {
-    console.log(channel);
+    this.channels=[];
     channel.forEach((object:any) => {
-      console.log(object);
-      
       if (object.creatorID === this.currentUser.id) {
         this.channels.push(object);
-        console.log(this.channels);
-
       } else {
         object.members.forEach((member:any) => {
-          console.log(member);
           
           if (member.id === this.currentUser.id) {
             this.channels.push(object);
           }
         })
       }
-
-
     })
 
   }

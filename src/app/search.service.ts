@@ -3,19 +3,21 @@ import { Subject } from "rxjs";
 import { Firestore, arrayUnion, doc, updateDoc } from "@angular/fire/firestore";
 import { User } from "./models/user.class";
 import { ChannelService } from "./channel.service";
+import { SharedService } from "./shared.service";
 @Injectable({
     providedIn: 'root',
 })
 export class SearchService {
     firestore = inject(Firestore);
     channelService = inject(ChannelService);
+    sharedService = inject(SharedService);
     isClicked: boolean = false;
     searchIsOpen: boolean = false;
     currentList: any[] = [];
     private openSearchList = new Subject<void>();
     openSearchList$ = this.openSearchList.asObservable();
     channels: any[] = [];
-    currentMember:any;
+    currentMember: any;
 
     openMemberList(input: string, users: any[]) {
         if (input.length < 3) {
@@ -37,16 +39,14 @@ export class SearchService {
         });
     }
 
-    setMember(index: number){
-this.currentMember=this.currentList[index];
-console.log(this.currentMember);
+    setMember(index: number) {
+        this.currentMember = this.currentList[index];
+        console.log(this.currentMember);
 
-        
+
     }
 
     async addMember(channel: any) {
-      
-        
         await this.loadChannels();
         console.log(this.channels);
         channel.id
@@ -60,7 +60,7 @@ console.log(this.currentMember);
         }
         const member = this.getMember(memberData);
         await this.saveMemberInFirestore(member, channel)
-
+        this.sharedService.openOverlay();
     }
 
     async saveMemberInFirestore(data: any, channel: any) {

@@ -16,10 +16,12 @@ export class SharedService {
     loadChatWindow$ = this.loadChatWindow.asObservable();
     private openThread = new Subject<void>();
     openThread$ = this.openThread.asObservable();
+    private openGeneralOverlay = new Subject<void>();
+    openGeneralOverlay$ = this.openGeneralOverlay.asObservable();
     reciever: any;
     chat: string = '';
     message: any;
-    channelID:string='';
+    channelID: string = '';
 
     navigateToPath(path: string) {
         this.router.navigate([path]);
@@ -60,9 +62,9 @@ export class SharedService {
     }
 
     reloadChannelData(newChannelID: any) {
-        
 
-        this.channelID=newChannelID;
+
+        this.channelID = newChannelID;
         console.log(this.reciever);
 
         this.reloadChannel.next();
@@ -82,7 +84,6 @@ export class SharedService {
     }
 
     setMessage(message: any) {
-        console.log(message);
         this.message = message;
     }
 
@@ -93,6 +94,8 @@ export class SharedService {
         this.openThread.next();
     }
 
-
+    openOverlay() {
+        this.openGeneralOverlay.next();
+    }
 
 }

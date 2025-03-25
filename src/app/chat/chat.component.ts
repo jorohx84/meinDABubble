@@ -30,10 +30,10 @@ export class ChatComponent {
   sharedservice = inject(SharedService);
   showChannel: boolean = false;
   private channelSubscription: Subscription | null = null;
-
+  isOverlay: boolean = false;
   channelName: string = '';
   channelDescription: string = '';
-
+  private overlaySubscription: Subscription | null = null;
   constructor() {
     this.sharedservice.getUserFromLocalStorage();
     this.sharedservice.getDataFromLocalStorage('reciever')
@@ -48,6 +48,10 @@ export class ChatComponent {
     this.channelSubscription = this.sharedservice.openChannelOverlay$.subscribe(() => {
       this.toggleChannelOverlay();
     })
+
+    this.overlaySubscription=this.sharedservice.openGeneralOverlay$.subscribe(()=>{
+      this.isOverlay=!this.isOverlay;
+    })
   }
 
 
@@ -59,7 +63,7 @@ export class ChatComponent {
 
   toggleChannelOverlay() {
     this.showChannel = !this.showChannel;
-    console.log(this.showChannel);
+   
 
   }
 
@@ -105,9 +109,9 @@ export class ChatComponent {
       console.error('Fehler beim Erstellen des Channels: ', error);
     }
   }
-  reloadChannels(newChannelID: any) {
-    console.log(newChannelID);
 
+
+  reloadChannels(newChannelID: any) {
     this.sharedservice.reloadChannelData(newChannelID);
   }
 

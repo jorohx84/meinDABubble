@@ -6,10 +6,10 @@ import { LoginComponent } from './login/login.component';
 import { ChatComponent } from './chat/chat.component';
 import { ThreadComponent } from './thread/thread.component';
 export const routes: Routes = [
-   { path: '', component: SigninComponent },
    { path: 'signin', component: SigninComponent },
    { path: 'avatar', component: AvatarComponent },
-   { path: 'login', component: LoginComponent },
+   { path: '', component: LoginComponent },
+   {path:'login', component:LoginComponent},
    { path: 'chat', component: ChatComponent },
-   {path:'thread', component:ThreadComponent}
+   { path: 'thread', component: ThreadComponent }
 ];
