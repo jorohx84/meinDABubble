@@ -12,7 +12,14 @@
                 <img class="profile-image" [src]="currentUser?.avatar" alt="" />
                 <div class="status-dot" [ngClass]="{ green: currentUser?.online }"></div>
             </div>
-            <button><img src="./img/arrow_down.svg" alt=""></button>
+            <button (click)="toggleLogout()"><img src="./img/arrow_down.svg" alt=""></button>
+        </div>
+        <div *ngIf="isLogout" class="logoutContainer">
+            <button (click)="toggleProfile()">Profil</button>
+            <button (click)="logoutUser()">Logout</button>
+        </div>
+        <div *ngIf="isProfileOpen" class="profileOverlay">
+            <app-profile></app-profile>
         </div>
     </div>
 
@@ -20,7 +27,7 @@
         <div class="devspace">
             <app-devspace></app-devspace>
         </div>
-    
+
         <div class="chatwindow">
             <app-chatwindow></app-chatwindow>
         </div>
@@ -29,10 +36,10 @@
         </div>
     </div>
 
-   
 
-    <div *ngIf="showChannel"  class="channelOverlay">
-        <form class="createChannel" (ngSubmit)="createChannel()"  #newChannel="ngForm">
+
+    <div *ngIf="showChannel" class="channelOverlay">
+        <form class="createChannel" (ngSubmit)="createChannel()" #newChannel="ngForm">
             <div class="headline">
                 <span>Channel erstellen</span>
                 <div (click)="toggleChannelOverlay()"><img src="./img/close.svg" alt=""></div>
@@ -45,14 +52,16 @@
                 <span>Channel-Name</span>
                 <div>
                     <img src="./img/tag.svg" alt="">
-                    <input #name="ngModel" [(ngModel)]="channelName" type="text" name="name" placeholder="z.B. Kooperationsprojekte" required>
+                    <input #name="ngModel" [(ngModel)]="channelName" type="text" name="name"
+                        placeholder="z.B. Kooperationsprojekte" required>
                 </div>
 
             </div>
             <div class="inputContainer">
                 <span>Beschreibung (optional)</span>
                 <div>
-                    <input #description="ngModel" [(ngModel)]="channelDescription" name="description" type="text" placeholder="Dein Text hier">
+                    <input #description="ngModel" [(ngModel)]="channelDescription" name="description" type="text"
+                        placeholder="Dein Text hier">
                 </div>
 
             </div>
@@ -63,5 +72,5 @@
         </form>
     </div>
 
-   <div *ngIf="isOverlay" class="overlay"></div>
+    <div *ngIf="isOverlay" class="overlay"></div>
 </section>

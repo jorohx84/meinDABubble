@@ -12,14 +12,15 @@ import { Message } from '../models/message.class';
 })
 export class ThreadComponent {
   threadSubscription: Subscription | null = null;
+  logoutSubscription: Subscription | null = null;
   sharedService = inject(SharedService);
   message: any;
-constructor(){
-  this.sharedService.getDataFromLocalStorage('message');
-  this.message=this.sharedService.data;
-console.log(this.message);
+  constructor() {
+    this.sharedService.getDataFromLocalStorage('message');
+    this.message = this.sharedService.data;
+    console.log(this.message);
 
-}
+  }
   ngOnInit() {
 
     this.threadSubscription = this.sharedService.openThread$.subscribe(() => {
@@ -27,6 +28,12 @@ console.log(this.message);
 
       this.openThreadContent();
     })
+
+    this.logoutSubscription = this.sharedService.logoutObserver$.subscribe(() => {
+      this.message = null;
+      localStorage.setItem('message', JSON.stringify(this.message));
+    });
+
   }
   ngOnDestroy() {
     if (this.threadSubscription) {

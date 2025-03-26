@@ -1,0 +1,29 @@
+<section>
+    <div class="headline">
+        <span>Profil</span>
+        <button (click)="closeProfile()"><img src="./img/close.svg" alt=""></button>
+    </div>
+    <img [src]="currentUser?.avatar" alt="">
+    <div class="userData">
+        <div class="userName">
+            <span>{{currentUser?.name}}</span>
+            <button>Bearbeiten</button>
+        </div>
+        <div class="status">
+            <div class="status-dot" [ngClass]="{ green: currentUser?.online }"></div>
+            <span class="greenColor" *ngIf="currentUser?.online">Aktiv</span>
+            <span *ngIf="!currentUser?.online">Abwesend</span>
+        </div>
+    </div>
+
+    <div class="contactData">
+        <div class="email">
+            <img src="./img/mail_black.svg" alt="">
+            <span>E-Mail-Adresse</span>
+        </div>
+        <div class="emailLink">
+            <a href="mailto:{{currentUser?.email}}">{{currentUser?.email}}</a>
+        </div>
+    </div>
+    <button *ngIf="isRecieverProfile"><img src="./img/mode_comment.svg" alt=""><span>Nachricht</span></button>
+</section>

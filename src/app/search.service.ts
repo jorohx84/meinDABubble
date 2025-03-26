@@ -77,7 +77,7 @@ export class SearchService {
             avatar: memberData.avatar,
             online: memberData.online,
             id: memberData.id,
-            messages: memberData.messages,
+            
 
         }
 

@@ -18,6 +18,11 @@ export class SharedService {
     openThread$ = this.openThread.asObservable();
     private openGeneralOverlay = new Subject<void>();
     openGeneralOverlay$ = this.openGeneralOverlay.asObservable();
+    private logoutObserver = new Subject<void>();
+    logoutObserver$ = this.logoutObserver.asObservable();
+    private profileObserver=new Subject<void>();
+    profileObserver$=this.profileObserver.asObservable();
+
     reciever: any;
     chat: string = '';
     message: any;
@@ -98,4 +103,11 @@ export class SharedService {
         this.openGeneralOverlay.next();
     }
 
+    logoutUser() {
+        this.logoutObserver.next();
+    }
+
+    generalObserve(){
+        this.profileObserver.next();
+    }
 }

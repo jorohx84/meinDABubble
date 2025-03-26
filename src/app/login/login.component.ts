@@ -28,7 +28,7 @@ export class LoginComponent {
     console.log('login erfolgreich');
     try {
       await signInWithEmailAndPassword(this.auth, this.user.email, this.user.password);
-      this.userservice.setOnlineStatus();
+      this.userservice.setOnlineStatus('login');
       await this.userservice.getCurrentUser(this.userservice.user.uid);
       this.sharedservice.navigateToPath('/chat')
     } catch (error) {

@@ -2,25 +2,29 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, Injectable } from '@angular/core';
 import { UserService } from '../user.service';
 import { SharedService } from '../shared.service';
-import { user } from '@angular/fire/auth';
+import { Auth } from '@angular/fire/auth';
+import { signOut } from 'firebase/auth';
 import { DevspaceComponent } from '../devspace/devspace.component';
 import { ChatwindowComponent } from '../chatwindow/chatwindow.component';
 import { Subscription } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { Channel } from '../models/channel.class';
-import { Firestore, collection, addDoc, updateDoc, doc, arrayUnion } from '@angular/fire/firestore';
+import { Firestore, collection, addDoc, } from '@angular/fire/firestore';
 import { ThreadComponent } from '../thread/thread.component';
+import { ProfileComponent } from '../profile/profile.component';
+
 @Injectable({
   providedIn: 'root',
 })
 
 @Component({
   selector: 'app-chat',
-  imports: [CommonModule, DevspaceComponent, ChatwindowComponent, ThreadComponent, FormsModule],
+  imports: [CommonModule, DevspaceComponent, ChatwindowComponent, ThreadComponent, FormsModule, ProfileComponent],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.scss'
 })
 export class ChatComponent {
+  auth = inject(Auth);
   userID: string = '';
   currentUser: any;
   currentReciever: any;
@@ -34,6 +38,9 @@ export class ChatComponent {
   channelName: string = '';
   channelDescription: string = '';
   private overlaySubscription: Subscription | null = null;
+  private profileSubscription: Subscription | null = null;
+  isLogout: boolean = false;
+  isProfileOpen: boolean = false;
   constructor() {
     this.sharedservice.getUserFromLocalStorage();
     this.sharedservice.getDataFromLocalStorage('reciever')
@@ -49,9 +56,13 @@ export class ChatComponent {
       this.toggleChannelOverlay();
     })
 
-    this.overlaySubscription=this.sharedservice.openGeneralOverlay$.subscribe(()=>{
-      this.isOverlay=!this.isOverlay;
+    this.overlaySubscription = this.sharedservice.openGeneralOverlay$.subscribe(() => {
+      this.isOverlay = !this.isOverlay;
     })
+    this.profileSubscription = this.sharedservice.profileObserver$.subscribe(() => {
+      this.isProfileOpen = false;
+    })
+
   }
 
 
@@ -63,32 +74,27 @@ export class ChatComponent {
 
   toggleChannelOverlay() {
     this.showChannel = !this.showChannel;
-   
+  }
 
+  toggleLogout() {
+    this.isLogout = !this.isLogout;
+    this.sharedservice.openOverlay();
+  }
+
+  toggleProfile() {
+    this.isProfileOpen = !this.isProfileOpen;
   }
 
 
-
   async createChannel() {
-    if (!this.channelName) {
-      return; // Falls der Channel-Name leer ist, abbrechen
-    }
-
+    if (!this.channelName) { return }
     const firstMember = this.getMember();
-    // Neues Channel-Objekt erstellen
-    const newChannel = new Channel(
-      this.channelName,
-      this.channelDescription,
-      this.currentUser.name,  // Setze den Creator des Channels als aktuellen Benutzer
-      this.currentUser.id,
+    const newChannel = new Channel(this.channelName, this.channelDescription, this.currentUser.name, this.currentUser.id, [firstMember], [], new Date().toISOString());
+    await this.addChannelToFirestore(newChannel);
+  }
 
-      [firstMember],  // Mitglieder, kann später hinzugefügt werden
-      [],  // Nachrichten, anfangs leer
-      new Date().toISOString()  // Timestamp setzen
-    );
-
+  async addChannelToFirestore(newChannel: any) {
     try {
-      // Channel-Objekt in Firestore speichern
       const channelsCollection = collection(this.firestore, 'channels');
       const channelDocRef = await addDoc(channelsCollection, {
         name: newChannel.name,
@@ -99,16 +105,21 @@ export class ChatComponent {
         members: newChannel.members,
         messages: newChannel.messages
       });
-
-      console.log('Channel erfolgreich erstellt!');
-      this.toggleChannelOverlay();  // Overlay schließen
-      this.channelName = '';  // Eingabefelder zurücksetzen
-      this.channelDescription = '';
+      this.resetChannelWindowAndReload()
       this.reloadChannels(channelDocRef.id);
+      console.log('Channel erfolgreich erstellt!');
     } catch (error) {
       console.error('Fehler beim Erstellen des Channels: ', error);
     }
   }
+
+  resetChannelWindowAndReload() {
+    this.toggleChannelOverlay();
+    this.channelName = '';
+    this.channelDescription = '';
+
+  }
+
 
 
   reloadChannels(newChannelID: any) {
@@ -122,8 +133,27 @@ export class ChatComponent {
       avatar: this.currentUser.avatar,
       online: this.currentUser.online,
       id: this.currentUser.id,
-      messages: this.currentUser.messages,
     }
     return member
   }
+
+  async logoutUser() {
+
+    await this.userservice.setOnlineStatus('logout');
+    await signOut(this.auth);
+    this.emptyLogalStorage();
+    setTimeout(() => {
+      this.sharedservice.navigateToPath('/login');
+    }, 1000);
+
+  }
+
+  emptyLogalStorage() {
+    this.currentUser = null;
+    this.currentReciever = null;
+    localStorage.setItem('reciever', JSON.stringify(this.currentReciever));
+    localStorage.setItem('user', JSON.stringify(this.currentUser));
+    this.sharedservice.logoutUser();
+  }
 }
+

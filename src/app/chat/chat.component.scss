@@ -9,6 +9,7 @@ section {
 }
 
 .header {
+    position: relative;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -22,6 +23,7 @@ section {
         width: 242px;
     }
 }
+
 
 .search {
     width: 100%;
@@ -61,7 +63,7 @@ input::placeholder {
     >button {
         width: 30px;
         height: 30px;
-
+        z-index: 10;
     }
 }
 
@@ -96,36 +98,74 @@ input::placeholder {
     background-color: #92c83e;
 }
 
+.logoutContainer {
+    position: absolute;
+    width: 282px;
+    height: 181px;
+    background-color: white;
+    border-radius: 30px 0 30px 30px;
+    right: 20px;
+    top: 100px;
+    box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 15px;
+    z-index: 10;
+
+    >button {
+        width: 100%;
+        height: 53px;
+        font-size: 20px;
+        font-weight: 500;
+
+        &:hover {
+            background-color: var(--bg-color);
+            color: var(--purple1);
+            border-radius: 25px;
+        }
+
+        &:active {
+            transform: scale(0.95);
+        }
+    }
+}
+
+.profileOverlay{
+position: absolute;
+right: 20px;
+top: 100px;
+z-index: 11;
+}
+
 .content {
-height: calc(100% - 115px);
-   
+    height: calc(100% - 115px);
+
     box-sizing: border-box;
     padding: 20px;
     display: flex;
     justify-content: flex-start;
     align-items: flex-start;
     gap: 30px;
-    display: flex;
-    justify-content: flex-start;
-    align-items: flex-start;
-    
 }
 
 .devspace {
     display: flex;
     width: 100%;
     max-width: 366px;
-height: 100%;
+    height: 100%;
 
 }
 
-.chatwindow{
-  
+.chatwindow {
+
     width: 100%;
     height: 100%;
 }
 
-.channelOverlay{
+.channelOverlay {
     width: 100vw;
     height: 100vh;
     position: absolute;
@@ -135,7 +175,7 @@ height: 100%;
     align-items: center;
 }
 
-.createChannel{
+.createChannel {
     width: 100%;
     max-width: 872px;
     height: 100%;
@@ -149,12 +189,14 @@ height: 100%;
     gap: 20px;
 
 }
-.headline{
+
+.headline {
     width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    >button{
+
+    >button {
         width: 40px;
         height: 40px;
         display: flex;
@@ -162,24 +204,25 @@ height: 100%;
         align-items: center;
 
     }
-    >span{
+
+    >span {
         font-size: 24px;
     }
 }
 
-.textfield{
+.textfield {
     width: 100%;
     height: 50px;
 }
 
-.inputContainer{
+.inputContainer {
     width: 100%;
     height: 105px;
     display: flex;
     flex-direction: column;
     gap: 20px;
 
-    >div{
+    >div {
         width: 100%;
         height: 60px;
         border: solid;
@@ -195,36 +238,40 @@ height: 100%;
 
 
 }
-.buttonContainer{
-width: 100%;
-display: flex;
-justify-content: flex-end;
+
+.buttonContainer {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
 
 }
-.createButton{
+
+.createButton {
     width: 125px;
     height: 49px;
     background-color: var(--purple1);
     color: white;
     border-radius: 25px;
-    &:active{
+
+    &:active {
         transform: scale(0.95);
     }
 
 }
 
-.thread{
+.thread {
     width: 100%;
     max-width: 485px;
     height: 100%;
 }
 
-.overlay{
+.overlay {
     width: 100vw;
     height: 100vh;
     position: absolute;
     background-color: rgba(0, 0, 0, 0.307);
-    >div{
+
+    >div {
         width: 300px;
         height: 300px;
         background-color: white;

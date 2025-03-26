@@ -30,10 +30,16 @@ export class UserService {
 
     }
 
-    async setOnlineStatus() {
+    async setOnlineStatus(status: string) {
         const currentUser = this.getUser();
         console.log(currentUser);
-        currentUser.online = true;
+        if (status === 'login') {
+            currentUser.online = true;
+        }
+        if (status === 'logout') {
+            currentUser.online = false;
+        }
+
         await this.updateOnlineStatus(currentUser);
 
     }
@@ -48,12 +54,12 @@ export class UserService {
         }
     }
 
-   setCurrentUser() {
+    setCurrentUser() {
         onAuthStateChanged(this.auth, (user) => {
             if (user) {
-               this.user=user;
+                this.user = user;
                 console.log('User ist eingeloggt', this.user);
-               
+
             } else {
                 this.user = new User(null);
                 console.log('User ist ausgeloggt');
@@ -83,14 +89,14 @@ export class UserService {
         this.users = await this.getUsers();
         const user = this.users.find(user => user.id === id);
         if (user) {
-           
+
             localStorage.setItem('user', JSON.stringify(user));
-          return user
+            return user
         }
 
 
     }
 
-   
+
 
 }

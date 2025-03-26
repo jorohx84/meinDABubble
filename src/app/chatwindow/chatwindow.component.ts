@@ -8,7 +8,7 @@ import { ChannelService } from '../channel.service';
 import { Message } from '../models/message.class';
 import { Firestore, doc, updateDoc, arrayUnion, onSnapshot } from '@angular/fire/firestore';
 import { SearchService } from '../search.service';
-
+import { MessageService } from '../message.service';
 @Injectable({
   providedIn: 'root',
 })
@@ -20,6 +20,7 @@ import { SearchService } from '../search.service';
   styleUrl: './chatwindow.component.scss'
 })
 export class ChatwindowComponent {
+  messageService = inject(MessageService);
   sharedservice = inject(SharedService);
   userService = inject(UserService)
   channelService = inject(ChannelService);
@@ -47,6 +48,7 @@ export class ChatwindowComponent {
   searchInput: string = '';
   searchSubscription: Subscription | null = null;
   loadChannelSubscrition: Subscription | null = null;
+  logoutSubscription: Subscription | null = null;
   searchList: any[] = [];
   constructor() {
 
@@ -77,12 +79,19 @@ export class ChatwindowComponent {
       await this.reloadChannels();
     });
 
+    this.logoutSubscription = this.sharedservice.logoutObserver$.subscribe(() => {
+      this.currentChat = 'new';
+      localStorage.setItem('chat', this.currentChat);
+
+    })
+
   }
 
   async reloadChannels() {
     await this.loadChannels();
     this.currentMessages = [];
     this.currentChat = 'channel'
+    this.loadCurrentWindow();
     const newChannelID = this.sharedservice.channelID;
     this.currentReciever = this.channels.find((channel: any) => channel.id === newChannelID);
     localStorage.setItem('reciever', JSON.stringify(this.currentReciever));
@@ -106,77 +115,125 @@ export class ChatwindowComponent {
       console.error('Error loading channels in component:', error);
     }
   }
-
+  /*
+    getDataFromDevspace() {
+  
+      if (this.sharedservice.chat) {
+        this.currentChat = this.sharedservice.chat;
+      } else {
+        this.sharedservice.getDataFromLocalStorage('chat');
+        this.currentChat = this.sharedservice.data;
+      }
+      if (this.sharedservice.user) {
+        this.currentUser = this.sharedservice.user;
+      } else {
+        this.sharedservice.getDataFromLocalStorage('user');
+        console.log(this.sharedservice.data);
+        this.currentUser = this.sharedservice.data
+      }
+      if (this.sharedservice.reciever) {
+        this.currentReciever = this.sharedservice.reciever;
+      } else {
+        this.sharedservice.getDataFromLocalStorage('reciever');
+        this.currentReciever = this.sharedservice.data;
+      }
+      if (this.currentReciever === null) {
+        this.currentChat = 'new'
+        localStorage.setItem('chat', this.currentChat);
+      }
+      console.log(this.currentChat);
+  
+      this.loadMessages()
+    }
+      */
   getDataFromDevspace() {
-
-    if (this.sharedservice.chat) {
-      this.currentChat = this.sharedservice.chat;
-    } else {
-      this.sharedservice.getDataFromLocalStorage('chat');
-      this.currentChat = this.sharedservice.data;
-    }
-    if (this.sharedservice.user) {
-      this.currentUser = this.sharedservice.user;
-    } else {
-      this.sharedservice.getDataFromLocalStorage('user');
-      console.log(this.sharedservice.data);
-      this.currentUser = this.sharedservice.data
-    }
-    if (this.sharedservice.reciever) {
-      this.currentReciever = this.sharedservice.reciever;
-    } else {
-      this.sharedservice.getDataFromLocalStorage('reciever');
-      this.currentReciever = this.sharedservice.data;
-    }
+    this.currentChat = this.getData('chat', this.sharedservice.chat);
+    this.currentUser = this.getData('user', this.sharedservice.user);
+    this.currentReciever = this.getData('reciever', this.sharedservice.reciever);
     if (this.currentReciever === null) {
-      this.currentChat = 'new'
+      this.currentChat = 'new';
       localStorage.setItem('chat', this.currentChat);
     }
-    console.log(this.currentChat);
+    this.loadMessages();
+  }
 
-    this.loadMessages()
+
+  getData(key: string, value: any): any {
+    if (value) {
+      return value;
+    } else {
+      this.sharedservice.getDataFromLocalStorage(key);
+      return this.sharedservice.data;
+    }
   }
 
 
   loadCurrentWindow() {
-    if (this.currentChat === 'user') {
-      this.isPersonalChat = true;
-      this.isChannel = false;
-      this.isNewMessage = false
-    }
-    if (this.currentChat === 'channel') {
-      this.isPersonalChat = false;
-      this.isChannel = true;
-      this.isNewMessage = false
-    }
-    if (this.currentChat === 'new') {
-      this.isPersonalChat = false;
-      this.isChannel = false;
-      this.isNewMessage = true
+    this.isPersonalChat = this.currentChat === 'user';
+    this.isChannel = this.currentChat === 'channel';
+    this.isNewMessage = this.currentChat === 'new';
+
+    if (this.isNewMessage) {
       this.currentMessages = [];
       this.isEmpty = false;
-
     }
   }
+  /*
+    loadCurrentWindow() {
+      if (this.currentChat === 'user') {
+        this.isPersonalChat = true;
+        this.isChannel = false;
+        this.isNewMessage = false
+      }
+      if (this.currentChat === 'channel') {
+        this.isPersonalChat = false;
+        this.isChannel = true;
+        this.isNewMessage = false
+      }
+      if (this.currentChat === 'new') {
+        this.isPersonalChat = false;
+        this.isChannel = false;
+        this.isNewMessage = true
+        this.currentMessages = [];
+        this.isEmpty = false;
+  
+      }
+    }
+  */
 
   getList() {
-    if (this.message.includes('#')) {
-      this.currentList = this.channels;
-      this.isClicked = true;
-      this.isChannelList = true;
-    }
-    if (this.message.includes('@')) {
-      this.isClicked = true;
-      this.currentList = this.users;
-      this.isChannelList = false;
-    }
-    if (
-      this.message === '' ||
-      (!this.message.includes('#') && !this.message.includes('@'))
-    ) {
+    const containsHash = this.message.includes('#');
+    const containsAt = this.message.includes('@');
+
+    this.isClicked = containsHash || containsAt;
+    this.isChannelList = containsHash;
+    this.currentList = containsHash ? this.channels : containsAt ? this.users : [];
+
+    // Falls weder # noch @ enthalten sind, isClicked bleibt false und currentList bleibt leer.
+    if (!containsHash && !containsAt) {
       this.isClicked = false;
     }
   }
+  /*
+    getList() {
+      if (this.message.includes('#')) {
+        this.currentList = this.channels;
+        this.isClicked = true;
+        this.isChannelList = true;
+      }
+      if (this.message.includes('@')) {
+        this.isClicked = true;
+        this.currentList = this.users;
+        this.isChannelList = false;
+      }
+      if (
+        this.message === '' ||
+        (!this.message.includes('#') && !this.message.includes('@'))
+      ) {
+        this.isClicked = false;
+      }
+    }
+  */
 
   getReciever(index: number) {
     if (this.isChannelList) {
@@ -218,127 +275,143 @@ export class ChatwindowComponent {
 
 
   async sendMessage() {
-
-    let collection;
-    if (this.message === '' || !this.currentReciever.id || !this.currentUser.id) {
-      console.log('kein Sender oder Empfänger');
-      return;
-    }
-    if (this.currentChat === 'channel') {
-      collection = 'channels'
-    }
-    if (this.currentChat === 'user') {
-      collection = 'users'
-    }
-    this.saveMessages(collection);
+    await this.messageService.sendMessage(this.message, this.currentUser, this.currentReciever, this.currentChat);
     this.isEmpty = false;
     this.message = '';
   }
 
-  async saveMessages(collection: any) {
-    const message = new Message(this.currentUser.name || '', this.currentUser.avatar || '', this.message, this.currentUser.id, this.currentReciever.id);
-    const messageData = this.createMessageData(message);
-    const currentUserRef = doc(this.firestore, `${collection}/${this.currentUser.id}`);
-    const currentReceiverRef = doc(this.firestore, `${collection}/${this.currentReciever.id}`);
-    if (this.currentReciever.id !== this.currentUser.id) {
-      await updateDoc(currentReceiverRef, {
-        messages: arrayUnion(messageData),
-      });
-    }
-    if (this.currentChat != 'channel') {
-      await updateDoc(currentUserRef, {
-        messages: arrayUnion(messageData),
-      });
-    }
-  }
-
-  createMessageData(message: Message) {
-    return {
-      name: message.name,
-      photo: message.photo,
-      content: message.content,
-      time: message.time.toISOString(),
-      from: message.from,
-      to: message.to,
-      thread: [],
-    };
-  }
-
-
-  checkReciever() {
-    if (this.currentReciever.id === this.currentUser.id) {
-      this.isYou = true;
-    } else {
-      this.isYou = false;
-    }
-    console.log(this.isYou);
-
-  }
-
 
   loadMessages() {
-    console.log(this.currentReciever);
-    console.log(this.currentChat);
+    this.messageService.loadMessages(this.currentUser, this.currentReciever, this.currentChat).subscribe((messages: any) => {
+      this.currentMessages = messages;
+      this.sortMessages();
+      this.checkMessages();
+    });
+  }
 
-
-    if (this.currentChat === 'user') {
-      this.loadUserMessages();
+  /*
+    async sendMessage() {
+  
+      let collection;
+      if (this.message === '' || !this.currentReciever.id || !this.currentUser.id) {
+        console.log('kein Sender oder Empfänger');
+        return;
+      }
+      if (this.currentChat === 'channel') {
+        collection = 'channels'
+      }
+      if (this.currentChat === 'user') {
+        collection = 'users'
+      }
+      await this.saveMessages(collection);
+      this.isEmpty = false;
+      this.message = '';
     }
-    if (this.currentChat === 'channel') {
-      this.loadChannelMessages();
+  
+    async saveMessages(collection: any) {
+      const message = new Message(this.currentUser.name || '', this.currentUser.avatar || '', this.message, this.currentUser.id, this.currentReciever.id);
+      const messageData = this.createMessageData(message);
+      const currentUserRef = doc(this.firestore, `${collection}/${this.currentUser.id}`);
+      const currentReceiverRef = doc(this.firestore, `${collection}/${this.currentReciever.id}`);
+      if (this.currentReciever.id !== this.currentUser.id) {
+        await updateDoc(currentReceiverRef, {
+          messages: arrayUnion(messageData),
+        });
+      }
+      if (this.currentChat != 'channel') {
+        await updateDoc(currentUserRef, {
+          messages: arrayUnion(messageData),
+        });
+      }
     }
-    this.checkReciever();
-  }
-
-
-  loadChannelMessages() {
-    const channelMessagesRef = doc(this.firestore, `channels/${this.currentReciever.id}`);
-    onSnapshot(channelMessagesRef, (docSnapshot) => {
-      if (docSnapshot.exists()) {
-        const messageData = docSnapshot.data();
-        const messages = messageData['messages'] || [];
-        console.log(messages);
-
-        this.currentMessages = messages;
-        this.sortMessages();
-        this.checkMessages();
+  
+    createMessageData(message: Message) {
+      return {
+        name: message.name,
+        photo: message.photo,
+        content: message.content,
+        time: message.time.toISOString(),
+        from: message.from,
+        to: message.to,
+        thread: [],
+      };
+    }
+  
+  
+    checkReciever() {
+      if (this.currentReciever.id === this.currentUser.id) {
+        this.isYou = true;
       } else {
-        console.log('Dokument existiert nicht');
+        this.isYou = false;
       }
-    });
-  }
-
-  loadUserMessages() {
-    const messagesRef = doc(this.firestore, `users/${this.currentUser.id}`);
-    onSnapshot(messagesRef, (docSnapshot) => {
-      if (docSnapshot.exists()) {
-        const messageData = docSnapshot.data();
-        const messages = messageData['messages'] || [];
-        this.currentMessages = [];
-        this.buildCurrentMessages(messages);
-        this.sortMessages();
-        this.checkMessages();
-      } else {
-        console.log('Benutzerdokument existiert nicht.');
+      console.log(this.isYou);
+  
+    }
+  
+  
+    loadMessages() {
+      console.log(this.currentReciever);
+      console.log(this.currentChat);
+  
+  
+      if (this.currentChat === 'user') {
+        this.loadUserMessages();
       }
-    });
-  }
-
-
-  buildCurrentMessages(messages: any) {
-    messages.forEach((message: any) => {
-      if (this.currentUser.id === this.currentReciever.id) {
-        if (message['to'] === this.currentReciever.id && message['from'] === this.currentReciever.id) {
-          this.currentMessages.push(message);
+      if (this.currentChat === 'channel') {
+        this.loadChannelMessages();
+      }
+      this.checkReciever();
+    }
+  
+  
+    loadChannelMessages() {
+      const channelMessagesRef = doc(this.firestore, `channels/${this.currentReciever.id}`);
+      onSnapshot(channelMessagesRef, (docSnapshot) => {
+        if (docSnapshot.exists()) {
+          const messageData = docSnapshot.data();
+          const messages = messageData['messages'] || [];
+          console.log(messages);
+  
+          this.currentMessages = messages;
+          this.sortMessages();
+          this.checkMessages();
+        } else {
+          console.log('Dokument existiert nicht');
         }
-      } else {
-        if (message['to'] === this.currentReciever.id || message['from'] === this.currentReciever.id) {
-          this.currentMessages.push(message);
+      });
+    }
+  
+    loadUserMessages() {
+      const messagesRef = doc(this.firestore, `users/${this.currentUser.id}`);
+      onSnapshot(messagesRef, (docSnapshot) => {
+        if (docSnapshot.exists()) {
+          const messageData = docSnapshot.data();
+          const messages = messageData['messages'] || [];
+          this.currentMessages = [];
+          this.buildCurrentMessages(messages);
+          this.sortMessages();
+          this.checkMessages();
+        } else {
+          console.log('Benutzerdokument existiert nicht.');
         }
-      }
-    });
-  }
-
+      });
+    }
+  
+  
+    buildCurrentMessages(messages: any) {
+      messages.forEach((message: any) => {
+        if (this.currentUser.id === this.currentReciever.id) {
+          if (message['to'] === this.currentReciever.id && message['from'] === this.currentReciever.id) {
+            this.currentMessages.push(message);
+          }
+        } else {
+          if (message['to'] === this.currentReciever.id || message['from'] === this.currentReciever.id) {
+            this.currentMessages.push(message);
+          }
+        }
+      });
+    }
+  */
   sortMessages() {
     this.currentMessages.sort((a: any, b: any) => {
       const timeA = new Date(a.time);
@@ -389,7 +462,7 @@ export class ChatwindowComponent {
     const currentChannel = this.channels.find(channel => channel.id === this.currentReciever.id);
     localStorage.setItem('reciever', JSON.stringify(currentChannel));
     this.currentReciever = currentChannel;
-   
+
 
   }
 }

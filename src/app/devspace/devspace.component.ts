@@ -76,6 +76,7 @@ export class DevspaceComponent {
   }
 
   findChannels(channel: any[]) {
+    if(this.currentUser){
     this.channels=[];
     channel.forEach((object:any) => {
       if (object.creatorID === this.currentUser.id) {
@@ -89,8 +90,8 @@ export class DevspaceComponent {
         })
       }
     })
-
   }
+}
 
   openChannel(index: any) {
     this.currentReceiver = this.channels[index];
