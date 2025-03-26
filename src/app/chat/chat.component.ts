@@ -9,7 +9,7 @@ import { ChatwindowComponent } from '../chatwindow/chatwindow.component';
 import { Subscription } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { Channel } from '../models/channel.class';
-import { Firestore, collection, addDoc, } from '@angular/fire/firestore';
+import { Firestore, collection, addDoc, doc, updateDoc } from '@angular/fire/firestore';
 import { ThreadComponent } from '../thread/thread.component';
 import { ProfileComponent } from '../profile/profile.component';
 
@@ -44,43 +44,57 @@ export class ChatComponent {
   isProfileOpen: boolean = false;
   isReceiver: boolean = false;
   constructor() {
-  //  this.sharedservice.getUserFromLocalStorage();
-    //this.sharedservice.getDataFromLocalStorage('reciever')
-    
-   // this.currentReciever = this.sharedservice.data;
+
+    this.sharedservice.getDataFromLocalStorage('reciever')
+    this.currentReciever = this.sharedservice.data;
     console.log(this.currentReciever);
 
   }
 
   async ngOnInit() {
-console.log(this.sharedservice.user);
-this.currentUser = this.sharedservice.user
-
+    this.loadCurrentUser();
     this.channelSubscription = this.sharedservice.openChannelOverlay$.subscribe(() => {
       this.toggleChannelOverlay();
     })
 
     this.overlaySubscription = this.sharedservice.openGeneralOverlay$.subscribe(() => {
-      
       this.isOverlay = !this.isOverlay;
     })
+
     this.profileSubscription = this.sharedservice.profileObserver$.subscribe((key) => {
-      if (key === 'receiver') {
-        this.isProfileOpen = true;
-        this.isReceiver = true;
-        this.sharedservice.recieverObserve(key);
-      } else {
-        this.isReceiver=false;
-        this.isProfileOpen = false;
-  
-      }
+      this.loadProfile(key);
     })
 
-this.userSubscription=this.sharedservice.userObserver$.subscribe(()=>{
-  this.currentUser=this.sharedservice.currenProfile;
-  console.log(this.currentUser);
-  
-})
+    this.userSubscription = this.sharedservice.userObserver$.subscribe(() => {
+      this.currentUser = this.sharedservice.currenProfile;
+      console.log(this.currentUser);
+
+    })
+  }
+
+
+  loadProfile(key: string) {
+    if (key === 'receiver') {
+      this.isProfileOpen = true;
+      this.isReceiver = true;
+      this.sharedservice.recieverObserve(key);
+    } else {
+      this.isReceiver = false;
+      this.isProfileOpen = false;
+
+    }
+  }
+
+  loadCurrentUser() {
+    if (this.sharedservice.user) {
+      this.currentUser = this.sharedservice.user
+      console.log('user wurde direkt geladen', this.currentUser);
+
+    } else {
+      this.sharedservice.getUserFromLocalStorage();
+      this.currentUser = this.sharedservice.user
+      console.log('user wurde aud dem localStorage geladen');
+    }
   }
 
 
@@ -100,8 +114,8 @@ this.userSubscription=this.sharedservice.userObserver$.subscribe(()=>{
   }
 
   toggleProfile() {
-    this.sharedservice.isReceiver=false;
-    this.sharedservice.currenProfile=this.currentUser;
+    this.sharedservice.isReceiver = false;
+    this.sharedservice.currenProfile = this.currentUser;
     this.isProfileOpen = !this.isProfileOpen;
   }
 
@@ -160,11 +174,26 @@ this.userSubscription=this.sharedservice.userObserver$.subscribe(()=>{
   async logoutUser() {
 
     await this.userservice.setOnlineStatus('logout');
+    await this.setLogoutTime();
     await signOut(this.auth);
     this.emptyLogalStorage();
+
     setTimeout(() => {
       this.sharedservice.navigateToPath('/login');
     }, 1000);
+
+  }
+
+
+  async setLogoutTime() {
+    console.log(this.currentUser);
+    const logoutTime: string = new Date().toISOString();
+    const userDocRef = doc(this.firestore, `users/${this.currentUser.id}`)
+    console.log(userDocRef);
+    await updateDoc(userDocRef, {
+      logout: logoutTime,
+    })
+
 
   }
 
@@ -176,11 +205,11 @@ this.userSubscription=this.sharedservice.userObserver$.subscribe(()=>{
     this.sharedservice.logoutUser();
   }
 
-  closeOverlay(){
+  closeOverlay() {
     console.log('CLOSE');
-    this.isOverlay=false;
-    this.isProfileOpen=false;
-    this.isLogout=false;
+    this.isOverlay = false;
+    this.isProfileOpen = false;
+    this.isLogout = false;
   }
 }
 

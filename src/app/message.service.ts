@@ -68,6 +68,7 @@ export class MessageService {
             from: message.from,
             to: message.to,
             thread: [],
+            reactions:[],
         };
     }
 

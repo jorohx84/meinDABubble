@@ -93,7 +93,7 @@ export class ChatwindowComponent {
         this.currentReciever = this.sharedservice.currenProfile;
       }
     })
-this.checkReciever();
+this.checkReciever(); 
   }
 
   async reloadChannels() {
@@ -348,13 +348,14 @@ this.checkReciever();
   
   */
     checkReciever() {
-      if (this.currentReciever.id === this.currentUser.id) {
-        this.isYou = true;
-      } else {
-        this.isYou = false;
+      if(this.currentReciever){
+        if (this.currentReciever.id === this.currentUser.id) {
+          this.isYou = true;
+        } else {
+          this.isYou = false;
+        }
+        console.log(this.isYou);
       }
-      console.log(this.isYou);
-  
     }
   /*
   
