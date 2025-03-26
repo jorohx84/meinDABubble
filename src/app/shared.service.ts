@@ -1,6 +1,6 @@
 import { Router } from "@angular/router";
 import { Injectable, inject } from "@angular/core";
-import { Subject, subscribeOn } from "rxjs";
+import { BehaviorSubject, Subject, subscribeOn } from "rxjs";
 @Injectable({
     providedIn: 'root',
 })
@@ -8,6 +8,7 @@ export class SharedService {
     router = inject(Router)
     user: any;
     data: any;
+    currentReciever: any;
     private openChannelOverlay = new Subject<void>();
     openChannelOverlay$ = this.openChannelOverlay.asObservable();
     private reloadChannel = new Subject<void>();
@@ -20,13 +21,15 @@ export class SharedService {
     openGeneralOverlay$ = this.openGeneralOverlay.asObservable();
     private logoutObserver = new Subject<void>();
     logoutObserver$ = this.logoutObserver.asObservable();
-    private profileObserver=new Subject<void>();
-    profileObserver$=this.profileObserver.asObservable();
-
+    private profileObserver = new Subject<string>();
+    profileObserver$ = this.profileObserver.asObservable();
+    private recieverObserver = new BehaviorSubject<string>('');
+    recieverObserver$ = this.recieverObserver.asObservable();
     reciever: any;
     chat: string = '';
     message: any;
     channelID: string = '';
+    isReceiver: boolean = false;
 
     navigateToPath(path: string) {
         this.router.navigate([path]);
@@ -107,7 +110,11 @@ export class SharedService {
         this.logoutObserver.next();
     }
 
-    generalObserve(){
-        this.profileObserver.next();
+    profileObserve(key: string) {
+        this.profileObserver.next(key);
+    }
+
+    recieverObserve(key: string) {
+        this.recieverObserver.next(key)
     }
 }

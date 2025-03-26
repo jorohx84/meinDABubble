@@ -18,9 +18,10 @@
             <button (click)="toggleProfile()">Profil</button>
             <button (click)="logoutUser()">Logout</button>
         </div>
-        <div *ngIf="isProfileOpen" class="profileOverlay">
-            <app-profile></app-profile>
-        </div>
+        
+    </div>
+    <div [ngClass]="{'receiverProfile':isReceiver}" *ngIf="isProfileOpen" class="profileOverlay">
+        <app-profile></app-profile>
     </div>
 
     <div class="content">

@@ -41,6 +41,7 @@ export class ChatComponent {
   private profileSubscription: Subscription | null = null;
   isLogout: boolean = false;
   isProfileOpen: boolean = false;
+  isReceiver: boolean = false;
   constructor() {
     this.sharedservice.getUserFromLocalStorage();
     this.sharedservice.getDataFromLocalStorage('reciever')
@@ -57,10 +58,22 @@ export class ChatComponent {
     })
 
     this.overlaySubscription = this.sharedservice.openGeneralOverlay$.subscribe(() => {
+      
       this.isOverlay = !this.isOverlay;
     })
-    this.profileSubscription = this.sharedservice.profileObserver$.subscribe(() => {
-      this.isProfileOpen = false;
+    this.profileSubscription = this.sharedservice.profileObserver$.subscribe((key) => {
+      if (key === 'receiver') {
+        this.isProfileOpen = true;
+        this.isReceiver = true;
+        this.sharedservice.recieverObserve(key);
+      } else {
+        this.isReceiver=false;
+        this.isProfileOpen = false;
+  
+      }
+
+      console.log(this.isProfileOpen);
+
     })
 
   }
@@ -82,6 +95,7 @@ export class ChatComponent {
   }
 
   toggleProfile() {
+    this.sharedservice.isReceiver=false;
     this.isProfileOpen = !this.isProfileOpen;
   }
 

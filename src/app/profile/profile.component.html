@@ -7,7 +7,7 @@
     <div class="userData">
         <div class="userName">
             <span>{{currentUser?.name}}</span>
-            <button>Bearbeiten</button>
+            <button *ngIf="!isRecieverProfile">Bearbeiten</button>
         </div>
         <div class="status">
             <div class="status-dot" [ngClass]="{ green: currentUser?.online }"></div>

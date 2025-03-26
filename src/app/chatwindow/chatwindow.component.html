@@ -1,6 +1,6 @@
 <section>
     <div [ngClass]="{'newMessageHeader': isNewMessage}" class="header">
-        <div *ngIf="isPersonalChat" class="profile">
+        <div (click)="openProfile()" *ngIf="isPersonalChat" class="profile">
             <div class="imageContainer">
                 <img class="profile-image" [src]="currentReciever?.avatar" alt="" />
                 <div class="status-dot" [ngClass]="{ green: currentReciever?.online }"></div>

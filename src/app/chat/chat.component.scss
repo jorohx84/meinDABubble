@@ -140,6 +140,14 @@ top: 100px;
 z-index: 11;
 }
 
+.receiverProfile{
+    
+    top: 50% !important;
+    left: 50% !important;
+    right: unset;
+    transform: translate(-50%, -50%) !important;
+}
+
 .content {
     height: calc(100% - 115px);
 

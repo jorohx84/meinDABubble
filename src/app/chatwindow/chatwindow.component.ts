@@ -462,7 +462,11 @@ export class ChatwindowComponent {
     const currentChannel = this.channels.find(channel => channel.id === this.currentReciever.id);
     localStorage.setItem('reciever', JSON.stringify(currentChannel));
     this.currentReciever = currentChannel;
+  }
 
-
+  openProfile(){
+   this.sharedservice.openOverlay();
+   this.sharedservice.isReceiver=true;
+   this.sharedservice.profileObserve('receiver');
   }
 }
