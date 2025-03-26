@@ -8,7 +8,7 @@ export class SharedService {
     router = inject(Router)
     user: any;
     data: any;
-    currentReciever: any;
+    currenProfile: any;
     private openChannelOverlay = new Subject<void>();
     openChannelOverlay$ = this.openChannelOverlay.asObservable();
     private reloadChannel = new Subject<void>();
@@ -25,6 +25,8 @@ export class SharedService {
     profileObserver$ = this.profileObserver.asObservable();
     private recieverObserver = new BehaviorSubject<string>('');
     recieverObserver$ = this.recieverObserver.asObservable();
+    private userObserver = new Subject<void>();
+    userObserver$ = this.userObserver.asObservable();
     reciever: any;
     chat: string = '';
     message: any;
@@ -116,5 +118,11 @@ export class SharedService {
 
     recieverObserve(key: string) {
         this.recieverObserver.next(key)
+    }
+
+    userObserve() {
+        console.log(this.currenProfile);
+        
+        this.userObserver.next();
     }
 }

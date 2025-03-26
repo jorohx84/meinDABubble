@@ -1,18 +1,18 @@
-<section>
+<section *ngIf="!isEdit" [ngClass]="{'border':isRecieverProfile}">
     <div class="headline">
         <span>Profil</span>
         <button (click)="closeProfile()"><img src="./img/close.svg" alt=""></button>
     </div>
-    <img [src]="currentUser?.avatar" alt="">
+    <img [src]="currentProfile?.avatar" alt="">
     <div class="userData">
         <div class="userName">
-            <span>{{currentUser?.name}}</span>
-            <button *ngIf="!isRecieverProfile">Bearbeiten</button>
+            <span>{{currentProfile?.name}}</span>
+            <button (click)="editProfile()" *ngIf="!isRecieverProfile">Bearbeiten</button>
         </div>
         <div class="status">
-            <div class="status-dot" [ngClass]="{ green: currentUser?.online }"></div>
-            <span class="greenColor" *ngIf="currentUser?.online">Aktiv</span>
-            <span *ngIf="!currentUser?.online">Abwesend</span>
+            <div class="status-dot" [ngClass]="{ green: currentProfile?.online }"></div>
+            <span class="greenColor" *ngIf="currentProfile?.online">Aktiv</span>
+            <span *ngIf="!currentProfile?.online">Abwesend</span>
         </div>
     </div>
 
@@ -22,8 +22,28 @@
             <span>E-Mail-Adresse</span>
         </div>
         <div class="emailLink">
-            <a href="mailto:{{currentUser?.email}}">{{currentUser?.email}}</a>
+            <a href="mailto:{{currentProfile?.email}}">{{currentProfile?.email}}</a>
         </div>
     </div>
     <button *ngIf="isRecieverProfile"><img src="./img/mode_comment.svg" alt=""><span>Nachricht</span></button>
 </section>
+
+<div *ngIf="isEdit" class="edit">
+<div class="headline">
+    <span>Profile bearbeiten</span>
+   <button (click)="closeEdit()"><img src="./img/close.svg" alt=""></button>
+</div>
+<img [src]="currentProfile?.avatar" alt="">
+
+<div class="editProfile">
+   <div>
+    <img src="./img/account_circle.svg" alt="">
+    <span>Vollständiger Name</span>
+   </div>
+   <input [(ngModel)]="input" name="name" type="text" placeholder="{{currentProfile?.name}}">
+</div>
+<div class="buttonsContainer">
+    <button (click)="closeEdit()" class="lightBtn">Abbrechen</button>
+    <button (click)="saveChanges()" class="purpleBtn">Speichern</button>
+</div>
+</div>

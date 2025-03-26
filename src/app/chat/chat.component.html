@@ -73,5 +73,5 @@
         </form>
     </div>
 
-    <div *ngIf="isOverlay" class="overlay"></div>
+    <div (click)="closeOverlay()" *ngIf="isOverlay" class="overlay"></div>
 </section>

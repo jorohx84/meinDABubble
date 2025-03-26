@@ -12,7 +12,9 @@ button {
     cursor: pointer;
     border: none;
     background-color: transparent;
-    
+    &:active{
+        transform: scale(0.95);
+    }
 }
 
 input {

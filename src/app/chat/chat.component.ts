@@ -39,6 +39,7 @@ export class ChatComponent {
   channelDescription: string = '';
   private overlaySubscription: Subscription | null = null;
   private profileSubscription: Subscription | null = null;
+  private userSubscription: Subscription | null = null;
   isLogout: boolean = false;
   isProfileOpen: boolean = false;
   isReceiver: boolean = false;
@@ -71,11 +72,13 @@ export class ChatComponent {
         this.isProfileOpen = false;
   
       }
-
-      console.log(this.isProfileOpen);
-
     })
 
+this.userSubscription=this.sharedservice.userObserver$.subscribe(()=>{
+  this.currentUser=this.sharedservice.currenProfile;
+  console.log(this.currentUser);
+  
+})
   }
 
 
@@ -96,6 +99,7 @@ export class ChatComponent {
 
   toggleProfile() {
     this.sharedservice.isReceiver=false;
+    this.sharedservice.currenProfile=this.currentUser;
     this.isProfileOpen = !this.isProfileOpen;
   }
 
@@ -168,6 +172,13 @@ export class ChatComponent {
     localStorage.setItem('reciever', JSON.stringify(this.currentReciever));
     localStorage.setItem('user', JSON.stringify(this.currentUser));
     this.sharedservice.logoutUser();
+  }
+
+  closeOverlay(){
+    console.log('CLOSE');
+    this.isOverlay=false;
+    this.isProfileOpen=false;
+    this.isLogout=false;
   }
 }
 

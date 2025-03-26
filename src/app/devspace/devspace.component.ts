@@ -27,6 +27,7 @@ export class DevspaceComponent {
   firestore = inject(Firestore);
   sharedservice = inject(SharedService)
   relaodSubscription: Subscription | null = null
+  userSubscription: Subscription | null = null
   router: Router = inject(Router);
   currentUser: any = [];
   currentReceiver: any;
@@ -52,7 +53,12 @@ export class DevspaceComponent {
       this.loadChannels();
 
     })
+    this.userSubscription = this.sharedservice.userObserver$.subscribe(async() => {
+      this.currentUser = this.sharedservice.currenProfile;
+      await this.loadUsers();
+      await this.loadChannels();
 
+    })
 
   }
 

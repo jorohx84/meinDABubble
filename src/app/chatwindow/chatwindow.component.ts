@@ -49,6 +49,7 @@ export class ChatwindowComponent {
   searchSubscription: Subscription | null = null;
   loadChannelSubscrition: Subscription | null = null;
   logoutSubscription: Subscription | null = null;
+  userSubscription: Subscription | null = null;
   searchList: any[] = [];
   constructor() {
 
@@ -82,6 +83,12 @@ export class ChatwindowComponent {
     this.logoutSubscription = this.sharedservice.logoutObserver$.subscribe(() => {
       this.currentChat = 'new';
       localStorage.setItem('chat', this.currentChat);
+
+    })
+
+    this.userSubscription = this.sharedservice.userObserver$.subscribe(() => {
+      this.currentUser = this.sharedservice.currenProfile;
+      console.log(this.currentUser);
 
     })
 
@@ -464,9 +471,11 @@ export class ChatwindowComponent {
     this.currentReciever = currentChannel;
   }
 
-  openProfile(){
-   this.sharedservice.openOverlay();
-   this.sharedservice.isReceiver=true;
-   this.sharedservice.profileObserve('receiver');
+  openProfile() {
+    this.sharedservice.openOverlay();
+    this.sharedservice.isReceiver = true;
+    console.log(this.currentReciever);
+    this.sharedservice.currenProfile = this.currentReciever;
+    this.sharedservice.profileObserve('receiver');
   }
 }
