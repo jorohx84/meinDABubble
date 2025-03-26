@@ -44,15 +44,17 @@ export class ChatComponent {
   isProfileOpen: boolean = false;
   isReceiver: boolean = false;
   constructor() {
-    this.sharedservice.getUserFromLocalStorage();
-    this.sharedservice.getDataFromLocalStorage('reciever')
-    this.currentUser = this.sharedservice.user
-    this.currentReciever = this.sharedservice.data;
+  //  this.sharedservice.getUserFromLocalStorage();
+    //this.sharedservice.getDataFromLocalStorage('reciever')
+    
+   // this.currentReciever = this.sharedservice.data;
     console.log(this.currentReciever);
 
   }
 
   async ngOnInit() {
+console.log(this.sharedservice.user);
+this.currentUser = this.sharedservice.user
 
     this.channelSubscription = this.sharedservice.openChannelOverlay$.subscribe(() => {
       this.toggleChannelOverlay();

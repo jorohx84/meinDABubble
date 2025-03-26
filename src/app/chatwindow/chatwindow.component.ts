@@ -89,9 +89,11 @@ export class ChatwindowComponent {
     this.userSubscription = this.sharedservice.userObserver$.subscribe(() => {
       this.currentUser = this.sharedservice.currenProfile;
       console.log(this.currentUser);
-
+      if (this.currentReciever.id === this.currentUser.id) {
+        this.currentReciever = this.sharedservice.currenProfile;
+      }
     })
-
+this.checkReciever();
   }
 
   async reloadChannels() {
@@ -344,7 +346,7 @@ export class ChatwindowComponent {
       };
     }
   
-  
+  */
     checkReciever() {
       if (this.currentReciever.id === this.currentUser.id) {
         this.isYou = true;
@@ -354,7 +356,7 @@ export class ChatwindowComponent {
       console.log(this.isYou);
   
     }
-  
+  /*
   
     loadMessages() {
       console.log(this.currentReciever);
