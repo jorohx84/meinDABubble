@@ -5,7 +5,7 @@ export class User {
     avatar: string;
     messages: string[];
     online: boolean;
-    logout: string;
+    login: string;
 
     constructor(user?: any) {
         this.name = user ? user.name : '';
@@ -14,6 +14,6 @@ export class User {
         this.avatar = user ? user.avatar : '';
         this.messages = user ? user.messages : [];
         this.online = user ? user.online : false;
-        this.logout = user ? user.logout : '';
+        this.login = user ? user.login : '';
     }
 }

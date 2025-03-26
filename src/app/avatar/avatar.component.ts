@@ -57,7 +57,7 @@ export class AvatarComponent {
             avatar: this.currentUser.avatar,
             messages: [],
             online: false,
-            logout:''
+            login:''
           });
         });
       })

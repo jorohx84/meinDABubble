@@ -30,6 +30,7 @@ export class LoginComponent {
       await signInWithEmailAndPassword(this.auth, this.user.email, this.user.password);
       this.userservice.setOnlineStatus('login');
       await this.userservice.getCurrentUser(this.userservice.user.uid);
+      await this.userservice.setLoginTime();
       this.sharedservice.navigateToPath('/chat')
     } catch (error) {
       console.log(error);
@@ -37,5 +38,7 @@ export class LoginComponent {
     }
 
   }
+
+
 
 }

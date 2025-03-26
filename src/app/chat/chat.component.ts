@@ -174,7 +174,6 @@ export class ChatComponent {
   async logoutUser() {
 
     await this.userservice.setOnlineStatus('logout');
-    await this.setLogoutTime();
     await signOut(this.auth);
     this.emptyLogalStorage();
 
@@ -185,17 +184,7 @@ export class ChatComponent {
   }
 
 
-  async setLogoutTime() {
-    console.log(this.currentUser);
-    const logoutTime: string = new Date().toISOString();
-    const userDocRef = doc(this.firestore, `users/${this.currentUser.id}`)
-    console.log(userDocRef);
-    await updateDoc(userDocRef, {
-      logout: logoutTime,
-    })
-
-
-  }
+  
 
   emptyLogalStorage() {
     this.currentUser = null;
