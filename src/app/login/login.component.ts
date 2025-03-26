@@ -29,9 +29,12 @@ export class LoginComponent {
     try {
       await signInWithEmailAndPassword(this.auth, this.user.email, this.user.password);
       this.userservice.setOnlineStatus('login');
-      await this.userservice.getCurrentUser(this.userservice.user.uid);
+      await this.userservice.findCurrentUser(this.userservice.user.uid);
       await this.userservice.setLoginTime();
-      this.sharedservice.navigateToPath('/chat')
+      setTimeout(() => {
+        this.sharedservice.navigateToPath('/chat')
+      }, 1000);
+   
     } catch (error) {
       console.log(error);
 

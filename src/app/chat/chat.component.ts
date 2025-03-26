@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, Injectable } from '@angular/core';
 import { UserService } from '../user.service';
 import { SharedService } from '../shared.service';
-import { Auth } from '@angular/fire/auth';
+import { Auth, user } from '@angular/fire/auth';
 import { signOut } from 'firebase/auth';
 import { DevspaceComponent } from '../devspace/devspace.component';
 import { ChatwindowComponent } from '../chatwindow/chatwindow.component';
@@ -25,6 +25,7 @@ import { ProfileComponent } from '../profile/profile.component';
 })
 export class ChatComponent {
   auth = inject(Auth);
+
   userID: string = '';
   currentUser: any;
   currentReciever: any;
@@ -43,11 +44,12 @@ export class ChatComponent {
   isLogout: boolean = false;
   isProfileOpen: boolean = false;
   isReceiver: boolean = false;
+  userObserver = this.userservice.user$;
   constructor() {
-
     this.sharedservice.getDataFromLocalStorage('reciever')
     this.currentReciever = this.sharedservice.data;
     console.log(this.currentReciever);
+
 
   }
 
@@ -69,7 +71,9 @@ export class ChatComponent {
       this.currentUser = this.sharedservice.currenProfile;
       console.log(this.currentUser);
 
-    })
+    });
+
+
   }
 
 
@@ -86,14 +90,18 @@ export class ChatComponent {
   }
 
   loadCurrentUser() {
-    if (this.sharedservice.user) {
-      this.currentUser = this.sharedservice.user
+   this.currentUser = this.userservice.getCurrentUser();
+
+
+    if (this.currentUser) {
+
+      console.log(this.currentUser);
       console.log('user wurde direkt geladen', this.currentUser);
 
     } else {
       this.sharedservice.getUserFromLocalStorage();
       this.currentUser = this.sharedservice.user
-      console.log('user wurde aud dem localStorage geladen');
+      console.log('user wurde aud dem localStorage geladen', this.currentUser);
     }
   }
 
@@ -184,7 +192,7 @@ export class ChatComponent {
   }
 
 
-  
+
 
   emptyLogalStorage() {
     this.currentUser = null;

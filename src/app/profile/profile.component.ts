@@ -65,7 +65,7 @@ this.isEdit=!this.isEdit;
     await updateDoc(profileDocRef, {
       name: this.input,
     });
-    this.currentProfile = await this.userService.getCurrentUser(this.currentProfile.id);
+    this.currentProfile = await this.userService.findCurrentUser(this.currentProfile.id);
 
     console.log(this.currentProfile);
     this.sharedService.currenProfile = this.currentProfile;

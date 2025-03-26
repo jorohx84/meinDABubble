@@ -2,7 +2,7 @@ import { inject, Injectable } from "@angular/core";
 import { User } from "./models/user.class";
 import { Auth, onAuthStateChanged } from "@angular/fire/auth";
 import { Firestore, doc, getDocs, collection, updateDoc } from "@angular/fire/firestore";
-import { runTransaction } from "firebase/firestore";
+import { BehaviorSubject } from "rxjs";
 
 
 @Injectable({
@@ -13,14 +13,18 @@ export class UserService {
     auth = inject(Auth);
     user: any = new User;
     users: any[] = [];
+    private userSubject = new BehaviorSubject<any>(null);
+    user$ = this.userSubject.asObservable();
     constructor() {
         this.setCurrentUser();
-        this.getCurrentUser(this.user.uid);
+        this.findCurrentUser(this.user.uid);
     }
 
 
     getUser(): User {
-        return this.user
+        console.log(this.user);
+        
+        return this.user;
     }
 
     setUser(user: any) {
@@ -58,7 +62,7 @@ export class UserService {
             if (user) {
                 this.user = user;
                 console.log('User ist eingeloggt', this.user);
-
+                
             } else {
                 this.user = new User(null);
                 console.log('User ist ausgeloggt');
@@ -84,21 +88,30 @@ export class UserService {
         }
     }
 
-    async getCurrentUser(id: string) {
+    async findCurrentUser(id: string) {
+        console.log(id);
+
         this.users = await this.getUsers();
         const user = this.users.find(user => user.id === id);
         if (user) {
+            
+            this.userSubject.next(user);
 
             localStorage.setItem('user', JSON.stringify(user));
             return user
         }
-
-
     }
+
+    getCurrentUser() {
+        console.log(this.userSubject.value);
+        
+        return this.userSubject.value
+    }
+
 
     async setLoginTime() {
         console.log(this.user);
-        const currentUser = await this.getCurrentUser(this.user.uid);
+        const currentUser = await this.findCurrentUser(this.user.uid);
         console.log(currentUser);
         const loginTime: string = new Date().toISOString();
         const userDocRef = doc(this.firestore, `users/${currentUser.id}`)
@@ -109,7 +122,7 @@ export class UserService {
         console.log(loginTime);
         console.log(currentUser.id);
 
-        this.user = await this.getCurrentUser(currentUser.id);
+        this.user = await this.findCurrentUser(currentUser.id);
         console.log(this.user);
 
 
