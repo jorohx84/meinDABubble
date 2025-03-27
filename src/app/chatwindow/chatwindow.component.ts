@@ -51,6 +51,8 @@ export class ChatwindowComponent {
   logoutSubscription: Subscription | null = null;
   userSubscription: Subscription | null = null;
   searchList: any[] = [];
+  isHeaderSearch: boolean = false;
+  currentInput: string = '';
   constructor() {
 
 
@@ -63,8 +65,6 @@ export class ChatwindowComponent {
 
 
   async ngOnInit() {
-
-
     await this.loadChannels();
     await this.loadUsers();
     this.loadDataSubscription = this.sharedservice.loadChatWindow$.subscribe(() => {
@@ -72,7 +72,12 @@ export class ChatwindowComponent {
       this.loadCurrentWindow();
       console.log(this.currentReciever);
     });
-    this.searchSubscription = this.searchService.openSearchList$.subscribe(() => {
+    this.searchSubscription = this.searchService.openSearchList$.subscribe((key) => {
+      if (key = 'new') {
+        this.isChannelList = this.searchService.isChannel;
+        console.log(this.isChannelList);
+
+      }
       this.showList();
     });
 
@@ -93,8 +98,38 @@ export class ChatwindowComponent {
         this.currentReciever = this.sharedservice.currenProfile;
       }
     })
-this.checkReciever(); 
+    this.checkReciever();
   }
+
+
+  searchForReciever() {
+    this.searchService.getCurrentList(this.currentInput, this.users, this.channels);
+    this.isClicked = this.searchService.isSearch;
+    this.isHeaderSearch = this.searchService.isSearch
+    console.log(this.isHeaderSearch);
+    this.currentList = this.searchService.currentList;
+    console.log(this.currentList);
+
+  }
+
+  toggelFunction(index: number) {
+    if (this.isHeaderSearch) {
+      this.searchService.chooseReciver(index);
+      this.isHeaderSearch = false;
+      this.isClicked = false;
+      this.currentInput = this.searchService.result;
+      this.currentReciever = this.searchService.reciever;
+      this.currentChat = this.searchService.currentChat;
+      localStorage.setItem('reciever', JSON.stringify(this.currentReciever));
+  this.loadMessages();
+      this.loadCurrentWindow();
+     
+      localStorage.setItem('chat', this.currentChat);
+    } else {
+      this.getReciever(index);
+    }
+  }
+
 
   async reloadChannels() {
     await this.loadChannels();
@@ -252,6 +287,7 @@ this.checkReciever();
       const currentReciever = this.currentList[index];
       this.message = '@' + currentReciever?.name;
     }
+    this.isClicked = false;
   }
 
   toggleList(event: Event) {
@@ -287,6 +323,7 @@ this.checkReciever();
     await this.messageService.sendMessage(this.message, this.currentUser, this.currentReciever, this.currentChat);
     this.isEmpty = false;
     this.message = '';
+    this.currentInput = '';
   }
 
 
@@ -347,16 +384,16 @@ this.checkReciever();
     }
   
   */
-    checkReciever() {
-      if(this.currentReciever){
-        if (this.currentReciever.id === this.currentUser.id) {
-          this.isYou = true;
-        } else {
-          this.isYou = false;
-        }
-        console.log(this.isYou);
+  checkReciever() {
+    if (this.currentReciever) {
+      if (this.currentReciever.id === this.currentUser.id) {
+        this.isYou = true;
+      } else {
+        this.isYou = false;
       }
+      console.log(this.isYou);
     }
+  }
   /*
   
     loadMessages() {

@@ -17,6 +17,11 @@ export class MessageService {
 
     // sendMessage
     async sendMessage(message: string, currentUser: any, currentReciever: any, currentChat: string) {
+        console.log(currentUser);
+        console.log(currentReciever);
+        console.log(currentChat);
+        console.log(message);
+        
         let collection: string = '';
 
         if (message === '' || !currentReciever.id || !currentUser.id) {

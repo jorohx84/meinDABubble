@@ -14,10 +14,16 @@ export class SearchService {
     isClicked: boolean = false;
     searchIsOpen: boolean = false;
     currentList: any[] = [];
-    private openSearchList = new Subject<void>();
+    private openSearchList = new Subject<string>();
     openSearchList$ = this.openSearchList.asObservable();
     channels: any[] = [];
     currentMember: any;
+    isSearch: boolean = false;
+    currentArray: any[] = [];
+    isChannel: boolean = false;
+    reciever: any;
+    result: string = '';
+    currentChat:string='';
 
     openMemberList(input: string, users: any[]) {
         if (input.length < 3) {
@@ -26,7 +32,7 @@ export class SearchService {
             this.searchIsOpen = true;
         }
         this.searchForMembers(input, users);
-        this.openSearchList.next();
+        this.openSearchList.next('');
     }
 
     searchForMembers(input: string, users: any[]) {
@@ -77,7 +83,7 @@ export class SearchService {
             avatar: memberData.avatar,
             online: memberData.online,
             id: memberData.id,
-            
+
 
         }
 
@@ -91,4 +97,89 @@ export class SearchService {
         }
     }
 
+
+    getCurrentList(input: string, users: any[], channels: any[]) {
+        if (input.includes('#')) {
+            this.currentArray = channels;
+            this.searchForReciever(input, 'channel');
+        } else if (input.includes('@')) {
+            this.currentArray = users;
+            this.searchForReciever(input, 'user');
+        }
+    }
+
+
+    searchForReciever(input: string, chat: string) {
+        if (input.length > 3) {
+            this.isSearch = true;
+            this.currentList = [];
+            const INPUT = input.slice(1).toLowerCase().trim();
+            this.startSearch(INPUT, chat);
+        } else {
+            this.isSearch = false;
+           
+        }
+    }
+
+
+
+
+    startSearch(input: string, chat: string) {
+        console.log(chat);
+        console.log(input);
+        this.currentArray.forEach((object: any) => {
+
+            if (chat === 'user') {
+                this.searchInUsers(object, input);
+            }
+            if (chat === 'channel') {
+                this.searchInChannels(object, input);
+            }
+
+
+
+        });
+
+    }
+    searchInUsers(object: any, input: string) {
+        if (object.name.toLowerCase().includes(input) || object.email.includes(input)) {
+            const duplette = this.currentList.find((search) => search.id === object.id);
+            if (!duplette) {
+                this.currentList.push(object);
+                this.isChannel = false;
+                this.currentChat='user'
+                this.openSearchList.next('new');
+            }
+        }
+
+    }
+
+    searchInChannels(object: any, input: string) {
+        if (object.name.toLowerCase().includes(input)) {
+            const duplette = this.currentList.find(
+                (search) => search.id === object.id
+            );
+            if (!duplette) {
+
+                this.isChannel = true;
+                this.currentChat='channel'
+                this.openSearchList.next('new');
+                this.currentList.push(object);
+            }
+        }
+    }
+    chooseReciver(index: number) {
+        console.log('isHeaderSearch' + index);
+        this.reciever = this.currentList[index];
+        console.log(this.reciever);
+        if (this.isChannel) {
+            this.result = '#' + this.reciever.name;
+        } else {
+            this.result = '@' + this.reciever.name;
+
+        }
+
+
+
+    }
 }

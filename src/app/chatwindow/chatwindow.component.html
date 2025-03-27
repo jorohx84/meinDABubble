@@ -29,7 +29,7 @@
         </div>
         <div *ngIf="isNewMessage" class="newMessage">
             <span>Neue Nachricht</span>
-            <input type="text" placeholder="An: #channel, oder @jemand oder E-Mail Adresse">
+            <input (input)="searchForReciever()" ng [(ngModel)]="currentInput" type="text" placeholder="An: #channel, oder @jemand oder E-Mail Adresse">
         </div>
     </div>
 
@@ -126,8 +126,8 @@
 
 
 
-    <div [ngClass]="{'show': isClicked }" class="lists">
-        <div (click)="getReciever(index)" [ngClass]="{'channelStyle': isChannelList}" class="listrow"
+    <div [ngClass]="{'show': isClicked, 'position': isHeaderSearch}" class="lists">
+        <div (click)="toggelFunction(index)" [ngClass]="{'channelStyle': isChannelList}" class="listrow"
             *ngFor="let object of currentList; let index = index">
             <div *ngIf="!isChannelList" class="imageContainer">
                 <img class="profile-image" [src]="object?.avatar" alt="">
