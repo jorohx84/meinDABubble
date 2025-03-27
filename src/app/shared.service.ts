@@ -33,6 +33,7 @@ export class SharedService {
     channelID: string = '';
     isReceiver: boolean = false;
 
+
     navigateToPath(path: string) {
         this.router.navigate([path]);
     }
@@ -100,13 +101,12 @@ export class SharedService {
     setReciever(recieverData: any) {
         this.reciever = recieverData;
         console.log(this.reciever);
-        
+
     }
 
     initializeThread() {
         console.log('initialisieren');
         console.log(this.message);
-
         this.openThread.next();
     }
 

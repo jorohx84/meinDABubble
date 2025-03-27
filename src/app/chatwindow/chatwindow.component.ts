@@ -525,6 +525,7 @@ this.sharedservice.setReciever(this.currentReciever);
 this.sharedservice.setUser(this.currentUser);
     this.sharedservice.setMessage(message);
     this.sharedservice.initializeThread();
+    
   }
 
   toggleSearch() {

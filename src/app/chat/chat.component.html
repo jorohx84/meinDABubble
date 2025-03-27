@@ -32,7 +32,7 @@
         <div class="chatwindow">
             <app-chatwindow></app-chatwindow>
         </div>
-        <div class="thread">
+        <div [ngClass]="{'showThread': threadIsOpen}" class="thread">
             <app-thread></app-thread>
         </div>
     </div>

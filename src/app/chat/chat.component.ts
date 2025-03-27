@@ -45,12 +45,14 @@ export class ChatComponent {
   isProfileOpen: boolean = false;
   isReceiver: boolean = false;
   userObserver = this.userservice.user$;
+  threadIsOpen: boolean = false;
+  threadSubscription: Subscription | null = null;
   constructor() {
     this.sharedservice.getDataFromLocalStorage('reciever')
     this.currentReciever = this.sharedservice.data;
     console.log(this.currentReciever);
-
-
+this.sharedservice.getDataFromLocalStorage('thread')
+this.threadIsOpen=this.sharedservice.data;
   }
 
   async ngOnInit() {
@@ -72,7 +74,10 @@ export class ChatComponent {
       console.log(this.currentUser);
 
     });
-
+    this.threadSubscription = this.sharedservice.openThread$.subscribe(() => {
+     this.threadIsOpen=true;
+     localStorage.setItem('thread',JSON.stringify (this.threadIsOpen));
+    })
 
   }
 
@@ -90,7 +95,7 @@ export class ChatComponent {
   }
 
   loadCurrentUser() {
-   this.currentUser = this.userservice.getCurrentUser();
+    this.currentUser = this.userservice.getCurrentUser();
 
 
     if (this.currentUser) {

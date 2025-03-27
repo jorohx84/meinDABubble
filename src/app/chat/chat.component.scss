@@ -169,8 +169,12 @@ z-index: 11;
 
 .chatwindow {
 
-    width: 100%;
+  
     height: 100%;
+    flex: 1;
+  
+   
+
 }
 
 .channelOverlay {
@@ -271,6 +275,16 @@ z-index: 11;
     width: 100%;
     max-width: 485px;
     height: 100%;
+    transform: translateX(100vw);
+ max-width: 0px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.showThread{
+   
+    max-width: 485px;
+    transform: translateY(0);
+    
 }
 
 .overlay {
