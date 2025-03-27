@@ -1,6 +1,6 @@
-import { Component, inject, Injectable } from '@angular/core';
+import { Component, inject, Injectable, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { SharedService } from '../shared.service';
-import { CommonModule, getLocaleFirstDayOfWeek } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../user.service';
@@ -20,6 +20,7 @@ import { MessageService } from '../message.service';
   styleUrl: './chatwindow.component.scss'
 })
 export class ChatwindowComponent {
+
   messageService = inject(MessageService);
   sharedservice = inject(SharedService);
   userService = inject(UserService)
@@ -53,6 +54,7 @@ export class ChatwindowComponent {
   searchList: any[] = [];
   isHeaderSearch: boolean = false;
   currentInput: string = '';
+
   constructor() {
 
 
@@ -71,6 +73,7 @@ export class ChatwindowComponent {
       this.getDataFromDevspace();
       this.loadCurrentWindow();
       console.log(this.currentReciever);
+      this.checkReciever();
     });
     this.searchSubscription = this.searchService.openSearchList$.subscribe((key) => {
       if (key = 'new') {
@@ -99,7 +102,9 @@ export class ChatwindowComponent {
       }
     })
     this.checkReciever();
+
   }
+
 
 
   searchForReciever() {
@@ -121,9 +126,9 @@ export class ChatwindowComponent {
       this.currentReciever = this.searchService.reciever;
       this.currentChat = this.searchService.currentChat;
       localStorage.setItem('reciever', JSON.stringify(this.currentReciever));
-  this.loadMessages();
+      this.loadMessages();
       this.loadCurrentWindow();
-     
+
       localStorage.setItem('chat', this.currentChat);
     } else {
       this.getReciever(index);
@@ -282,10 +287,10 @@ export class ChatwindowComponent {
   getReciever(index: number) {
     if (this.isChannelList) {
       const currentChannel = this.currentList[index];
-      this.message = this.message + currentChannel?.name;
+      this.message = this.message + currentChannel?.name.replace(/ /g, '');;
     } else {
       const currentReciever = this.currentList[index];
-      this.message = '@' + currentReciever?.name;
+      this.message = this.message + currentReciever?.name.replace(/ /g, '');;
     }
     this.isClicked = false;
   }
@@ -330,11 +335,51 @@ export class ChatwindowComponent {
   loadMessages() {
     this.messageService.loadMessages(this.currentUser, this.currentReciever, this.currentChat).subscribe((messages: any) => {
       this.currentMessages = messages;
+      //this.formatMessage(messages);
       this.sortMessages();
       this.checkMessages();
     });
+
   }
 
+  /*
+    formatMessage(messages: any[]) {
+      console.log(messages);
+      messages.forEach((message) => {
+        const content = message.content
+        console.log(content);
+  
+        let wordArray = content.split(' ').map((word: any) => {
+  
+          return word;
+  
+        });
+        console.log(wordArray);
+        const editedContent=this.editWords(wordArray);
+        console.log(editedContent);
+        
+        message.content = editedContent;
+      });
+      console.log(messages);
+      
+    }
+  
+    editWords(wordArray: any[]) {
+      const editedContent = wordArray.map(word => {
+        if (word.includes('@') || word.includes('#')) {
+          return `<span class="highlight">${word}</span>`;
+  
+        } else {
+          return word
+        }
+  
+      });
+      
+      const formattedMessage = editedContent.join(' '); // Worte wieder mit Leerzeichen verbinden
+      console.log(formattedMessage);
+      return formattedMessage;
+    }
+      */
   /*
     async sendMessage() {
   
@@ -475,7 +520,9 @@ export class ChatwindowComponent {
     }
   }
 
-  openThread(message: any[]) {
+  openThread(message: any[],) {
+this.sharedservice.setReciever(this.currentReciever);
+this.sharedservice.setUser(this.currentUser);
     this.sharedservice.setMessage(message);
     this.sharedservice.initializeThread();
   }

@@ -317,7 +317,7 @@ input {
     align-items: center;
     box-sizing: border-box;
     padding: 10px 45px;
-   
+   margin-block: 20px;
     display: flex;
     gap: 30px;
 }
@@ -629,3 +629,4 @@ cursor: pointer;
     top:125px !important;
 border-radius: 0 20px 20px 20px;
 }
+

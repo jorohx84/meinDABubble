@@ -92,6 +92,17 @@ export class SharedService {
         this.message = message;
     }
 
+    setUser(userData: any) {
+        this.user = userData;
+        console.log(this.user);
+
+    }
+    setReciever(recieverData: any) {
+        this.reciever = recieverData;
+        console.log(this.reciever);
+        
+    }
+
     initializeThread() {
         console.log('initialisieren');
         console.log(this.message);
@@ -117,7 +128,7 @@ export class SharedService {
 
     userObserve() {
         console.log(this.currenProfile);
-        
+
         this.userObserver.next();
     }
 }

@@ -4,6 +4,7 @@ import { SharedService } from '../shared.service';
 import { CommonModule } from '@angular/common';
 import { Message } from '../models/message.class';
 
+
 @Component({
   selector: 'app-thread',
   imports: [CommonModule],
@@ -15,17 +16,16 @@ export class ThreadComponent {
   logoutSubscription: Subscription | null = null;
   sharedService = inject(SharedService);
   message: any;
+  currentReciever: any;
+  currentUser: any;
   constructor() {
-    this.sharedService.getDataFromLocalStorage('message');
-    this.message = this.sharedService.data;
-    console.log(this.message);
 
+    this.openThreadContent();
   }
   ngOnInit() {
 
     this.threadSubscription = this.sharedService.openThread$.subscribe(() => {
       console.log('openThread ausgelöst!');
-
       this.openThreadContent();
     })
 
@@ -42,6 +42,26 @@ export class ThreadComponent {
   }
   openThreadContent() {
     this.message = this.sharedService.message;
+    if (this.sharedService.user && this.sharedService.reciever && this.sharedService.message) {
+      this.currentUser = this.sharedService.user;
+      this.currentReciever = this.sharedService.reciever;
+      console.log('Daten direkt geladen', this.currentReciever, this.currentUser);
+    } else {
+      console.log('hallo');
+      
+      this.sharedService.getDataFromLocalStorage('user');
+      this.currentUser = this.sharedService.data;
+      this.sharedService.getDataFromLocalStorage('reciever');
+      this.currentReciever = this.sharedService.data;
+      this.sharedService.getDataFromLocalStorage('message');
+      this.message = this.sharedService.data;
+      console.log('Daten aus localStorage geladen', this.currentReciever, this.currentUser);
+    }
+
+
+    this.currentUser = this.sharedService.user;
+
+
     console.log(this.message);
     localStorage.setItem('message', JSON.stringify(this.message));
   }
