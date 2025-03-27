@@ -79,7 +79,7 @@ export class ThreadComponent {
   }
 
 
-  getReciever(index: number) {
+  getReciever(index: number, event:Event) {
     if (this.isChannelList) {
       const currentChannel = this.currentList[index];
       this.threadMessage = this.threadMessage + currentChannel?.name.replace(/ /g, '');;
@@ -88,9 +88,10 @@ export class ThreadComponent {
       this.threadMessage = this.threadMessage + currentReciever?.name.replace(/ /g, '');;
     }
     this.isClicked = false;
+    event.stopPropagation();
   }
 
-  getList() {
+  getList(event:Event) {
     const containsHash = this.threadMessage.includes('#');
     const containsAt = this.threadMessage.includes('@');
     this.isClicked = containsHash || containsAt;
@@ -99,7 +100,7 @@ export class ThreadComponent {
     if (!containsHash && !containsAt) {
       this.isClicked = false;
     }
-
+event.stopPropagation();
   }
 
   async loadUsers() {
@@ -126,12 +127,18 @@ export class ThreadComponent {
   }
 
   sendThreadMessage(){
+    console.log(this.message);
+    
     console.log(this.currentUser);
     console.log(this.currentReciever);
     console.log(this.threadMessage);
-     const messageObject = new Message(this.currentUser.name || '', this.currentUser.avatar || '', this.threadMessage, this.currentUser.id, this.currentReciever.id);
+     const messageObject = new Message(this.currentUser.name || '', this.currentUser.avatar || '', this.threadMessage, this.currentUser.id, this.message.from);
   console.log(messageObject);
   
      this.threadMessage='';
+    }
+
+    closeThread(){
+
     }
 }

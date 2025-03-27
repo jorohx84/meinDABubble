@@ -15,7 +15,7 @@ export class SharedService {
     reloadChannel$ = this.reloadChannel.asObservable();
     private loadChatWindow = new Subject<void>();
     loadChatWindow$ = this.loadChatWindow.asObservable();
-    private openThread = new Subject<void>();
+    private openThread = new Subject<string>();
     openThread$ = this.openThread.asObservable();
     private openGeneralOverlay = new Subject<void>();
     openGeneralOverlay$ = this.openGeneralOverlay.asObservable();
@@ -104,10 +104,10 @@ export class SharedService {
 
     }
 
-    initializeThread() {
+    initializeThread(key:string) {
         console.log('initialisieren');
         console.log(this.message);
-        this.openThread.next();
+        this.openThread.next(key);
     }
 
     openOverlay() {

@@ -520,12 +520,12 @@ export class ChatwindowComponent {
     }
   }
 
-  openThread(message: any[],) {
-this.sharedservice.setReciever(this.currentReciever);
-this.sharedservice.setUser(this.currentUser);
+  openThread(message: any[], event: Event) {
+    this.sharedservice.setReciever(this.currentReciever);
+    this.sharedservice.setUser(this.currentUser);
     this.sharedservice.setMessage(message);
-    this.sharedservice.initializeThread();
-    
+    this.sharedservice.initializeThread('');
+    event.stopPropagation();
   }
 
   toggleSearch() {

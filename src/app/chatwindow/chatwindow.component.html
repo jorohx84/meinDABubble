@@ -86,7 +86,7 @@
                         <span>{{message.content}}</span>
                     </div>
                     <div [ngClass]="{'reverse': isUser(message)}" *ngIf="isChannel" class="threadlink">
-                        <a (click)="openThread(message)" >
+                        <a (click)="openThread(message, $event)" >
                             <span>{{message.thread?.length}}</span>
                             <span>Antworten</span>
                         </a>
