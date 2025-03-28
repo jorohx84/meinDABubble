@@ -5,7 +5,7 @@
             <span>Thread</span>
             <p>#{{currentReciever?.name}}</p>
         </div>
-        <button><img src="./img/close.svg" alt=""></button>
+        <button (click)="closeThread()"><img src="./img/close.svg" alt=""></button>
    
 </div>
 <div class="message">
@@ -13,8 +13,8 @@
         <img [src]="message?.photo" alt="">
         <div >
             <div class="textData">
-                <span>{{message.name}}</span>
-                <p>{{message.time | date:'HH:mm'}} Uhr</p>
+                <span>{{message?.name}}</span>
+                <p>{{message?.time | date:'HH:mm'}} Uhr</p>
             </div>
             <div class="text">
                 <span>{{message?.content}}</span>
@@ -24,13 +24,30 @@
     
 </div>
 <div class="divider">
-    <span>{{message.thread.length}} Antworten</span>
+    <span>{{message?.thread.length}} Antworten</span>
     <div class="line">
 
     </div>
 </div>
 
-<div class="chat-content"></div>
+<div class="chat-content">
+    <div *ngFor="let message of currentMessages; let index=index">
+        <div class="message">
+            <div [ngClass]="{'reverse': index % 2 !== 0}" class="content">
+                <img [src]="message?.photo" alt="">
+                <div [ngClass]="{'flex-end': index % 2 !== 0}" >
+                    <div [ngClass]="{'reverse': index % 2 !== 0}" class="textData">
+                        <span>{{message?.name}}</span>
+                        <p>{{message?.time | date:'HH:mm'}} Uhr</p>
+                    </div>
+                    <div [ngClass]="{'reverseColor': index % 2 !== 0}" class="text">
+                        <span>{{message?.content}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <div [ngClass]="{'show': isClicked}" class="lists">

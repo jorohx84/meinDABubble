@@ -32,7 +32,7 @@ export class SharedService {
     message: any;
     channelID: string = '';
     isReceiver: boolean = false;
-
+    messageIndex: number = 0;
 
     navigateToPath(path: string) {
         this.router.navigate([path]);
@@ -89,8 +89,13 @@ export class SharedService {
 
     }
 
-    setMessage(message: any) {
+    setMessage(message: any, index: number) {
+        this.messageIndex=index;
+        localStorage.setItem('messageIndex', JSON.stringify(index));
+        console.log(this.messageIndex);
+        
         this.message = message;
+        localStorage.setItem('message', JSON.stringify(this.message));
     }
 
     setUser(userData: any) {
@@ -104,7 +109,9 @@ export class SharedService {
 
     }
 
-    initializeThread(key:string) {
+    initializeThread(key: string) {
+        console.log(key);
+
         console.log('initialisieren');
         console.log(this.message);
         this.openThread.next(key);

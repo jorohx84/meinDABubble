@@ -1,4 +1,4 @@
-section{
+section {
     width: 100%;
     height: 100%;
     background-color: white;
@@ -9,33 +9,35 @@ section{
     justify-content: space-between;
 }
 
-p{
+p {
     margin: 0;
 }
 
-.headline{
+.headline {
     width: 100%;
     height: 110px;
     box-sizing: border-box;
     padding: 32px 40px;
-  
+
     display: flex;
     justify-content: space-between;
-    box-shadow:  0 2px 10px 0 rgba(0,0,0,0.08);
+    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.08);
     border-radius: 30px 30px 0 0;
-    
+
 }
 
-.title{
+.title {
     display: flex;
     justify-content: flex-start;
     align-items: center;
     gap: 5px;
-    >span{
+
+    >span {
         font-size: 24px;
         font-weight: 600;
     }
-    >p{
+
+    >p {
         font-size: 14px;
         font-weight: 400;
         color: var(--purple1);
@@ -43,15 +45,16 @@ p{
     }
 }
 
-.message{
+.message {
     width: 100%;
-    height: 150px;
-    padding: 18px 25px 0  0;
+    min-height: 150px;
+    padding: 18px 25px 0 0;
     box-sizing: border-box;
 
 
 }
-.content{
+
+.content {
     width: 100%;
     height: 100%;
     box-sizing: border-box;
@@ -60,58 +63,66 @@ p{
     justify-content: flex-start;
     align-items: flex-start;
     gap: 20px;
-    >div{
+
+    >div {
         width: 100%;
         max-width: 278px;
         display: flex;
         flex-direction: column;
         gap: 8px;
     }
-    >img{
+
+    >img {
         width: 70px;
         height: 70px;
-        border-radius:40px ;
+        border-radius: 40px;
     }
 }
 
-.textData{
+.textData {
     display: flex;
     justify-content: flex-start;
     align-items: center;
     gap: 20px;
-width: 100%;
-    >span{
+    width: 100%;
+
+    >span {
         font-size: 18px;
         font-weight: 600;
     }
-    >p{
+
+    >p {
         font-size: 14px;
     }
 }
-.text{
-    width: 100%;
-    min-height:80px;
+
+.text {
+    width: fit-content;
+    max-width: 100%;
+    min-height: 80px;
     box-sizing: border-box;
     padding: 15px;
     background-color: var(--bg-color);
     border-radius: 0 20px 20px 20px;
 }
-.divider{
+
+.divider {
     width: 100%;
     box-sizing: border-box;
     padding: 0 32.5px;
     display: flex;
     align-items: center;
     gap: 20px;
-    >span{
+
+    >span {
         width: 110px;
         font-size: 18px;
         color: var(--border-light);
-    
+
     }
 }
 
-.line{
+.line {
     border: solid;
     border-width: 1px;
     border-color: var(--border-light);
@@ -307,4 +318,23 @@ textarea:focus {
 
 .green {
     background-color: #92c83e;
+}
+
+.reverse {
+    display: flex;
+    flex-direction: row-reverse;
+>.text{
+    background-color: var(--purple2) !important;
+}
+}
+
+.reverseColor{
+    border-radius: 20px 0px 20px 20px;
+    background-color: var(--purple2) !important; 
+    color: white;
+}
+
+.flex-end{
+    display: flex;
+    align-items: flex-end;
 }

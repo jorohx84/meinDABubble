@@ -31,7 +31,7 @@ export class ChatwindowComponent {
   currentUser: any;
   currentChat: string = '';
   loadDataSubscription: Subscription | null = null;
-  isNewMessage: boolean = false;
+  isNewMessage: boolean = true;
   isChannel: boolean = false;
   isPersonalChat: boolean = false;
   message: string = '';
@@ -90,6 +90,8 @@ export class ChatwindowComponent {
 
     this.logoutSubscription = this.sharedservice.logoutObserver$.subscribe(() => {
       this.currentChat = 'new';
+      this.isNewMessage=true;
+      localStorage.setItem('newMessageWindow',JSON.stringify (this.isNewMessage));
       localStorage.setItem('chat', this.currentChat);
 
     })
@@ -196,6 +198,7 @@ export class ChatwindowComponent {
     }
       */
   getDataFromDevspace() {
+    
     this.currentChat = this.getData('chat', this.sharedservice.chat);
     this.currentUser = this.getData('user', this.sharedservice.user);
     this.currentReciever = this.getData('reciever', this.sharedservice.reciever);
@@ -520,10 +523,11 @@ export class ChatwindowComponent {
     }
   }
 
-  openThread(message: any[], event: Event) {
+  openThread(message: any[], index:number, event: Event) {
+    console.log(index);
     this.sharedservice.setReciever(this.currentReciever);
     this.sharedservice.setUser(this.currentUser);
-    this.sharedservice.setMessage(message);
+    this.sharedservice.setMessage(message, index);
     this.sharedservice.initializeThread('');
     event.stopPropagation();
   }
@@ -542,6 +546,10 @@ export class ChatwindowComponent {
     this.openSearch = this.searchService.searchIsOpen;
     this.searchList = this.searchService.currentList;
 
+  }
+
+  closeThread(){
+    this.sharedservice.initializeThread('close');
   }
 
   findMember(index: number) {

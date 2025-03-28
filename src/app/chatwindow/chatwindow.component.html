@@ -1,4 +1,4 @@
-<section>
+<section (click)="closeThread()">
     <div [ngClass]="{'newMessageHeader': isNewMessage}" class="header">
         <div (click)="openProfile()" *ngIf="isPersonalChat" class="profile">
             <div class="imageContainer">
@@ -70,7 +70,7 @@
         <div *ngFor="let message of currentMessages; let i=index" [ngClass]="{'change': isUser(message)}"  #chatContent>
             <div class="divider" *ngIf="isNewDay(message, currentMessages[i - 1])">
                 <div>
-                    <p>{{isToday(message.time)? 'Heute' : (message.time | date:'EEEE, d MMMM')}}</p>
+                    <p>{{isToday(message.time)? 'Heute' : (message.time | date:'EEEE, d MMMM':'de')}}</p>
                 </div>
             </div>
             <div [ngClass]="{'reverse': isUser(message)}" class="messagerow">
@@ -86,13 +86,13 @@
                         <span>{{message.content}}</span>
                     </div>
                     <div [ngClass]="{'reverse': isUser(message)}" *ngIf="isChannel" class="threadlink">
-                        <a (click)="openThread(message, $event)" >
+                        <a (click)="openThread(message,i, $event)" >
                             <span>{{message.thread?.length}}</span>
                             <span>Antworten</span>
                         </a>
                         <div>
                             <span>Letzte Antwort</span>
-                            <span></span><!--{{message.thread[message.thread.length-1]?.time}}-->
+                            <span>{{message.thread[message.thread.length-1]?.time | date:'HH:mm'}} Uhr</span><!---->
                         </div>
 
                     </div>

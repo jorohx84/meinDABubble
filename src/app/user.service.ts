@@ -102,6 +102,11 @@ export class UserService {
         }
     }
 
+
+
+
+
+
     getCurrentUser() {
         console.log(this.userSubject.value);
         

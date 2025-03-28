@@ -277,7 +277,8 @@ z-index: 11;
     height: 100%;
     transform: translateX(100vw);
  max-width: 0px;
-    transition: transform 0.3s ease-in-out;
+ transition: transform 0.3s ease-in-out, width 0.3s ease-in-out;
+    
 }
 
 .showThread{

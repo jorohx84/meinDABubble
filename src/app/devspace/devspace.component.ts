@@ -153,4 +153,8 @@ export class DevspaceComponent {
     this.sharedservice.openOverlayChannel();
   }
 
+  closeThread(){
+    this.sharedservice.initializeThread('close')
+  }
+
 }

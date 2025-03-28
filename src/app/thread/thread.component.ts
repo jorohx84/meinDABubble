@@ -6,6 +6,9 @@ import { Message } from '../models/message.class';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../user.service';
 import { ChannelService } from '../channel.service';
+import { Firestore, doc, updateDoc, getDoc } from '@angular/fire/firestore';
+import { MessageService } from '../message.service';
+import { ChangeDetectorRef } from '@angular/core';
 @Component({
   selector: 'app-thread',
   imports: [CommonModule, FormsModule],
@@ -15,9 +18,11 @@ import { ChannelService } from '../channel.service';
 export class ThreadComponent {
   threadSubscription: Subscription | null = null;
   logoutSubscription: Subscription | null = null;
+  firestore = inject(Firestore);
   sharedService = inject(SharedService);
   userService = inject(UserService);
   channelService = inject(ChannelService);
+  messageService = inject(MessageService);
   message: any;
   threadMessage: any;
   currentReciever: any;
@@ -27,17 +32,21 @@ export class ThreadComponent {
   currentList: any[] = [];
   users: any[] = [];
   channels: any[] = [];
-
-  constructor() {
+  currentIndex: number = 0;
+  currentMessages: any[] = [];
+  constructor(private cdRef: ChangeDetectorRef) {
 
     this.openThreadContent();
   }
   async ngOnInit() {
     await this.loadUsers();
     await this.loadChannels();
-    this.threadSubscription = this.sharedService.openThread$.subscribe(() => {
+    this.threadSubscription = this.sharedService.openThread$.subscribe(async () => {
       console.log('openThread ausgelöst!');
-      this.openThreadContent();
+      await this.loadUsers();
+      await this.loadChannels();
+      await this.openThreadContent();
+
     })
 
     this.logoutSubscription = this.sharedService.logoutObserver$.subscribe(() => {
@@ -51,21 +60,28 @@ export class ThreadComponent {
       this.threadSubscription.unsubscribe();
     }
   }
-  openThreadContent() {
-    if (this.sharedService.user && this.sharedService.reciever && this.sharedService.message) {
+  async openThreadContent() {
+
+    if (this.sharedService.user && this.sharedService.reciever && this.sharedService.message && this.sharedService.messageIndex) {
       this.setData();
     } else {
       this.reloadDataFromLocalStorage();
     }
+    this.currentReciever = await this.channelService.setCurrentReciever(this.currentReciever.id);
+    console.log(this.currentReciever);
 
-    localStorage.setItem('message', JSON.stringify(this.message));
+    console.log(this.currentIndex);
+    this.loadThreadMessages();
+
   }
 
   setData() {
     this.message = this.sharedService.message;
+    this.currentIndex = this.sharedService.messageIndex;
     this.currentUser = this.sharedService.user;
     this.currentReciever = this.sharedService.reciever;
     console.log('Daten direkt geladen', this.currentReciever, this.currentUser);
+    console.log(this.currentReciever);
 
   }
   reloadDataFromLocalStorage() {
@@ -75,11 +91,13 @@ export class ThreadComponent {
     this.currentReciever = this.sharedService.data;
     this.sharedService.getDataFromLocalStorage('message');
     this.message = this.sharedService.data;
+    this.sharedService.getDataFromLocalStorage('messageIndex');
+    this.currentIndex = this.sharedService.data
     console.log('Daten aus localStorage geladen', this.currentReciever, this.currentUser);
   }
 
 
-  getReciever(index: number, event:Event) {
+  getReciever(index: number, event: Event) {
     if (this.isChannelList) {
       const currentChannel = this.currentList[index];
       this.threadMessage = this.threadMessage + currentChannel?.name.replace(/ /g, '');;
@@ -91,7 +109,7 @@ export class ThreadComponent {
     event.stopPropagation();
   }
 
-  getList(event:Event) {
+  getList(event: Event) {
     const containsHash = this.threadMessage.includes('#');
     const containsAt = this.threadMessage.includes('@');
     this.isClicked = containsHash || containsAt;
@@ -100,7 +118,7 @@ export class ThreadComponent {
     if (!containsHash && !containsAt) {
       this.isClicked = false;
     }
-event.stopPropagation();
+    event.stopPropagation();
   }
 
   async loadUsers() {
@@ -126,19 +144,27 @@ event.stopPropagation();
     event.stopPropagation();
   }
 
-  sendThreadMessage(){
-    console.log(this.message);
-    
-    console.log(this.currentUser);
-    console.log(this.currentReciever);
-    console.log(this.threadMessage);
-     const messageObject = new Message(this.currentUser.name || '', this.currentUser.avatar || '', this.threadMessage, this.currentUser.id, this.message.from);
-  console.log(messageObject);
-  
-     this.threadMessage='';
-    }
+  async sendThreadMessage() {
+    const messageObject = new Message(this.currentUser.name || '', this.currentUser.avatar || '', this.threadMessage, this.currentUser.id, this.message.from);
+    const messageData = this.messageService.createMessageData(messageObject);
+    const THREAD = this.currentReciever.messages[this.currentIndex].thread;
+    THREAD.push(messageData);
+    localStorage.setItem('reciever', JSON.stringify(this.currentReciever));
+    await this.messageService.updateThreadMessages(this.currentReciever);
+    this.message = this.currentReciever.messages[this.currentIndex];
+    localStorage.setItem('message', JSON.stringify(this.message));
+    this.cdRef.detectChanges();
+    this.openThreadContent();
+    this.threadMessage = '';
+  }
 
-    closeThread(){
+  loadThreadMessages() {
+    this.messageService.loadChannelMessages(this.currentReciever).subscribe((messages: any) => {
+      this.currentMessages = messages[this.currentIndex].thread;
+    })
+  }
 
-    }
+  closeThread() {
+    this.sharedService.initializeThread('close');
+  }
 }

@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { Firestore, doc, updateDoc, arrayUnion, onSnapshot } from '@angular/fire/firestore';
+import { Firestore, doc, updateDoc, arrayUnion, onSnapshot, getDoc } from '@angular/fire/firestore';
 import { Message } from './models/message.class';
 import { SharedService } from './shared.service';
 import { UserService } from './user.service';
@@ -139,6 +139,19 @@ export class MessageService {
       }
     });
     return currentMessages;
+  }
+
+
+  async updateThreadMessages(receiver:any){
+    const channelDocRef = doc(this.firestore, `channels/${receiver.id}`);
+    const docSnap = await getDoc(channelDocRef);
+    if (docSnap) {
+      await updateDoc(channelDocRef, receiver)
+      console.log('Dokument exisitert und wurde aktualisiert', docSnap);
+    }else{
+      console.log('Dokument nicht gefunden', docSnap);
+    }
+
   }
 
 }

@@ -5,7 +5,8 @@ import { Firestore, collection, getDocs } from "@angular/fire/firestore";
     providedIn: 'root',
 })
 export class ChannelService{
-    firestore=inject(Firestore)
+    firestore=inject(Firestore);
+    channels:any[]=[];
     async getChannels() {
         try {
           const channelCollection = collection(this.firestore, 'channels');
@@ -20,4 +21,16 @@ export class ChannelService{
         }
       }
       
+      async setCurrentReciever(id:string){
+        console.log(id);
+        
+        this.channels = await this.getChannels();
+        const reciever=this.channels.find(reciever=> reciever.id===id);
+        if(reciever){
+           localStorage.setItem('reciever', JSON.stringify(reciever));
+           console.log(reciever);
+           
+           return reciever
+        }
+    }
 }

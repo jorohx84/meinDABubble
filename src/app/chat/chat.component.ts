@@ -77,11 +77,15 @@ export class ChatComponent {
 
     });
     this.threadSubscription = this.sharedservice.openThread$.subscribe((key:string) => {
+      console.log(key);
+      
       if (key==='close') {
         this.threadIsOpen = false;
+      }else{
+        this.threadIsOpen = true;
+        localStorage.setItem('thread', JSON.stringify(this.threadIsOpen));
       }
-      this.threadIsOpen = true;
-      localStorage.setItem('thread', JSON.stringify(this.threadIsOpen));
+  
     })
 
   }
@@ -207,6 +211,8 @@ export class ChatComponent {
   emptyLogalStorage() {
     this.currentUser = null;
     this.currentReciever = null;
+    this.threadIsOpen=false;
+    localStorage.setItem('thread',JSON.stringify (this.threadIsOpen))
     localStorage.setItem('reciever', JSON.stringify(this.currentReciever));
     localStorage.setItem('user', JSON.stringify(this.currentUser));
     this.sharedservice.logoutUser();
