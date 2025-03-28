@@ -162,7 +162,6 @@ export class ThreadComponent {
     await this.messageService.updateThreadMessages(this.currentReciever);
     this.message = this.currentReciever.messages[this.currentIndex];
     localStorage.setItem('message', JSON.stringify(this.message));
-    await this.openThreadContent();
     this.threadMessage = '';
 
   }
