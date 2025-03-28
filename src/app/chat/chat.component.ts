@@ -77,15 +77,12 @@ export class ChatComponent {
 
     });
     this.threadSubscription = this.sharedservice.openThread$.subscribe((key:string) => {
-      console.log(key);
-      
       if (key==='close') {
         this.threadIsOpen = false;
       }else{
         this.threadIsOpen = true;
-        localStorage.setItem('thread', JSON.stringify(this.threadIsOpen));
       }
-  
+      localStorage.setItem('thread', JSON.stringify(this.threadIsOpen));
     })
 
   }

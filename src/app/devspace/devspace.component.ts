@@ -39,12 +39,11 @@ export class DevspaceComponent {
     this.sharedservice.getUserFromLocalStorage();
     this.currentUser = this.sharedservice.user;
 
+    this.sharedservice.getDataFromLocalStorage('active');
+    this.active = this.sharedservice.data;
+    this.sharedservice.getDataFromLocalStorage('directMessages');
+    this.message = this.sharedservice.data;
   }
-
-
-
-
-
 
   async ngOnInit() {
     await this.loadUsers();
@@ -53,12 +52,13 @@ export class DevspaceComponent {
       this.loadChannels();
 
     })
-    this.userSubscription = this.sharedservice.userObserver$.subscribe(async() => {
+    this.userSubscription = this.sharedservice.userObserver$.subscribe(async () => {
       this.currentUser = this.sharedservice.currenProfile;
       await this.loadUsers();
       await this.loadChannels();
 
     })
+
 
   }
 
@@ -82,22 +82,22 @@ export class DevspaceComponent {
   }
 
   findChannels(channel: any[]) {
-    if(this.currentUser){
-    this.channels=[];
-    channel.forEach((object:any) => {
-      if (object.creatorID === this.currentUser.id) {
-        this.channels.push(object);
-      } else {
-        object.members.forEach((member:any) => {
-          
-          if (member.id === this.currentUser.id) {
-            this.channels.push(object);
-          }
-        })
-      }
-    })
+    if (this.currentUser) {
+      this.channels = [];
+      channel.forEach((object: any) => {
+        if (object.creatorID === this.currentUser.id) {
+          this.channels.push(object);
+        } else {
+          object.members.forEach((member: any) => {
+
+            if (member.id === this.currentUser.id) {
+              this.channels.push(object);
+            }
+          })
+        }
+      })
+    }
   }
-}
 
   openChannel(index: any) {
     this.currentReceiver = this.channels[index];
@@ -121,14 +121,17 @@ export class DevspaceComponent {
 
   toggleActive() {
     this.active = !this.active;
+    localStorage.setItem('active', JSON.stringify(this.active));
   }
 
   toggleMessage() {
     this.message = !this.message;
+    localStorage.setItem('directMessages', JSON.stringify(this.message));
   }
 
   isOpen() {
     return this.message === true;
+
   }
 
   isActive() {
@@ -153,7 +156,7 @@ export class DevspaceComponent {
     this.sharedservice.openOverlayChannel();
   }
 
-  closeThread(){
+  closeThread() {
     this.sharedservice.initializeThread('close')
   }
 

@@ -1,4 +1,4 @@
-import { Component, inject, Injectable, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, inject, Injectable, ElementRef, ViewChild, AfterViewInit, AfterViewChecked,ChangeDetectorRef } from '@angular/core';
 import { SharedService } from '../shared.service';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
@@ -19,8 +19,8 @@ import { MessageService } from '../message.service';
   templateUrl: './chatwindow.component.html',
   styleUrl: './chatwindow.component.scss'
 })
-export class ChatwindowComponent {
-
+export class ChatwindowComponent implements AfterViewChecked {
+  @ViewChild('chatContainer', { static: false }) private chatContainer: ElementRef | undefined;
   messageService = inject(MessageService);
   sharedservice = inject(SharedService);
   userService = inject(UserService)
@@ -64,7 +64,19 @@ export class ChatwindowComponent {
     //this.userID = this.sharedservice.user.uid;
 
   }
+  ngAfterViewInit() {
+    this.scrollToBottom();
+  }
+  ngAfterViewChecked() {
+    this.scrollToBottom();  // Hier führst du das Scrollen nach unten durch
+  }
 
+  scrollToBottom() {
+    if (this.chatContainer && this.chatContainer.nativeElement) {
+      const container = this.chatContainer.nativeElement;
+      container.scrollToBottom = container.scrollHeight;
+    }
+  }
 
   async ngOnInit() {
     await this.loadChannels();
@@ -332,6 +344,7 @@ export class ChatwindowComponent {
     this.isEmpty = false;
     this.message = '';
     this.currentInput = '';
+   
   }
 
 

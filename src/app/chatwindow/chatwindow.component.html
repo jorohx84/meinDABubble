@@ -67,7 +67,7 @@
 
 
     <div id="chat" class="chat-content">
-        <div *ngFor="let message of currentMessages; let i=index" [ngClass]="{'change': isUser(message)}"  #chatContent>
+        <div *ngFor="let message of currentMessages; let i=index" [ngClass]="{'change': isUser(message)}"  #chatContainer>
             <div class="divider" *ngIf="isNewDay(message, currentMessages[i - 1])">
                 <div>
                     <p>{{isToday(message.time)? 'Heute' : (message.time | date:'EEEE, d MMMM':'de')}}</p>

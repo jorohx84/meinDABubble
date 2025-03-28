@@ -99,7 +99,7 @@ p {
 .text {
     width: fit-content;
     max-width: 100%;
-    min-height: 80px;
+    height: fit-content;
     box-sizing: border-box;
     padding: 15px;
     background-color: var(--bg-color);
@@ -338,3 +338,4 @@ textarea:focus {
     display: flex;
     align-items: flex-end;
 }
+

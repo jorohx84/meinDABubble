@@ -34,6 +34,7 @@ export class ThreadComponent {
   channels: any[] = [];
   currentIndex: number = 0;
   currentMessages: any[] = [];
+  threadStarts: boolean = false;
   constructor(private cdRef: ChangeDetectorRef) {
 
     this.openThreadContent();
@@ -41,11 +42,20 @@ export class ThreadComponent {
   async ngOnInit() {
     await this.loadUsers();
     await this.loadChannels();
-    this.threadSubscription = this.sharedService.openThread$.subscribe(async () => {
+    this.threadSubscription = this.sharedService.openThread$.subscribe(async (key) => {
+   
+      console.log(key);
+      if (key==='close') {
+        this.threadStarts = false;
+      }else{
+        this.threadStarts = true;
+      }
+      localStorage.setItem('threadStarts', JSON.stringify(this.threadStarts));
       console.log('openThread ausgelöst!');
       await this.loadUsers();
       await this.loadChannels();
       await this.openThreadContent();
+
 
     })
 
@@ -61,16 +71,15 @@ export class ThreadComponent {
     }
   }
   async openThreadContent() {
-
+   this.sharedService.getDataFromLocalStorage('threadStarts');
+    this.threadStarts = this.sharedService.data;
     if (this.sharedService.user && this.sharedService.reciever && this.sharedService.message && this.sharedService.messageIndex) {
       this.setData();
     } else {
       this.reloadDataFromLocalStorage();
     }
     this.currentReciever = await this.channelService.setCurrentReciever(this.currentReciever.id);
-    console.log(this.currentReciever);
 
-    console.log(this.currentIndex);
     this.loadThreadMessages();
 
   }
@@ -153,18 +162,22 @@ export class ThreadComponent {
     await this.messageService.updateThreadMessages(this.currentReciever);
     this.message = this.currentReciever.messages[this.currentIndex];
     localStorage.setItem('message', JSON.stringify(this.message));
-    this.cdRef.detectChanges();
-    this.openThreadContent();
+    await this.openThreadContent();
     this.threadMessage = '';
+
   }
 
   loadThreadMessages() {
-    this.messageService.loadChannelMessages(this.currentReciever).subscribe((messages: any) => {
-      this.currentMessages = messages[this.currentIndex].thread;
-    })
+    if (this.threadStarts) {
+      this.messageService.loadChannelMessages(this.currentReciever).subscribe((messages: any) => {
+        this.currentMessages = messages[this.currentIndex].thread;
+      });
+    }
   }
 
   closeThread() {
     this.sharedService.initializeThread('close');
+    this.threadStarts = false;
+    localStorage.setItem('threadStarts', JSON.stringify(this.threadStarts));
   }
 }
