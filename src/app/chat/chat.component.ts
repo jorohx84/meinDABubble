@@ -213,6 +213,7 @@ export class ChatComponent {
     localStorage.setItem('reciever', JSON.stringify(this.currentReciever));
     localStorage.setItem('user', JSON.stringify(this.currentUser));
     this.sharedservice.logoutUser();
+    this.sharedservice.initializeThread('close');
   }
 
   closeOverlay() {

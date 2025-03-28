@@ -70,6 +70,7 @@ export class ThreadComponent {
       this.threadSubscription.unsubscribe();
     }
   }
+
   async openThreadContent() {
    this.sharedService.getDataFromLocalStorage('threadStarts');
     this.threadStarts = this.sharedService.data;
@@ -78,7 +79,10 @@ export class ThreadComponent {
     } else {
       this.reloadDataFromLocalStorage();
     }
-    this.currentReciever = await this.channelService.setCurrentReciever(this.currentReciever.id);
+    if (this.currentReciever) {
+      this.currentReciever = await this.channelService.setCurrentReciever(this.currentReciever.id);
+    }
+   
 
     this.loadThreadMessages();
 
