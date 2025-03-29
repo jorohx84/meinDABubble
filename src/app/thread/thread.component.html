@@ -9,7 +9,7 @@
 
     </div>
     <div class="message">
-        <div class="content">
+        <div class="content startmessage">
             <img [src]="message?.photo" alt="">
             <div>
                 <div class="textData">
@@ -46,8 +46,8 @@
                     </div>
                     <div [ngClass]="{'menubarposition':  index % 2 !== 0}" class="menubar">
 
-                        <button><img src="./img/addreaction.svg" alt=""></button>
-                        <button *ngIf="isUser(message)"><img src="./img/dots.svg" alt=""></button>
+                        <button class="addreaction"><img src="./img/addreaction.svg" alt=""></button>
+                        <button class="dots" *ngIf="isUser(message)"><img src="./img/dots.svg" alt=""></button>
                     </div>
                 </div>
             </div>

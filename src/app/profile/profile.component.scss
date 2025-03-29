@@ -49,6 +49,12 @@ section {
         font-size: 24px;
         font-weight: 600;
     }
+
+    >button>img{
+        &:hover{
+            content: url(./../../../public/img/close_hover.svg);
+        }
+    }
 }
 
 .userData {

@@ -405,6 +405,42 @@ input {
     }
 }
 
+.checkmark{
+    >img{
+        &:hover{
+            content: url(./../../../public/img/checkmark_hover.svg);
+        }
+    }
+}
+.ThumbsUp{
+    >img{
+        &:hover{
+            content: url(./../../../public/img/ThumbsUp_hover.svg);
+        }
+    }
+}
+.addreaction{
+    >img{
+        &:hover{
+            content: url(./../../../public/img/addreaction_hover.svg);
+        }
+    }
+}
+.Answer{
+    >img{
+        &:hover{
+            content: url(./../../../public/img/Answer_hover.svg);
+        }
+    }
+}
+.dots{
+    >img{
+        &:hover{
+            content: url(./../../../public/img/dots_hover.svg);
+        }
+    }
+}
+
 .messageContainer {
     display: flex;
     flex-direction: column;

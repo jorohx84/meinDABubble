@@ -100,11 +100,11 @@
                     </div>
                 </div>
                 <div [ngClass]="{'menubarposition': isUser(message)}" class="menubar">
-                    <button><img src="./img/checkmark.svg" alt=""></button>
-                    <button><img src="./img/ThumbsUp.svg" alt=""></button>
-                    <button><img src="./img/addreaction.svg" alt=""></button>
-                    <button><img src="./img/Answer.svg" alt=""></button>
-                    <button *ngIf="isUser(message)"><img src="./img/dots.svg" alt=""></button>
+                    <button class="checkmark"><img src="./img/checkmark.svg" alt=""></button>
+                    <button class="ThumbsUp"><img src="./img/ThumbsUp.svg" alt=""></button>
+                    <button class="addreaction"><img src="./img/addreaction.svg" alt=""></button>
+                    <button class="Answer"><img src="./img/Answer.svg" alt=""></button>
+                    <button class="dots" *ngIf="isUser(message)"><img src="./img/dots.svg" alt=""></button>
                 </div>
             </div>
 
