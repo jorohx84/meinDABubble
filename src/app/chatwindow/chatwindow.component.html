@@ -21,7 +21,7 @@
                     <div *ngFor="let member of currentReciever?.members?.slice(0,3)">
                         <img [src]="member.avatar" alt="">
                     </div>
-                    
+
                 </div>
                 <span *ngIf="currentReciever?.members.length - 3 > 0">+ {{currentReciever?.members.length - 3}}</span>
             </div>
@@ -29,7 +29,8 @@
         </div>
         <div *ngIf="isNewMessage" class="newMessage">
             <span>Neue Nachricht</span>
-            <input (input)="searchForReciever()" ng [(ngModel)]="currentInput" type="text" placeholder="An: #channel, oder @jemand oder E-Mail Adresse">
+            <input (input)="searchForReciever()" ng [(ngModel)]="currentInput" type="text"
+                placeholder="An: #channel, oder @jemand oder E-Mail Adresse">
         </div>
     </div>
 
@@ -47,7 +48,7 @@
         </div>
         <input (input)="openList()" [(ngModel)]="searchInput" type="text" placeholder="Namen eingeben">
         <div class="buttonCont">
-            <button (click)="addPerson()" >Hinzufügen</button>
+            <button (click)="addPerson()">Hinzufügen</button>
         </div>
         <div *ngIf="openSearch" class="lists memberlist">
             <div (click)="findMember(index)" [ngClass]="{'channelStyle': isChannelList}" class="listrow"
@@ -67,7 +68,8 @@
 
 
     <div id="chat" class="chat-content">
-        <div *ngFor="let message of currentMessages; let i=index" [ngClass]="{'change': isUser(message)}"  #chatContainer>
+        <div *ngFor="let message of currentMessages; let i=index" [ngClass]="{'change': isUser(message)}"
+            #chatContainer>
             <div class="divider" *ngIf="isNewDay(message, currentMessages[i - 1])">
                 <div>
                     <p>{{isToday(message.time)? 'Heute' : (message.time | date:'EEEE, d MMMM':'de')}}</p>
@@ -82,11 +84,11 @@
                         <span>{{message.name}}</span>
                         <p>{{message.time | date:'HH:mm'}} Uhr</p>
                     </div>
-                    <div [ngClass]="{'bubbleReverse': isUser(message)}" class="messageBubble">
+                    <div [ngClass]="{'bubbleReverse': isUser(message), 'bubbleBG': !isUser(message)}" class="messageBubble">
                         <span>{{message.content}}</span>
                     </div>
                     <div [ngClass]="{'reverse': isUser(message)}" *ngIf="isChannel" class="threadlink">
-                        <a (click)="openThread(message,i, $event)" >
+                        <a (click)="openThread(message,i, $event)">
                             <span>{{message.thread?.length}}</span>
                             <span>Antworten</span>
                         </a>
@@ -97,7 +99,13 @@
 
                     </div>
                 </div>
-
+                <div [ngClass]="{'menubarposition': isUser(message)}" class="menubar">
+                    <button><img src="./img/checkmark.svg" alt=""></button>
+                    <button><img src="./img/ThumbsUp.svg" alt=""></button>
+                    <button><img src="./img/addreaction.svg" alt=""></button>
+                    <button><img src="./img/Answer.svg" alt=""></button>
+                    <button *ngIf="isUser(message)"><img src="./img/dots.svg" alt=""></button>
+                </div>
             </div>
 
         </div>

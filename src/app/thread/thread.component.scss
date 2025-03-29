@@ -63,7 +63,7 @@ p {
     justify-content: flex-start;
     align-items: flex-start;
     gap: 20px;
-
+position: relative;
     >div {
         width: 100%;
         max-width: 278px;
@@ -76,6 +76,18 @@ p {
         width: 70px;
         height: 70px;
         border-radius: 40px;
+    }
+    &:hover {
+        background-color: var(--bg-color);
+
+        >.menubar {
+            display: flex !important;
+        }
+
+        .bubbleBG {
+            background-color: white !important;
+        }
+
     }
 }
 
@@ -339,3 +351,38 @@ textarea:focus {
     align-items: flex-end;
 }
 
+.menubar {
+    position: absolute;
+    top: -10px;
+    right: 1px;
+    width: 100%;
+    max-width: fit-content !important;
+    height: 46px;
+    border: solid;
+    border-width: 1px;
+    border-color: var(--border-light);
+    border-radius: 25px 25px 0px 25px;
+    box-sizing: border-box;
+    padding: 3px 13px;
+    background-color: white;
+    display: flex;
+    flex-direction: row !important;
+    justify-content: center;
+    align-items: center;
+  
+    display: none !important;
+
+    >button {
+        padding: 0;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+    }
+}
+
+.menubarposition {
+    left: 18px;
+}

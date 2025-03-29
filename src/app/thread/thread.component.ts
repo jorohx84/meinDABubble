@@ -183,4 +183,8 @@ export class ThreadComponent {
     this.threadStarts = false;
     localStorage.setItem('threadStarts', JSON.stringify(this.threadStarts));
   }
+
+  isUser(message: any) {
+    return message.from === this.currentUser.id;
+  }
 }
