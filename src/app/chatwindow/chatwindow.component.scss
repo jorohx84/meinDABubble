@@ -113,6 +113,11 @@ section {
     align-items: center;
 
     >button {
+        &:hover{
+            >img{
+                content: url(./../../../public/img/addMembers_hover.svg);
+            }
+        }
         &:active {
             transform: scale(0.95);
         }
@@ -120,12 +125,26 @@ section {
 }
 
 .memberAvatars {
-    width: 142px;
+    width: fit-content;
     height: 46px;
     display: flex;
     justify-content: flex-start;
     align-items: center;
     gap: 10px;
+    box-sizing: border-box;
+    padding: 3px 10px;
+    >span{
+        width: 30px;
+        font-weight: 600;
+        font-size: 20px;
+    }
+    &:hover{
+        background-color: var(--bg-color);
+        border-radius: 30px;
+        >span{
+            color: var(--purple3);
+        }
+    }
 }
 
 .memberImages {
@@ -711,6 +730,18 @@ textarea:focus {
         align-items: center;
         gap: 10px;
         color: var(--purple3);
+    }
+
+   >div{
+    display: flex;
+    justify-items: center;
+    align-items: center;
+    gap: 10px;
+        min-width: fit-content;
+        >span{
+            font-weight: 14px;
+            font-weight: 300;
+        }
     }
 }
 

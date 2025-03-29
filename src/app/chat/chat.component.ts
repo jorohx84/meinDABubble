@@ -196,9 +196,9 @@ export class ChatComponent {
     await signOut(this.auth);
     this.emptyLogalStorage();
 
-    setTimeout(() => {
+  //  setTimeout(() => {
       this.sharedservice.navigateToPath('/login');
-    }, 1000);
+   // }, 1000);
 
   }
 
@@ -221,6 +221,7 @@ export class ChatComponent {
     this.isOverlay = false;
     this.isProfileOpen = false;
     this.isLogout = false;
+    this.sharedservice.closeAddMember();
   }
 
   closeThread(){

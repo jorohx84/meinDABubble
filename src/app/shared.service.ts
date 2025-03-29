@@ -27,6 +27,8 @@ export class SharedService {
     recieverObserver$ = this.recieverObserver.asObservable();
     private userObserver = new Subject<void>();
     userObserver$ = this.userObserver.asObservable();
+    private closeMember = new Subject<void>();
+    closeMember$ = this.closeMember.asObservable();
     reciever: any;
     chat: string = '';
     message: any;
@@ -90,10 +92,10 @@ export class SharedService {
     }
 
     setMessage(message: any, index: number) {
-        this.messageIndex=index;
+        this.messageIndex = index;
         localStorage.setItem('messageIndex', JSON.stringify(index));
         console.log(this.messageIndex);
-        
+
         this.message = message;
         localStorage.setItem('message', JSON.stringify(this.message));
     }
@@ -137,5 +139,10 @@ export class SharedService {
         console.log(this.currenProfile);
 
         this.userObserver.next();
+    }
+
+
+    closeAddMember() {
+        this.closeMember.next();
     }
 }

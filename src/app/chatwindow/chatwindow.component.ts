@@ -51,6 +51,7 @@ export class ChatwindowComponent implements AfterViewChecked {
   loadChannelSubscrition: Subscription | null = null;
   logoutSubscription: Subscription | null = null;
   userSubscription: Subscription | null = null;
+  memberSubscription: Subscription | null = null;
   searchList: any[] = [];
   isHeaderSearch: boolean = false;
   currentInput: string = '';
@@ -100,6 +101,10 @@ export class ChatwindowComponent implements AfterViewChecked {
       await this.reloadChannels();
     });
 
+    this.memberSubscription=this.sharedservice.closeMember$.subscribe(()=>{
+      this.isSearch=false;
+    });
+
     this.logoutSubscription = this.sharedservice.logoutObserver$.subscribe(() => {
       this.currentChat = 'new';
       this.isNewMessage=true;
@@ -110,7 +115,6 @@ export class ChatwindowComponent implements AfterViewChecked {
 
     this.userSubscription = this.sharedservice.userObserver$.subscribe(() => {
       this.currentUser = this.sharedservice.currenProfile;
-      console.log(this.currentUser);
       if (this.currentReciever.id === this.currentUser.id) {
         this.currentReciever = this.sharedservice.currenProfile;
       }
