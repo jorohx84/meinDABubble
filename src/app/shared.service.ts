@@ -8,7 +8,7 @@ export class SharedService {
     router = inject(Router)
     user: any;
     data: any;
-    currenProfile: any;
+    currentProfile: any;
     private openChannelOverlay = new Subject<void>();
     openChannelOverlay$ = this.openChannelOverlay.asObservable();
     private reloadChannel = new Subject<void>();
@@ -35,6 +35,14 @@ export class SharedService {
     channelID: string = '';
     isReceiver: boolean = false;
     messageIndex: number = 0;
+    isChange: boolean = false;
+    isSearch: boolean = false;
+    isOverlay: boolean = false;
+    isRecieverProfile: boolean = false;
+    member: any;
+    isMember: boolean = false;
+    isLogout: boolean = false;
+    isProfileOpen: boolean = false;
 
     navigateToPath(path: string) {
         this.router.navigate([path]);
@@ -120,7 +128,8 @@ export class SharedService {
     }
 
     openOverlay() {
-        this.openGeneralOverlay.next();
+        this.isOverlay = !this.isOverlay
+        //this.openGeneralOverlay.next();
     }
 
     logoutUser() {
@@ -132,11 +141,10 @@ export class SharedService {
     }
 
     recieverObserve(key: string) {
-        this.recieverObserver.next(key)
+        this.recieverObserver.next(key);
     }
 
     userObserve() {
-        console.log(this.currenProfile);
 
         this.userObserver.next();
     }
@@ -145,4 +153,65 @@ export class SharedService {
     closeAddMember() {
         this.closeMember.next();
     }
+
+    changeAddMember(event: Event) {
+        this.isChange = !this.isChange;
+        this.isSearch = !this.isSearch;
+        this.isOverlay = !this.isOverlay;
+        console.log(this.isChange);
+        event.stopPropagation();
+    }
+    toggleSearch(event: Event) {
+        this.isSearch = !this.isSearch;
+        this.isOverlay = !this.isOverlay;
+        this.isChange = false;
+        event.stopPropagation();
+
+    }
+
+    closeOverlay() {
+        this.isChange = false;
+        this.isSearch = false;
+        this.isOverlay = false;
+        this.isLogout = false;
+        this.isProfileOpen = false;
+
+    }
+
+    changeIsChange() {
+        this.isChange = false;
+    }
+
+    closeProfile() {
+        //this.profileObserve('');
+
+
+        if (this.isRecieverProfile === true) {
+            this.openOverlay();
+
+        }
+        this.isRecieverProfile = false;
+        this.isMember = false;
+        this.isProfileOpen = false;
+    }
+
+
+    openMemberProfile(receiver: any) {
+        this.isSearch = false;
+        this.isChange = false;
+        this.isRecieverProfile = true;
+        console.log(receiver);
+        this.isMember = true;
+        this.currentProfile = receiver;
+        this.isLogout = false;
+        this.recieverObserver.next('');
+    }
+
+    toggleLogout() {
+        this.isLogout = !this.isLogout;
+        this.isOverlay = !this.isOverlay;
+        //this.sharedservice.openOverlay();
+    }
 }
+
+

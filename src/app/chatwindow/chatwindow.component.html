@@ -16,7 +16,7 @@
             <button><img src="./img/arrow_down.svg" alt=""></button>
         </div>
         <div *ngIf="isChannel" class="members">
-            <div class="memberAvatars">
+            <div (click)="sharedservice.changeAddMember($event)" class="memberAvatars">
                 <div class="memberImages">
                     <div *ngFor="let member of currentReciever?.members?.slice(0,3)">
                         <img [src]="member.avatar" alt="">
@@ -25,8 +25,10 @@
                 </div>
                 <span *ngIf="currentReciever?.members.length - 3 > 0">+ {{currentReciever?.members.length - 3}}</span>
             </div>
-            <button (click)="toggleSearch()"><img src="./img/add_members.svg" alt=""></button>
+            <button (click)="sharedservice.toggleSearch($event)"><img src="./img/add_members.svg" alt=""></button>
         </div>
+
+
         <div *ngIf="isNewMessage" class="newMessage">
             <span>Neue Nachricht</span>
             <input (input)="searchForReciever()" ng [(ngModel)]="currentInput" type="text"
@@ -34,20 +36,40 @@
         </div>
     </div>
 
-    <div *ngIf="isSearch" class="addMember">
+    <div [ngClass]="{'changeAddMember': sharedservice.isChange}" *ngIf="sharedservice.isSearch" class="addMember">
         <div>
             <div>
-                <span>Leute hinzufügen</span>
-                <button (click)="toggleSearch()"><img src="./img/close.svg" alt=""></button>
+                <span>{{sharedservice.isChange ? 'Mitglieder' : 'Leute hinzufügen' }}</span>
+                <button (click)="sharedservice.toggleSearch($event)"><img src="./img/close.svg" alt=""></button>
             </div>
 
-            <div class="nameOfChannel">
+            <div *ngIf="!sharedservice.isChange" class="nameOfChannel">
                 <img src="./img/tag_purple2.svg" alt="">
                 <span>{{currentReciever.name}}</span>
             </div>
         </div>
-        <input (input)="openList()" [(ngModel)]="searchInput" type="text" placeholder="Namen eingeben">
-        <div class="buttonCont">
+        <div class="listContainer" *ngIf="sharedservice.isChange">
+            <div (click)="sharedservice.openMemberProfile(member)" *ngFor="let member of users; let index=index" class="listrow">
+                <div  class="imageContainer">
+                    <img class="profile-image" [src]="member?.avatar" alt="">
+                    <div class="status-dot" [ngClass]="{'green': member?.online}"></div>
+                </div>
+                <div>
+                    <span>{{ member?.name}}</span>
+                </div>
+            </div>
+       
+        </div>
+        <div *ngIf="sharedservice.isChange">
+            <div (click)="sharedservice.changeIsChange()" class="addMemberBtn">
+                <img src="./img/add_members.svg" alt="">
+                <span>Mitglieder hinzufügen</span>
+            </div>
+        </div>
+   
+        <input *ngIf="!sharedservice.isChange" (input)="openList()" [(ngModel)]="searchInput" type="text"
+            placeholder="Namen eingeben">
+        <div *ngIf="!sharedservice.isChange" class="buttonCont">
             <button (click)="addPerson()">Hinzufügen</button>
         </div>
         <div *ngIf="openSearch" class="lists memberlist">
@@ -84,7 +106,8 @@
                         <span>{{message.name}}</span>
                         <p>{{message.time | date:'HH:mm'}} Uhr</p>
                     </div>
-                    <div [ngClass]="{'bubbleReverse': isUser(message), 'bubbleBG': !isUser(message)}" class="messageBubble">
+                    <div [ngClass]="{'bubbleReverse': isUser(message), 'bubbleBG': !isUser(message)}"
+                        class="messageBubble">
                         <span>{{message.content}}</span>
                     </div>
                     <div [ngClass]="{'reverse': isUser(message)}" *ngIf="isChannel" class="threadlink">
@@ -94,7 +117,8 @@
                         </a>
                         <div>
                             <span>Letzte Antwort</span>
-                            <span>{{message.thread[message.thread.length-1]?.time | date:'d MMMM, HH:mm'}} Uhr</span><!---->
+                            <span>{{message.thread[message.thread.length-1]?.time | date:'d MMMM, HH:mm'}}
+                                Uhr</span><!---->
                         </div>
 
                     </div>
@@ -161,5 +185,8 @@
                 <button (click)="sendMessage()" class="right"><img src="./img/send.svg" alt=""></button>
             </div>
         </div>
+    </div>
+    <div *ngIf="sharedservice.isMember" class="memberProfile">
+        <app-profile></app-profile>
     </div>
 </section>

@@ -16,7 +16,7 @@ export class ProfileComponent {
   sharedService = inject(SharedService);
   userService = inject(UserService);
   currentProfile: any;
-  isRecieverProfile: boolean = false;
+ 
   recieverSubscription: Subscription | null = null;
   isEdit: boolean = false;
   input: string = '';
@@ -25,27 +25,14 @@ export class ProfileComponent {
   ngOnInit() {
 
     this.recieverSubscription = this.sharedService.recieverObserver$.subscribe(() => {
-      this.currentProfile = this.sharedService.currenProfile;
-      this.isRecieverProfile = this.sharedService.isReceiver;
-      console.log(this.isRecieverProfile);
-      console.log(this.currentProfile);
-
-
+      this.currentProfile = this.sharedService.currentProfile;
+      
     })
   }
 
 
 
-  closeProfile() {
-    this.sharedService.profileObserve('');
-    console.log(this.isRecieverProfile);
 
-    if (this.isRecieverProfile === true) {
-      this.sharedService.openOverlay();
-
-    }
-    this.isRecieverProfile = false;
-  }
 
   editProfile(){
 this.isEdit=!this.isEdit;
@@ -57,18 +44,12 @@ this.isEdit=!this.isEdit;
 
 
   async saveChanges() {
-    console.log(this.input);
-    console.log(this.currentProfile);
-    console.log(this.currentProfile.id);
     const profileDocRef = doc(this.firestore, `users/${this.currentProfile.id}`);
-    console.log(profileDocRef);
     await updateDoc(profileDocRef, {
       name: this.input,
     });
     this.currentProfile = await this.userService.findCurrentUser(this.currentProfile.id);
-
-    console.log(this.currentProfile);
-    this.sharedService.currenProfile = this.currentProfile;
+    this.sharedService.currentProfile = this.currentProfile;
     this.sharedService.userObserve();
     localStorage.setItem('user', JSON.stringify(this.currentProfile));
     this.input=''

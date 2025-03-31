@@ -10,7 +10,8 @@ import { SharedService } from '../shared.service';
   selector: 'app-signin',
   imports: [CommonModule, FormsModule],
   templateUrl: './signin.component.html',
-  styleUrl: './signin.component.scss'
+  styleUrl: './signin.component.scss',
+
 })
 export class SigninComponent {
   isChecked: boolean = false;

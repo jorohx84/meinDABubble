@@ -115,22 +115,15 @@ export class UserService {
 
 
     async setLoginTime() {
-        console.log(this.user);
         const currentUser = await this.findCurrentUser(this.user.uid);
-        console.log(currentUser);
         const loginTime: string = new Date().toISOString();
         const userDocRef = doc(this.firestore, `users/${currentUser.id}`)
         console.log(userDocRef);
         await updateDoc(userDocRef, {
             login: loginTime,
         })
-        console.log(loginTime);
-        console.log(currentUser.id);
-
         this.user = await this.findCurrentUser(currentUser.id);
-        console.log(this.user);
-
-
+       
     }
 
 }

@@ -53,7 +53,7 @@ export class DevspaceComponent {
 
     })
     this.userSubscription = this.sharedservice.userObserver$.subscribe(async () => {
-      this.currentUser = this.sharedservice.currenProfile;
+      this.currentUser = this.sharedservice.currentProfile;
       await this.loadUsers();
       await this.loadChannels();
 

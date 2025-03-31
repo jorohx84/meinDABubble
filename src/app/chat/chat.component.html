@@ -12,15 +12,15 @@
                 <img class="profile-image" [src]="currentUser?.avatar" alt="" />
                 <div class="status-dot" [ngClass]="{ green: currentUser?.online }"></div>
             </div>
-            <button (click)="toggleLogout()"><img src="./img/arrow_down.svg" alt=""></button>
+            <button (click)="sharedservice.toggleLogout()"><img src="./img/arrow_down.svg" alt=""></button>
         </div>
-        <div *ngIf="isLogout" class="logoutContainer">
+        <div *ngIf="sharedservice.isLogout" class="logoutContainer">
             <button (click)="toggleProfile()">Profil</button>
             <button (click)="logoutUser()">Logout</button>
         </div>
         
     </div>
-    <div [ngClass]="{'receiverProfile':isReceiver}" *ngIf="isProfileOpen" class="profileOverlay">
+    <div [ngClass]="{'receiverProfile':sharedservice.isReceiver}" *ngIf="sharedservice.isProfileOpen" class="profileOverlay">
         <app-profile></app-profile>
     </div>
 
@@ -73,5 +73,5 @@
         </form>
     </div>
 
-    <div (click)="closeOverlay()" *ngIf="isOverlay" class="overlay"></div>
+    <div (click)="sharedservice.closeOverlay()" *ngIf="sharedservice.isOverlay" class="overlay"></div>
 </section>

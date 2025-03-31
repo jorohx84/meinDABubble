@@ -41,7 +41,6 @@ export class ChatComponent {
   private overlaySubscription: Subscription | null = null;
   private profileSubscription: Subscription | null = null;
   private userSubscription: Subscription | null = null;
-  isLogout: boolean = false;
   isProfileOpen: boolean = false;
   isReceiver: boolean = false;
   userObserver = this.userservice.user$;
@@ -72,8 +71,8 @@ export class ChatComponent {
     })
 
     this.userSubscription = this.sharedservice.userObserver$.subscribe(() => {
-      this.currentUser = this.sharedservice.currenProfile;
-      console.log(this.currentUser);
+      this.currentUser = this.sharedservice.currentProfile;
+ 
 
     });
     this.threadSubscription = this.sharedservice.openThread$.subscribe((key:string) => {
@@ -106,7 +105,7 @@ export class ChatComponent {
 
     if (this.currentUser) {
 
-      console.log(this.currentUser);
+     
       console.log('user wurde direkt geladen', this.currentUser);
 
     } else {
@@ -127,15 +126,12 @@ export class ChatComponent {
     this.showChannel = !this.showChannel;
   }
 
-  toggleLogout() {
-    this.isLogout = !this.isLogout;
-    this.sharedservice.openOverlay();
-  }
+ 
 
   toggleProfile() {
     this.sharedservice.isReceiver = false;
-    this.sharedservice.currenProfile = this.currentUser;
-    this.isProfileOpen = !this.isProfileOpen;
+    this.sharedservice.currentProfile = this.currentUser;
+    this.sharedservice.isProfileOpen = !this.sharedservice.isProfileOpen
   }
 
 
@@ -216,13 +212,7 @@ export class ChatComponent {
     this.sharedservice.initializeThread('close');
   }
 
-  closeOverlay() {
-    console.log('CLOSE');
-    this.isOverlay = false;
-    this.isProfileOpen = false;
-    this.isLogout = false;
-    this.sharedservice.closeAddMember();
-  }
+
 
   closeThread(){
    this.threadIsOpen=false;

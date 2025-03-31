@@ -219,6 +219,56 @@ section {
     }
 }
 
+.changeAddMember{
+right: 130px;
+max-width: 415px;
+max-height: fit-content;
+
+}
+
+.listContainer{
+    height: fit-content;
+ 
+}
+
+.addMemberBtn{
+    width: 274px;
+    height: 56px;
+    display: flex;
+    flex-direction: row !important;
+    justify-content: flex-start !important;
+    align-items: center;
+    gap: 15px !important;
+    box-sizing: border-box;
+    padding: 12px 20px;
+    cursor: pointer;
+    >img{
+        width: 32px;
+        height: 32px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    >span{
+        font-size: 18px !important;
+        font-weight: 400 !important;
+    }
+    &:hover{
+        background-color: var(--bg-color);
+        border-radius: 100px;
+>img{
+    content: url(./../../../public/img/addMembers_hover.svg);
+}
+>span{
+    color: var(--purple3);
+}
+    }
+
+    &:active{
+        transform: scale(0.95);
+    }
+}
+
 .memberlist {
     top: 170px !important;
     left: 50px !important;
@@ -748,4 +798,12 @@ textarea:focus {
 .position {
     top: 125px !important;
     border-radius: 0 20px 20px 20px;
+}
+
+.memberProfile{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
 }
