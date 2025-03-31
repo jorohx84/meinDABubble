@@ -23,7 +23,7 @@ export class SearchService {
     isChannel: boolean = false;
     reciever: any;
     result: string = '';
-    currentChat:string='';
+    currentChat: string = '';
 
     openMemberList(input: string, users: any[]) {
         if (input.length < 3) {
@@ -66,7 +66,8 @@ export class SearchService {
         }
         const member = this.getMember(memberData);
         await this.saveMemberInFirestore(member, channel)
-        this.sharedService.openOverlay();
+        //this.sharedService.openOverlay();
+        this.sharedService.isOverlay = false;
     }
 
     async saveMemberInFirestore(data: any, channel: any) {
@@ -117,7 +118,7 @@ export class SearchService {
             this.startSearch(INPUT, chat);
         } else {
             this.isSearch = false;
-           
+
         }
     }
 
@@ -147,7 +148,7 @@ export class SearchService {
             if (!duplette) {
                 this.currentList.push(object);
                 this.isChannel = false;
-                this.currentChat='user'
+                this.currentChat = 'user'
                 this.openSearchList.next('new');
             }
         }
@@ -162,7 +163,7 @@ export class SearchService {
             if (!duplette) {
 
                 this.isChannel = true;
-                this.currentChat='channel'
+                this.currentChat = 'channel'
                 this.openSearchList.next('new');
                 this.currentList.push(object);
             }

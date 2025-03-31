@@ -38,7 +38,7 @@ export class ChatComponent {
   isOverlay: boolean = false;
   channelName: string = '';
   channelDescription: string = '';
-  private overlaySubscription: Subscription | null = null;
+  //private overlaySubscription: Subscription | null = null;
   private profileSubscription: Subscription | null = null;
   private userSubscription: Subscription | null = null;
   isProfileOpen: boolean = false;
@@ -62,9 +62,9 @@ export class ChatComponent {
       this.toggleChannelOverlay();
     })
 
-    this.overlaySubscription = this.sharedservice.openGeneralOverlay$.subscribe(() => {
-      this.isOverlay = !this.isOverlay;
-    })
+  //  this.overlaySubscription = this.sharedservice.openGeneralOverlay$.subscribe(() => {
+    //  this.isOverlay = !this.isOverlay;
+    //})
 
     this.profileSubscription = this.sharedservice.profileObserver$.subscribe((key) => {
       this.loadProfile(key);

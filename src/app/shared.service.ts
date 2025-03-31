@@ -17,8 +17,8 @@ export class SharedService {
     loadChatWindow$ = this.loadChatWindow.asObservable();
     private openThread = new Subject<string>();
     openThread$ = this.openThread.asObservable();
-    private openGeneralOverlay = new Subject<void>();
-    openGeneralOverlay$ = this.openGeneralOverlay.asObservable();
+    //private openGeneralOverlay = new Subject<void>();
+    //openGeneralOverlay$ = this.openGeneralOverlay.asObservable();
     private logoutObserver = new Subject<void>();
     logoutObserver$ = this.logoutObserver.asObservable();
     private profileObserver = new Subject<string>();
@@ -127,10 +127,10 @@ export class SharedService {
         this.openThread.next(key);
     }
 
-    openOverlay() {
-        this.isOverlay = !this.isOverlay
+    //openOverlay() {
+      //  this.isOverlay = !this.isOverlay
         //this.openGeneralOverlay.next();
-    }
+    //}
 
     logoutUser() {
         this.logoutObserver.next();
@@ -187,12 +187,13 @@ export class SharedService {
 
 
         if (this.isRecieverProfile === true) {
-            this.openOverlay();
+            this.isOverlay=false;
 
         }
         this.isRecieverProfile = false;
         this.isMember = false;
         this.isProfileOpen = false;
+ 
     }
 
 
