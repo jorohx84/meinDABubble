@@ -1,0 +1,51 @@
+<section>
+    <div class="headline">
+        <div>
+            <img src="./img/tag_black.svg" alt="">
+            <span>{{currentReciever?.name}}</span>
+        </div>
+        <button (click)="closeEdit()"><img src="./img/close.svg" alt=""></button>
+    </div>
+    <div [ngClass]="{'noBorder':isEditName}" class="editName">
+        <div class="margin">
+            <span>Channel-Name</span>
+            <button *ngIf="!isEditName" (click)="editChannel('name')">Bearbeiten</button>
+            <button *ngIf="isEditName" (click)="saveEdit('name', inputName)">Speichern</button>
+        </div>
+        <div>
+            <div *ngIf="!isEditName" class="channelName">
+                <img src="./img/tag_black.svg" alt="">
+                <span>{{currentReciever?.name}}</span>
+            </div>
+        </div>
+        <div *ngIf="isEditName" class="inputfield">
+            <img src="./img/tag_black.svg" alt="">
+            <input #name="ngModel" [(ngModel)]="inputName" name="name" type="text"
+                placeholder="{{currentReciever?.name}}">
+        </div>
+    </div>
+    <div [ngClass]="{'noBorder':isEditDescription}" class="editName height">
+        <div class="margin">
+            <span>Beschreibung</span>
+            <button *ngIf="!isEditDescription" (click)="editChannel('description')">Bearbeiten</button>
+            <button *ngIf="isEditDescription" (click)="saveEdit('description', inputDescription)">Speichern</button>
+        </div>
+        <div *ngIf="!isEditDescription" class="description">
+            <span>{{currentReciever?.description}}</span>
+        </div>
+        <div *ngIf="isEditDescription" class="inputfield">
+            <input #description="ngModel" [(ngModel)]="inputDescription" name="description" type="text"
+                placeholder="dein Text hier">
+        </div>
+        <div class="divider"></div>
+
+        <div class="creator">
+
+            <span>Erstellt von</span>
+            <p>{{currentReciever?.creator}}</p>
+        </div>
+    </div>
+    <div class="leaveBtn">
+        <button (click)="leaveChannel()">Channel Verlassen</button>
+    </div>
+</section>

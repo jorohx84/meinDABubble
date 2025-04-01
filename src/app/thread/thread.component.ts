@@ -43,19 +43,19 @@ export class ThreadComponent {
     await this.loadUsers();
     await this.loadChannels();
     this.threadSubscription = this.sharedService.openThread$.subscribe(async (key) => {
-   
-      console.log(key);
-      if (key==='close') {
-        this.threadStarts = false;
-      }else{
-        this.threadStarts = true;
-      }
-      localStorage.setItem('threadStarts', JSON.stringify(this.threadStarts));
-      console.log('openThread ausgelöst!');
-      await this.loadUsers();
-      await this.loadChannels();
-      await this.openThreadContent();
 
+      console.log(key);
+      if (key === 'close') {
+        this.threadStarts = false;
+      } else {
+        this.threadStarts = true;
+
+        localStorage.setItem('threadStarts', JSON.stringify(this.threadStarts));
+        console.log('openThread ausgelöst!');
+        await this.loadUsers();
+        await this.loadChannels();
+        await this.openThreadContent();
+      }
 
     })
 
@@ -72,7 +72,7 @@ export class ThreadComponent {
   }
 
   async openThreadContent() {
-   this.sharedService.getDataFromLocalStorage('threadStarts');
+    this.sharedService.getDataFromLocalStorage('threadStarts');
     this.threadStarts = this.sharedService.data;
     if (this.sharedService.user && this.sharedService.reciever && this.sharedService.message && this.sharedService.messageIndex) {
       this.setData();
@@ -82,7 +82,7 @@ export class ThreadComponent {
     if (this.currentReciever) {
       this.currentReciever = await this.channelService.setCurrentReciever(this.currentReciever.id);
     }
-   
+
 
     this.loadThreadMessages();
 
@@ -171,9 +171,13 @@ export class ThreadComponent {
   }
 
   loadThreadMessages() {
-    if (this.threadStarts) {
+    if (this.threadStarts && this.currentReciever) {
       this.messageService.loadChannelMessages(this.currentReciever).subscribe((messages: any) => {
-        this.currentMessages = messages[this.currentIndex].thread;
+        if (messages.length > 0) {
+          this.currentMessages = messages[this.currentIndex].thread;
+        }
+
+
       });
     }
   }

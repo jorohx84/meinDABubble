@@ -28,6 +28,7 @@ export class DevspaceComponent {
   sharedservice = inject(SharedService)
   relaodSubscription: Subscription | null = null
   userSubscription: Subscription | null = null
+  emptyChannelSubscribtion: Subscription | null = null
   router: Router = inject(Router);
   currentUser: any = [];
   currentReceiver: any;
@@ -48,7 +49,8 @@ export class DevspaceComponent {
   async ngOnInit() {
     await this.loadUsers();
     await this.loadChannels();
-    this.relaodSubscription = this.sharedservice.reloadChannel$.subscribe(() => {
+    this.relaodSubscription = this.channelService.reloadChannel$.subscribe(() => {
+  
       this.loadChannels();
 
     })
@@ -57,6 +59,9 @@ export class DevspaceComponent {
       await this.loadUsers();
       await this.loadChannels();
 
+    })
+    this.emptyChannelSubscribtion=this.channelService.loadEmptyChannel$.subscribe(()=>{
+      this.loadChannels();
     })
 
 
@@ -75,29 +80,14 @@ export class DevspaceComponent {
     try {
       const channelData = await this.channelService.getChannels();
 
-      this.findChannels(channelData);
+      this.channelService.findChannels(channelData, this.currentUser);
+      this.channels=this.channelService.channels;
     } catch (error) {
       console.error('Error loading channels in component:', error);
     }
   }
 
-  findChannels(channel: any[]) {
-    if (this.currentUser) {
-      this.channels = [];
-      channel.forEach((object: any) => {
-        if (object.creatorID === this.currentUser.id) {
-          this.channels.push(object);
-        } else {
-          object.members.forEach((member: any) => {
 
-            if (member.id === this.currentUser.id) {
-              this.channels.push(object);
-            }
-          })
-        }
-      })
-    }
-  }
 
   openChannel(index: any) {
     this.currentReceiver = this.channels[index];

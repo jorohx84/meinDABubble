@@ -1,4 +1,4 @@
-import { Component, inject, Injectable, ElementRef, ViewChild, AfterViewInit, AfterViewChecked,ChangeDetectorRef } from '@angular/core';
+import { Component, inject, Injectable, ElementRef, ViewChild, AfterViewInit, AfterViewChecked, ChangeDetectorRef } from '@angular/core';
 import { SharedService } from '../shared.service';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
@@ -10,13 +10,15 @@ import { Firestore, doc, updateDoc, arrayUnion, onSnapshot } from '@angular/fire
 import { SearchService } from '../search.service';
 import { MessageService } from '../message.service';
 import { ProfileComponent } from '../profile/profile.component';
+import { EditchannelComponent } from '../editchannel/editchannel.component';
+
 @Injectable({
   providedIn: 'root',
 })
 
 @Component({
   selector: 'app-chatwindow',
-  imports: [CommonModule, FormsModule, ProfileComponent],
+  imports: [CommonModule, FormsModule, ProfileComponent, EditchannelComponent],
   templateUrl: './chatwindow.component.html',
   styleUrl: './chatwindow.component.scss'
 })
@@ -53,6 +55,7 @@ export class ChatwindowComponent implements AfterViewChecked {
   logoutSubscription: Subscription | null = null;
   userSubscription: Subscription | null = null;
   memberSubscription: Subscription | null = null;
+  emptyChannelSubscribtion: Subscription | null = null;
   searchList: any[] = [];
   isHeaderSearch: boolean = false;
   currentInput: string = '';
@@ -92,24 +95,27 @@ export class ChatwindowComponent implements AfterViewChecked {
     this.searchSubscription = this.searchService.openSearchList$.subscribe((key) => {
       if (key = 'new') {
         this.isChannelList = this.searchService.isChannel;
-       
+
 
       }
       this.showList();
     });
 
-    this.loadChannelSubscrition = this.sharedservice.reloadChannel$.subscribe(async () => {
-      await this.reloadChannels();
+    this.loadChannelSubscrition = this.channelService.reloadChannel$.subscribe(async () => {
+    
+        await this.reloadChannels();
+    
+
     });
 
-    this.memberSubscription=this.sharedservice.closeMember$.subscribe(()=>{
-      this.isSearch=false;
+    this.memberSubscription = this.sharedservice.closeMember$.subscribe(() => {
+      this.isSearch = false;
     });
 
     this.logoutSubscription = this.sharedservice.logoutObserver$.subscribe(() => {
       this.currentChat = 'new';
-      this.isNewMessage=true;
-      localStorage.setItem('newMessageWindow',JSON.stringify (this.isNewMessage));
+      this.isNewMessage = true;
+      localStorage.setItem('newMessageWindow', JSON.stringify(this.isNewMessage));
       localStorage.setItem('chat', this.currentChat);
 
     })
@@ -120,6 +126,11 @@ export class ChatwindowComponent implements AfterViewChecked {
         this.currentReciever = this.sharedservice.currentProfile;
       }
     })
+
+this.emptyChannelSubscribtion=this.channelService.loadEmptyChannel$.subscribe(()=>{
+  this.currentChat='new';
+  this.loadCurrentWindow();
+})
     this.checkReciever();
 
   }
@@ -160,7 +171,7 @@ export class ChatwindowComponent implements AfterViewChecked {
     this.currentMessages = [];
     this.currentChat = 'channel'
     this.loadCurrentWindow();
-    const newChannelID = this.sharedservice.channelID;
+    const newChannelID = this.channelService.channelID;
     this.currentReciever = this.channels.find((channel: any) => channel.id === newChannelID);
     localStorage.setItem('reciever', JSON.stringify(this.currentReciever));
     this.loadMessages();
@@ -185,7 +196,7 @@ export class ChatwindowComponent implements AfterViewChecked {
   }
 
   getDataFromDevspace() {
-    
+
     this.currentChat = this.getData('chat', this.sharedservice.chat);
     this.currentUser = this.getData('user', this.sharedservice.user);
     this.currentReciever = this.getData('reciever', this.sharedservice.reciever);
@@ -277,7 +288,7 @@ export class ChatwindowComponent implements AfterViewChecked {
     this.isEmpty = false;
     this.message = '';
     this.currentInput = '';
-   
+
   }
 
 
@@ -298,7 +309,7 @@ export class ChatwindowComponent implements AfterViewChecked {
       } else {
         this.isYou = false;
       }
-     
+
     }
   }
 
@@ -318,8 +329,8 @@ export class ChatwindowComponent implements AfterViewChecked {
     }
   }
 
-  openThread(message: any[], index:number, event: Event) {
-   
+  openThread(message: any[], index: number, event: Event) {
+
     this.sharedservice.setReciever(this.currentReciever);
     this.sharedservice.setUser(this.currentUser);
     this.sharedservice.setMessage(message, index);
@@ -339,7 +350,7 @@ export class ChatwindowComponent implements AfterViewChecked {
 
   }
 
-  closeThread(){
+  closeThread() {
     this.sharedservice.initializeThread('close');
   }
 
@@ -352,7 +363,7 @@ export class ChatwindowComponent implements AfterViewChecked {
     await this.searchService.addMember(this.currentReciever);
     this.searchInput = '';
     this.sharedservice.isSearch = false;
-    this.sharedservice.isOverlay=false;
+    this.sharedservice.isOverlay = false;
     await this.loadChannels();
     const currentChannel = this.channels.find(channel => channel.id === this.currentReciever.id);
     localStorage.setItem('reciever', JSON.stringify(currentChannel));
@@ -361,11 +372,18 @@ export class ChatwindowComponent implements AfterViewChecked {
 
   openProfile() {
     //this.sharedservice.openOverlay();
-    this.sharedservice.isProfileOpen=true;
-   this.sharedservice.isReceiver = true;
-   this.sharedservice.isRecieverProfile=true;
+    this.sharedservice.isProfileOpen = true;
+    this.sharedservice.isReceiver = true;
+    this.sharedservice.isRecieverProfile = true;
     this.sharedservice.currentProfile = this.currentReciever;
-    this.sharedservice.isOverlay=true;
+    this.sharedservice.isOverlay = true;
     //this.sharedservice.profileObserve('receiver');
+  }
+
+
+  openEditChannel() {
+    this.sharedservice.isOverlay = true;
+    this.sharedservice.isEdit = true;
+    this.sharedservice.triggerEditChannel(this.currentReciever);
   }
 }

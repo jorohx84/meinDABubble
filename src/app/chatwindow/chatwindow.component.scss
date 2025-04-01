@@ -82,7 +82,9 @@ section {
     justify-content: space-between;
     align-items: center;
     gap: 10px;
-
+    padding: 6px 10px;
+    box-sizing: border-box;
+cursor: pointer;
     >div {
         display: flex;
         justify-content: flex-start;
@@ -93,6 +95,7 @@ section {
             font-size: 24px;
             font-weight: 600;
         }
+
     }
 
     >button {
@@ -102,6 +105,10 @@ section {
         display: flex;
         justify-content: center;
         align-items: center;
+    }
+    &:hover{
+        background-color: var(--bg-color);
+        border-radius: 50px !important;
     }
 }
 
@@ -113,11 +120,12 @@ section {
     align-items: center;
 
     >button {
-        &:hover{
-            >img{
+        &:hover {
+            >img {
                 content: url(./../../../public/img/addMembers_hover.svg);
             }
         }
+
         &:active {
             transform: scale(0.95);
         }
@@ -133,15 +141,18 @@ section {
     gap: 10px;
     box-sizing: border-box;
     padding: 3px 10px;
-    >span{
+
+    >span {
         width: 30px;
         font-weight: 600;
         font-size: 20px;
     }
-    &:hover{
+
+    &:hover {
         background-color: var(--bg-color);
         border-radius: 30px;
-        >span{
+
+        >span {
             color: var(--purple3);
         }
     }
@@ -219,19 +230,19 @@ section {
     }
 }
 
-.changeAddMember{
-right: 130px;
-max-width: 415px;
-max-height: fit-content;
+.changeAddMember {
+    right: 130px;
+    max-width: 415px;
+    max-height: fit-content;
 
 }
 
-.listContainer{
+.listContainer {
     height: fit-content;
- 
+
 }
 
-.addMemberBtn{
+.addMemberBtn {
     width: 274px;
     height: 56px;
     display: flex;
@@ -242,29 +253,34 @@ max-height: fit-content;
     box-sizing: border-box;
     padding: 12px 20px;
     cursor: pointer;
-    >img{
+
+    >img {
         width: 32px;
         height: 32px;
         display: flex;
         justify-content: center;
         align-items: center;
     }
-    >span{
+
+    >span {
         font-size: 18px !important;
         font-weight: 400 !important;
     }
-    &:hover{
+
+    &:hover {
         background-color: var(--bg-color);
         border-radius: 100px;
->img{
-    content: url(./../../../public/img/addMembers_hover.svg);
-}
->span{
-    color: var(--purple3);
-}
+
+        >img {
+            content: url(./../../../public/img/addMembers_hover.svg);
+        }
+
+        >span {
+            color: var(--purple3);
+        }
     }
 
-    &:active{
+    &:active {
         transform: scale(0.95);
     }
 }
@@ -474,37 +490,41 @@ input {
     }
 }
 
-.checkmark{
-    >img{
-        &:hover{
+.checkmark {
+    >img {
+        &:hover {
             content: url(./../../../public/img/checkmark_hover.svg);
         }
     }
 }
-.ThumbsUp{
-    >img{
-        &:hover{
+
+.ThumbsUp {
+    >img {
+        &:hover {
             content: url(./../../../public/img/ThumbsUp_hover.svg);
         }
     }
 }
-.addreaction{
-    >img{
-        &:hover{
+
+.addreaction {
+    >img {
+        &:hover {
             content: url(./../../../public/img/addreaction_hover.svg);
         }
     }
 }
-.Answer{
-    >img{
-        &:hover{
+
+.Answer {
+    >img {
+        &:hover {
             content: url(./../../../public/img/Answer_hover.svg);
         }
     }
 }
-.dots{
-    >img{
-        &:hover{
+
+.dots {
+    >img {
+        &:hover {
             content: url(./../../../public/img/dots_hover.svg);
         }
     }
@@ -782,13 +802,14 @@ textarea:focus {
         color: var(--purple3);
     }
 
-   >div{
-    display: flex;
-    justify-items: center;
-    align-items: center;
-    gap: 10px;
+    >div {
+        display: flex;
+        justify-items: center;
+        align-items: center;
+        gap: 10px;
         min-width: fit-content;
-        >span{
+
+        >span {
             font-weight: 14px;
             font-weight: 300;
         }
@@ -800,10 +821,24 @@ textarea:focus {
     border-radius: 0 20px 20px 20px;
 }
 
-.memberProfile{
+.memberProfile {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    z-index: 10;
+}
+
+.editChannel {
+    position: absolute;
+    top: 90px;
+    left: 50px;
+    width: 100%;
+    max-width: 872px;
+    height: 100%;
+    max-height: 616px;
+    background-color: white;
+    box-shadow: 0 10px 6px 0 rgba(0, 0, 0, 0.2);
+    border-radius: 0 30px 30px 30px;
     z-index: 10;
 }

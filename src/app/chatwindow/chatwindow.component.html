@@ -8,13 +8,14 @@
             <span>{{currentReciever?.name}}</span>
         </div>
 
-        <div *ngIf="isChannel" class="channelName">
+        <div *ngIf="isChannel" class="channelName" (click)="openEditChannel()">
             <div>
                 <img src="./img/tag_black.svg" alt="">
                 <span>{{currentReciever.name}}</span>
             </div>
             <button><img src="./img/arrow_down.svg" alt=""></button>
         </div>
+ 
         <div *ngIf="isChannel" class="members">
             <div (click)="sharedservice.changeAddMember($event)" class="memberAvatars">
                 <div class="memberImages">
@@ -61,7 +62,7 @@
        
         </div>
         <div *ngIf="sharedservice.isChange">
-            <div (click)="sharedservice.changeIsChange()" class="addMemberBtn">
+            <div (click)="sharedservice.changeIsChange($event)" class="addMemberBtn">
                 <img src="./img/add_members.svg" alt="">
                 <span>Mitglieder hinzufügen</span>
             </div>
@@ -189,4 +190,7 @@
     <div *ngIf="sharedservice.isMember" class="memberProfile">
         <app-profile></app-profile>
     </div>
+    <div *ngIf="sharedservice.isEdit" class="editChannel">
+        <app-editchannel></app-editchannel>
+          </div>
 </section>

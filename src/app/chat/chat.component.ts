@@ -12,6 +12,7 @@ import { Channel } from '../models/channel.class';
 import { Firestore, collection, addDoc, doc, updateDoc } from '@angular/fire/firestore';
 import { ThreadComponent } from '../thread/thread.component';
 import { ProfileComponent } from '../profile/profile.component';
+import { ChannelService } from '../channel.service';
 
 @Injectable({
   providedIn: 'root',
@@ -25,7 +26,7 @@ import { ProfileComponent } from '../profile/profile.component';
 })
 export class ChatComponent {
   auth = inject(Auth);
-
+channelService=inject(ChannelService);
   userID: string = '';
   currentUser: any;
   currentReciever: any;
@@ -172,7 +173,7 @@ export class ChatComponent {
 
 
   reloadChannels(newChannelID: any) {
-    this.sharedservice.reloadChannelData(newChannelID);
+    this.channelService.reloadChannelData(newChannelID);
   }
 
   getMember() {
