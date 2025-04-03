@@ -31,7 +31,7 @@ export class MessageService {
         if (currentChat === 'user') {
             collection = 'users';
         }
-      
+
         await this.saveMessages(collection, message, currentUser, currentReciever);
     }
 
@@ -40,7 +40,7 @@ export class MessageService {
         console.log(currentReciever);
         console.log(currentUser);
         console.log(collection);
-        
+
         const msg = new Message(currentUser.name || '', currentUser.avatar || '', message, currentUser.id, currentReciever.id);
         const messageData = this.createMessageData(msg);
         const currentUserRef = doc(this.firestore, `${collection}/${currentUser.id}`);
@@ -59,8 +59,9 @@ export class MessageService {
         }
     }
 
-   
+
     createMessageData(message: Message) {
+        const firestoreID = this.generateFirestoreId();
         return {
             name: message.name,
             photo: message.photo,
@@ -69,92 +70,103 @@ export class MessageService {
             from: message.from,
             to: message.to,
             thread: [],
-            reactions:[],
+            reactions: [],
+            id: firestoreID,
         };
+    }
+
+    generateFirestoreId(): string {
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let result = '';
+        const charactersLength = characters.length;
+        for (let i = 0; i < 28; i++) {
+            result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+        return result;
     }
 
 
     // loadMessages now returns an observable
-  loadMessages(currentUser: any, currentReciever: any, currentChat: string): Observable<any[]> {
-    if (currentChat === 'user') {
-      return this.loadUserMessages(currentUser, currentReciever);
-    }
-    if (currentChat === 'channel') {
-      return this.loadChannelMessages(currentReciever);
-    }
-   
-    return new Observable<any[]>(); // Empty observable in case of invalid chat type
-  }
+    loadMessages(currentUser: any, currentReciever: any, currentChat: string): Observable<any[]> {
+        if (currentChat === 'user') {
+            return this.loadUserMessages(currentUser, currentReciever);
+        }
+        if (currentChat === 'channel') {
+            return this.loadChannelMessages(currentReciever);
+        }
 
-  // loadChannelMessages now returns an observable
-  loadChannelMessages(currentReciever: any): Observable<any[]> {
-    const channelMessagesRef = doc(this.firestore, `channels/${currentReciever.id}`);
-    return new Observable((observer) => {
-      onSnapshot(channelMessagesRef, (docSnapshot) => {
-        if (docSnapshot.exists()) {
-          const messageData = docSnapshot.data();
-          const messages = messageData?.['messages'] || [];
-          observer.next(messages);  // Return messages in the observer
-        
+        return new Observable<any[]>(); // Empty observable in case of invalid chat type
+    }
+
+    // loadChannelMessages now returns an observable
+    loadChannelMessages(currentReciever: any): Observable<any[]> {
+        const channelMessagesRef = doc(this.firestore, `channels/${currentReciever.id}`);
+        return new Observable((observer) => {
+            onSnapshot(channelMessagesRef, (docSnapshot) => {
+                if (docSnapshot.exists()) {
+                    const messageData = docSnapshot.data();
+                    const messages = messageData?.['messages'] || [];
+                    observer.next(messages);  // Return messages in the observer
+
+                } else {
+                    console.log('Dokument existiert nicht');
+                    observer.next([]);  // Return an empty array if the document does not exist
+                }
+            }, (error) => {
+                observer.error(error); // Handle errors from Firestore
+            });
+        });
+    }
+
+    // loadUserMessages now returns an observable
+    loadUserMessages(currentUser: any, currentReciever: any): Observable<any[]> {
+        const messagesRef = doc(this.firestore, `users/${currentUser.id}`);
+        return new Observable((observer) => {
+            onSnapshot(messagesRef, (docSnapshot) => {
+                if (docSnapshot.exists()) {
+                    const messageData = docSnapshot.data();
+                    const messages = messageData?.['messages'] || [];
+                    const currentMessages = this.buildCurrentMessages(messages, currentUser, currentReciever);
+                    observer.next(currentMessages); // Return filtered messages in the observer
+
+                } else {
+                    console.log('Benutzerdokument existiert nicht.');
+                    observer.next([]); // Return an empty array if the document does not exist
+                }
+            }, (error) => {
+                observer.error(error); // Handle errors from Firestore
+            });
+        });
+    }
+
+    // buildCurrentMessages method filters the messages
+    buildCurrentMessages(messages: any[], currentUser: any, currentReciever: any): any[] {
+        const currentMessages: any[] = [];
+        messages.forEach((message: any) => {
+            if (currentUser.id === currentReciever.id) {
+                if (message['to'] === currentReciever.id && message['from'] === currentReciever.id) {
+                    currentMessages.push(message);
+                }
+            } else {
+                if (message['to'] === currentReciever.id || message['from'] === currentReciever.id) {
+                    currentMessages.push(message);
+                }
+            }
+        });
+        return currentMessages;
+    }
+
+
+    async updateThreadMessages(receiver: any) {
+        const channelDocRef = doc(this.firestore, `channels/${receiver.id}`);
+        const docSnap = await getDoc(channelDocRef);
+        if (docSnap) {
+            await updateDoc(channelDocRef, receiver)
+            console.log('Dokument exisitert und wurde aktualisiert', docSnap);
         } else {
-          console.log('Dokument existiert nicht');
-          observer.next([]);  // Return an empty array if the document does not exist
+            console.log('Dokument nicht gefunden', docSnap);
         }
-      }, (error) => {
-        observer.error(error); // Handle errors from Firestore
-      });
-    });
-  }
 
-  // loadUserMessages now returns an observable
-  loadUserMessages(currentUser: any, currentReciever: any): Observable<any[]> {
-    const messagesRef = doc(this.firestore, `users/${currentUser.id}`);
-    return new Observable((observer) => {
-      onSnapshot(messagesRef, (docSnapshot) => {
-        if (docSnapshot.exists()) {
-          const messageData = docSnapshot.data();
-          const messages = messageData?.['messages'] || [];
-          const currentMessages = this.buildCurrentMessages(messages, currentUser, currentReciever);
-          observer.next(currentMessages); // Return filtered messages in the observer
-        
-        } else {
-          console.log('Benutzerdokument existiert nicht.');
-          observer.next([]); // Return an empty array if the document does not exist
-        }
-      }, (error) => {
-        observer.error(error); // Handle errors from Firestore
-      });
-    });
-  }
-
-  // buildCurrentMessages method filters the messages
-  buildCurrentMessages(messages: any[], currentUser: any, currentReciever: any): any[] {
-    const currentMessages: any[] = [];
-    messages.forEach((message: any) => {
-      if (currentUser.id === currentReciever.id) {
-        if (message['to'] === currentReciever.id && message['from'] === currentReciever.id) {
-          currentMessages.push(message);
-        }
-      } else {
-        if (message['to'] === currentReciever.id || message['from'] === currentReciever.id) {
-          currentMessages.push(message);
-        }
-      }
-    });
-    return currentMessages;
-  }
-
-
-  async updateThreadMessages(receiver:any){
-    const channelDocRef = doc(this.firestore, `channels/${receiver.id}`);
-    const docSnap = await getDoc(channelDocRef);
-    if (docSnap) {
-      await updateDoc(channelDocRef, receiver)
-      console.log('Dokument exisitert und wurde aktualisiert', docSnap);
-    }else{
-      console.log('Dokument nicht gefunden', docSnap);
     }
-
-  }
 
 }

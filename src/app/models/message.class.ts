@@ -7,6 +7,7 @@ export class Message {
     to: string;
     thread: any[] = [];
     reactions: any[] = [];
+  
 
     constructor(username: string, photo: string, content: string, from: string, to: string) {
         this.name = username;
@@ -15,6 +16,6 @@ export class Message {
         this.time = new Date();
         this.from = from;
         this.to = to;
-
+       
     }
 }

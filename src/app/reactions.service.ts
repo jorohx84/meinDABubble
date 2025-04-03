@@ -2,6 +2,7 @@ import { inject, Injectable } from "@angular/core";
 import { Firestore, updateDoc, doc, arrayUnion } from "@angular/fire/firestore";
 import { ChannelService } from "./channel.service";
 import { reload } from "firebase/auth";
+import { UserService } from "./user.service";
 
 @Injectable({
     providedIn: 'root',
@@ -10,12 +11,15 @@ import { reload } from "firebase/auth";
 export class ReactionService {
     firestore = inject(Firestore);
     channelService = inject(ChannelService);
+    userService=inject(UserService);
     reciever: any;
     thumbs: any[] = [];
     checks: any[] = [];
     isIconBar: boolean = false;
     isFooterIconBar: boolean = false;
     async addReaction(icon: string, index: number, user: any, recieverID: any, reactionType: string) {
+        console.log(recieverID);
+
         await this.getCurrentReciever(recieverID);
         const reactor = user;
         const message = this.reciever.messages[index];
@@ -76,6 +80,7 @@ export class ReactionService {
 
 
     async getCurrentReciever(recieverID: string) {
+        const userData = await this.userService.getUsers()
         const channelData = await this.channelService.getChannels();
         console.log(channelData);
         channelData.forEach(channel => {
