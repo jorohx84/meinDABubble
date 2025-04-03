@@ -64,7 +64,8 @@ export class EditchannelComponent {
       await this.saveChannelDescription(input, channelDocRef);
     }
     this.channelService.reloadChannelData(this.currentReciever.id);
-
+    this.sharedService.isEdit = false;
+    this.sharedService.isOverlay = false;
   }
 
   async saveChannelName(input: string, ref: any) {
@@ -134,14 +135,16 @@ export class EditchannelComponent {
       this.channelService.reloadChannelData(newChannel.id);
       localStorage.setItem('reciever', JSON.stringify(newChannel));
     } else {
-      this.currentReciever=null;
+      this.currentReciever = null;
       localStorage.setItem('reciever', JSON.stringify(this.currentReciever));
-     this.channelService.loadWhenChannelEmpty();
+      this.channelService.loadWhenChannelEmpty();
     }
     this.sharedService.isEdit = false;
     this.sharedService.isOverlay = false;
 
   }
+
+  
 
   async changeCreator(members: any[], ref: any,) {
     const newCreator = members[0];

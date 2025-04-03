@@ -11,6 +11,7 @@ import { SearchService } from '../search.service';
 import { MessageService } from '../message.service';
 import { ProfileComponent } from '../profile/profile.component';
 import { EditchannelComponent } from '../editchannel/editchannel.component';
+import { ReactionService } from '../reactions.service';
 
 @Injectable({
   providedIn: 'root',
@@ -30,6 +31,7 @@ export class ChatwindowComponent implements AfterViewChecked {
   channelService = inject(ChannelService);
   searchService = inject(SearchService);
   firestore = inject(Firestore)
+  reactionService = inject(ReactionService);
   currentReciever: any;
   currentUser: any;
   currentChat: string = '';
@@ -102,9 +104,9 @@ export class ChatwindowComponent implements AfterViewChecked {
     });
 
     this.loadChannelSubscrition = this.channelService.reloadChannel$.subscribe(async () => {
-    
-        await this.reloadChannels();
-    
+
+      await this.reloadChannels();
+
 
     });
 
@@ -127,10 +129,10 @@ export class ChatwindowComponent implements AfterViewChecked {
       }
     })
 
-this.emptyChannelSubscribtion=this.channelService.loadEmptyChannel$.subscribe(()=>{
-  this.currentChat='new';
-  this.loadCurrentWindow();
-})
+    this.emptyChannelSubscribtion = this.channelService.loadEmptyChannel$.subscribe(() => {
+      this.currentChat = 'new';
+      this.loadCurrentWindow();
+    })
     this.checkReciever();
 
   }
@@ -283,12 +285,12 @@ this.emptyChannelSubscribtion=this.channelService.loadEmptyChannel$.subscribe(()
   }
 
 
-  async sendMessage() {
+  async sendMessage(event: Event) {
     await this.messageService.sendMessage(this.message, this.currentUser, this.currentReciever, this.currentChat);
     this.isEmpty = false;
     this.message = '';
     this.currentInput = '';
-
+    event.stopPropagation();
   }
 
 
@@ -298,6 +300,8 @@ this.emptyChannelSubscribtion=this.channelService.loadEmptyChannel$.subscribe(()
       //this.formatMessage(messages);
       this.sortMessages();
       this.checkMessages();
+    //this.reactionService.loadReactions(this.currentMessages);
+    
     });
 
   }

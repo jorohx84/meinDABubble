@@ -38,13 +38,15 @@ export class ThreadComponent {
   constructor(private cdRef: ChangeDetectorRef) {
 
     this.openThreadContent();
+    //this.threadStarts = false;
+   // localStorage.setItem('threadStarts', JSON.stringify(this.threadStarts));
   }
   async ngOnInit() {
     await this.loadUsers();
     await this.loadChannels();
     this.threadSubscription = this.sharedService.openThread$.subscribe(async (key) => {
 
-      console.log(key);
+
       if (key === 'close') {
         this.threadStarts = false;
       } else {
@@ -174,7 +176,7 @@ export class ThreadComponent {
     if (this.threadStarts && this.currentReciever) {
       this.messageService.loadChannelMessages(this.currentReciever).subscribe((messages: any) => {
         if (messages.length > 0) {
-          this.currentMessages = messages[this.currentIndex].thread;
+          this.currentMessages = messages[this.currentIndex]?.thread;
         }
 
 

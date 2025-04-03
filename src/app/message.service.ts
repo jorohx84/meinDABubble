@@ -31,7 +31,7 @@ export class MessageService {
         if (currentChat === 'user') {
             collection = 'users';
         }
-
+      
         await this.saveMessages(collection, message, currentUser, currentReciever);
     }
 
@@ -59,7 +59,7 @@ export class MessageService {
         }
     }
 
-    // createMessageData
+   
     createMessageData(message: Message) {
         return {
             name: message.name,
@@ -82,6 +82,7 @@ export class MessageService {
     if (currentChat === 'channel') {
       return this.loadChannelMessages(currentReciever);
     }
+   
     return new Observable<any[]>(); // Empty observable in case of invalid chat type
   }
 
@@ -94,6 +95,7 @@ export class MessageService {
           const messageData = docSnapshot.data();
           const messages = messageData?.['messages'] || [];
           observer.next(messages);  // Return messages in the observer
+        
         } else {
           console.log('Dokument existiert nicht');
           observer.next([]);  // Return an empty array if the document does not exist
@@ -114,6 +116,7 @@ export class MessageService {
           const messages = messageData?.['messages'] || [];
           const currentMessages = this.buildCurrentMessages(messages, currentUser, currentReciever);
           observer.next(currentMessages); // Return filtered messages in the observer
+        
         } else {
           console.log('Benutzerdokument existiert nicht.');
           observer.next([]); // Return an empty array if the document does not exist
