@@ -17,8 +17,13 @@ export class ReactionService {
     checks: any[] = [];
     isIconBar: boolean = false;
     isFooterIconBar: boolean = false;
+    check:any[]=[];
+    thumb:any[]=[];
+    rocket:any[]=[];
+    nerd:any[]=[];
     async addReaction(icon: string, index: number, user: any, recieverID: any, reactionType: string) {
         console.log(recieverID);
+console.log(user);
 
         await this.getCurrentReciever(recieverID);
         const reactor = user;
@@ -56,6 +61,8 @@ export class ReactionService {
     }
 
     getReactionObject(reactor: any, icon: string, reactionType: string) {
+        console.log(reactor);
+        
         return {
             name: reactor.name,
             id: reactor.id,
@@ -168,4 +175,22 @@ export class ReactionService {
     toggleFooterIconBar() {
         this.isFooterIconBar = !this.isFooterIconBar;
     }
+
+    leadReactor(message:any, reactionType:string){
+        console.log(reactionType);
+        console.log(message);
+        const reactions=message.reactions;
+        console.log(reactions);
+        
+        
+
+    }
+
+    isUser(reaction:any, user:any){
+console.log(reaction);
+console.log(user);
+
+
+return reaction.id ===user.id
+}
 }
