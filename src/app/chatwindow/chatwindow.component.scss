@@ -422,6 +422,9 @@ input {
         .bubbleBG {
             background-color: white;
         }
+        .reactionContainer{
+            opacity: 1;
+        }
 
     }
 }
@@ -858,7 +861,8 @@ textarea:focus {
 .reactionContainer {
     display: flex;
     align-items: center;
-
+position: relative;
+opacity: 0;
     >button {
         width: 24px;
         height: 24px;
@@ -933,4 +937,10 @@ textarea:focus {
 .hoverRocket{
 border-radius: 100px;
 background-color: var(--bg-color);
+}
+
+.footerIcon{
+    left: unset;
+   right: -220px !important;
+    
 }

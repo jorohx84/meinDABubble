@@ -14,6 +14,7 @@ export class ReactionService {
     thumbs: any[] = [];
     checks: any[] = [];
     isIconBar: boolean = false;
+    isFooterIconBar: boolean = false;
     async addReaction(icon: string, index: number, user: any, recieverID: any, reactionType: string) {
         await this.getCurrentReciever(recieverID);
         const reactor = user;
@@ -157,5 +158,9 @@ export class ReactionService {
 
     toogleIconBar() {
         this.isIconBar = !this.isIconBar
+    }
+
+    toggleFooterIconBar() {
+        this.isFooterIconBar = !this.isFooterIconBar;
     }
 }
