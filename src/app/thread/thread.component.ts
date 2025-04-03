@@ -9,6 +9,7 @@ import { ChannelService } from '../channel.service';
 import { Firestore, doc, updateDoc, getDoc } from '@angular/fire/firestore';
 import { MessageService } from '../message.service';
 import { ChangeDetectorRef } from '@angular/core';
+import { ReactionService } from '../reactions.service';
 @Component({
   selector: 'app-thread',
   imports: [CommonModule, FormsModule],
@@ -23,6 +24,7 @@ export class ThreadComponent {
   userService = inject(UserService);
   channelService = inject(ChannelService);
   messageService = inject(MessageService);
+  reactionService=inject(ReactionService);
   message: any;
   threadMessage: any;
   currentReciever: any;
