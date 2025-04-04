@@ -11,19 +11,19 @@ import { UserService } from "./user.service";
 export class ReactionService {
     firestore = inject(Firestore);
     channelService = inject(ChannelService);
-    userService=inject(UserService);
+    userService = inject(UserService);
     reciever: any;
     thumbs: any[] = [];
     checks: any[] = [];
     isIconBar: boolean = false;
     isFooterIconBar: boolean = false;
-    check:any[]=[];
-    thumb:any[]=[];
-    rocket:any[]=[];
-    nerd:any[]=[];
+    check: any[] = [];
+    thumb: any[] = [];
+    rocket: any[] = [];
+    nerd: any[] = [];
     async addReaction(icon: string, index: number, user: any, recieverID: any, reactionType: string) {
         console.log(recieverID);
-console.log(user);
+        console.log(user);
 
         await this.getCurrentReciever(recieverID);
         const reactor = user;
@@ -62,7 +62,7 @@ console.log(user);
 
     getReactionObject(reactor: any, icon: string, reactionType: string) {
         console.log(reactor);
-        
+
         return {
             name: reactor.name,
             id: reactor.id,
@@ -100,13 +100,6 @@ console.log(user);
     }
 
 
-    loadReactions(reaction: any, reactIndex: number, messageIndex: number, reciever: any) {
-        console.log(reactIndex);
-        console.log('Nachricht Nr:', messageIndex);
-        console.log(reaction);
-
-
-    }
 
     isCheck(message: any) {
         const reactions = message.reactions;
@@ -176,21 +169,24 @@ console.log(user);
         this.isFooterIconBar = !this.isFooterIconBar;
     }
 
-    leadReactor(message:any, reactionType:string){
-        console.log(reactionType);
-        console.log(message);
-        const reactions=message.reactions;
-        console.log(reactions);
-        
-        
+    loadReactions(message: any, reactionType:string) {
+
+        const allReactions=message.reactions;
+        const reactions:any[]=[];
+        allReactions.forEach((reaction:any)=>{
+            
+            if (reaction.type===reactionType) {
+                reactions.push(reaction);
+            }
+        })
+     
+
+        return reactions
 
     }
 
-    isUser(reaction:any, user:any){
-console.log(reaction);
-console.log(user);
+    isUser(reaction: any, user: any) {
 
-
-return reaction.id ===user.id
-}
+        return reaction.id === user.id
+    }
 }

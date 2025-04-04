@@ -21,6 +21,19 @@ button {
     font-family: 'Nunito';
 }
 
+.btn-purple{
+    background-color: var(--purple1);
+    color: white;
+}
+
+.btn-white{
+    background-color: white;
+    border: solid !important;
+    border-width: 1px !important;
+    border-color: var(--purple2) !important;
+    color: var(--purple1);
+}
+
 input {
     background-color: transparent;
     border: none;

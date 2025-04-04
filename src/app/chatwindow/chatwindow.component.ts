@@ -62,6 +62,8 @@ export class ChatwindowComponent implements AfterViewChecked {
   isHeaderSearch: boolean = false;
   currentInput: string = '';
 
+  editIndex: number = 0;
+ 
   constructor() {
 
 
@@ -207,6 +209,7 @@ export class ChatwindowComponent implements AfterViewChecked {
       localStorage.setItem('chat', this.currentChat);
     }
     this.loadMessages();
+    //loadReactions()
   }
 
 
@@ -300,8 +303,8 @@ export class ChatwindowComponent implements AfterViewChecked {
       //this.formatMessage(messages);
       this.sortMessages();
       this.checkMessages();
-    //this.reactionService.loadReactions(this.currentMessages);
-    
+
+
     });
 
   }
@@ -389,5 +392,10 @@ export class ChatwindowComponent implements AfterViewChecked {
     this.sharedservice.isOverlay = true;
     this.sharedservice.isEdit = true;
     this.sharedservice.triggerEditChannel(this.currentReciever);
+  }
+
+  toggelIsEdit(index: number) {
+    this.editIndex = index;
+    this.messageService.isEdit = !this.messageService.isEdit;
   }
 }

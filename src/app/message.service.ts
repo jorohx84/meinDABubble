@@ -13,6 +13,8 @@ export class MessageService {
     sharedService = inject(SharedService);
     userService = inject(UserService);
     channelService = inject(ChannelService);
+    editInput: string = '';
+    isEdit: boolean = false;
     constructor() { }
 
     // sendMessage
@@ -57,6 +59,7 @@ export class MessageService {
                 messages: arrayUnion(messageData),
             });
         }
+        this.channelService.reloadChannelData(currentReciever.id);
     }
 
 
@@ -93,6 +96,7 @@ export class MessageService {
         }
         if (currentChat === 'channel') {
             return this.loadChannelMessages(currentReciever);
+
         }
 
         return new Observable<any[]>(); // Empty observable in case of invalid chat type
@@ -169,4 +173,19 @@ export class MessageService {
 
     }
 
+
+    async editMessage(mes: any, index: number, receiver: any) {
+        const messages = receiver.messages;
+        const message = messages[index];
+        message.content = this.editInput;
+
+        const channelDocRef = doc(this.firestore, `channels/${receiver.id}`);
+        await updateDoc(channelDocRef, {
+            messages: messages,
+        })
+        this.channelService.reloadChannelData(receiver.id)
+        this.isEdit = false
+    }
+
 }
+

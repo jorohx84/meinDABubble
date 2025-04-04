@@ -128,9 +128,13 @@
                                 <span>{{reactionService.reactionCount(message, 'check')}}</span>
                                 <div class="hoverBubble">
                                     <img src="./img/checkmark.svg" alt="">
-                                    <div *ngFor="let reaction of message.reactions ; let index=index">
-                                        <span *ngIf="reaction.type === 'check'">{{
-                                            reactionService.isUser(reaction, currentUser)?'Du': reaction.name}}</span>
+                                    <div>
+                                        <div
+                                            *ngFor="let reaction of reactionService.loadReactions(message,'check'); let index=index">
+                                            <span>{{
+                                                reactionService.isUser(reaction, currentUser)?'Du':
+                                                reaction.name}}</span>
+                                        </div>
                                     </div>
                                     <span>hat reagiert</span>
                                 </div>
@@ -140,21 +144,33 @@
                                 <span>{{reactionService.reactionCount(message, 'thumb')}}</span>
                                 <div class="hoverBubble">
                                     <img src="./img/ThumbsUp.svg" alt="">
-                                    <div *ngFor="let reaction of message.reactions ; let index=index">
-                                        <span *ngIf="reaction.type === 'thumb'">{{
-                                            reactionService.isUser(reaction, currentUser)?'Du': reaction.name}}</span>
+                                    <div>
+                                        <div
+                                            *ngFor="let reaction of reactionService.loadReactions(message,'thumb') ; let index=index">
+                                            <span>{{
+                                                reactionService.isUser(reaction, currentUser)?'Du':
+                                                reaction.name}}</span>
+
+                                        </div>
                                     </div>
-                                    <span>hat reagiert</span>
+                                    <span *ngIf="reactionService.loadReactions(message,'thumb').length===0">hat
+                                        reagiert</span>
+                                    <span *ngIf="reactionService.loadReactions(message,'thumb').length>0">haben
+                                        reagiert</span>
                                 </div>
                             </div>
                             <div class="reaction" ng *ngIf="reactionService.isRocket(message)">
                                 <img src="./img/rocket.svg" alt="">
                                 <span>{{reactionService.reactionCount(message, 'rocket')}}</span>
-                                <div (load)="reactionService.leadReactor(message, 'rocket')" class="hoverBubble">
+                                <div class="hoverBubble">
                                     <img src="./img/rocket.svg" alt="">
-                                    <div *ngFor="let reaction of message.reactions ; let index=index">
-                                        <span *ngIf="reaction.type === 'rocket'">{{
-                                            reactionService.isUser(reaction, currentUser)?'Du': reaction.name}}</span>
+                                    <div>
+                                        <div
+                                            *ngFor="let reaction of reactionService.loadReactions(message,'rocket') ; let index=index">
+                                            <span>{{
+                                                reactionService.isUser(reaction, currentUser)?'Du':
+                                                reaction.name}}</span>
+                                        </div>
                                     </div>
                                     <span>hat reagiert</span>
                                 </div>
@@ -165,9 +181,13 @@
                                 <div class="hoverBubble">
 
                                     <img src="./img/nerd.svg" alt="">
-                                    <div *ngFor="let reaction of message.reactions ; let index=index">
-                                        <span *ngIf="reaction.type === 'nerd'">{{
-                                            reactionService.isUser(reaction, currentUser)?'Du': reaction.name}}</span>
+                                    <div>
+                                        <div
+                                            *ngFor="let reaction of reactionService.loadReactions(message,'nerd') ; let index=index">
+                                            <span>{{
+                                                reactionService.isUser(reaction, currentUser)?'Du':
+                                                reaction.name}}</span>
+                                        </div>
                                     </div>
                                     <span>hat reagiert</span>
                                 </div>
@@ -218,7 +238,8 @@
                             src="./img/addreaction.svg" alt=""></button>
                     <button (click)="openThread(message,index, $event)" class="Answer"><img src="./img/Answer.svg"
                             alt=""></button>
-                    <button class="dots" *ngIf="isUser(message)"><img src="./img/dots.svg" alt=""></button>
+                    <button (click)="toggelIsEdit(index)" class="dots" *ngIf="isUser(message)"><img src="./img/dots.svg"
+                            alt=""></button>
 
 
                     <div *ngIf="reactionService.isIconBar"
@@ -247,7 +268,16 @@
 
                 </div>
             </div>
-
+            <div *ngIf="messageService.isEdit && editIndex===index" class="editMessage"> <!-- -->
+                <textarea class="editInput" #edit="ngModel" [(ngModel)]="messageService.editInput" name="editInput" id="" placeholder="{{message.content}}" ></textarea>
+                <div class="editBtns">
+                    <img src="./img/smiley.svg" alt="">
+                    <div>
+                        <button class="btn-white" (click)="toggelIsEdit(index)">Abbrechen</button>
+                        <button (click)="messageService.editMessage(message, index, currentReciever)" class="btn-purple">Speichern</button>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="startContainer" *ngIf="isEmpty">
             <div class="userContainer">
