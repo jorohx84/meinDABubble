@@ -393,9 +393,11 @@ export class ChatwindowComponent implements AfterViewChecked {
     this.sharedservice.isEdit = true;
     this.sharedservice.triggerEditChannel(this.currentReciever);
   }
-
+/*
   toggelIsEdit(index: number) {
     this.editIndex = index;
     this.messageService.isEdit = !this.messageService.isEdit;
   }
+    */
+
 }

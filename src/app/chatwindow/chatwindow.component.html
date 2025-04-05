@@ -1,4 +1,4 @@
-<section (click)="closeThread()">
+<section>
     <div [ngClass]="{'newMessageHeader': isNewMessage}" class="header">
         <div (click)="openProfile()" *ngIf="isPersonalChat" class="profile">
             <div class="imageContainer">
@@ -20,7 +20,7 @@
             <div (click)="sharedservice.changeAddMember($event)" class="memberAvatars">
                 <div class="memberImages">
                     <div *ngFor="let member of currentReciever?.members?.slice(0,3)">
-                        <img [src]="member.avatar" alt="">
+                        <img [src]="member?.avatar" alt="">
                     </div>
 
                 </div>
@@ -238,8 +238,8 @@
                             src="./img/addreaction.svg" alt=""></button>
                     <button (click)="openThread(message,index, $event)" class="Answer"><img src="./img/Answer.svg"
                             alt=""></button>
-                    <button (click)="toggelIsEdit(index)" class="dots" *ngIf="isUser(message)"><img src="./img/dots.svg"
-                            alt=""></button>
+                    <button (click)="messageService.toggelIsEdit(index, message, 'chat')" class="dots"
+                        *ngIf="isUser(message)"><img src="./img/dots.svg" alt=""></button>
 
 
                     <div *ngIf="reactionService.isIconBar"
@@ -268,7 +268,8 @@
 
                 </div>
             </div>
-            <div *ngIf="messageService.isEdit && editIndex===index" class="editMessage"> <!-- -->
+            <!--Hier kommt der Edit Container rein
+            <div *ngIf="messageService.isEdit && editIndex===index" class="editMessage"> 
                 <textarea class="editInput" #edit="ngModel" [(ngModel)]="messageService.editInput" name="editInput" id="" placeholder="{{message.content}}" ></textarea>
                 <div class="editBtns">
                     <img src="./img/smiley.svg" alt="">
@@ -277,8 +278,9 @@
                         <button (click)="messageService.editMessage(message, index, currentReciever)" class="btn-purple">Speichern</button>
                     </div>
                 </div>
-            </div>
+            </div>-->
         </div>
+    </div>
         <div class="startContainer" *ngIf="isEmpty">
             <div class="userContainer">
                 <img *ngIf="isChannel" class="channelImg" src="./img/tag_black.svg" alt="">
@@ -300,7 +302,7 @@
             </div>
         </div>
 
-    </div>
+  
 
 
 
@@ -337,5 +339,17 @@
     </div>
     <div *ngIf="sharedservice.isEdit" class="editChannel">
         <app-editchannel></app-editchannel>
+    </div>
+    <div *ngIf="messageService.isEdit" class="editMessage">
+        <span>Nachricht bearbeiten</span>
+        <textarea class="editInput" #edit="ngModel" [(ngModel)]="messageService.editInput" name="editInput" id=""
+            placeholder="{{messageService.messageContent}}"></textarea>
+        <div class="editBtns">
+            <img src="./img/smiley.svg" alt="">
+            <div>
+                <button (click)="messageService.closeEdit()" class="btn-white">Abbrechen</button>
+                <button (click)="messageService.editMessage(currentReciever, currentUser)" class="btn-purple">Speichern</button>
+            </div>
+        </div>
     </div>
 </section>

@@ -24,7 +24,7 @@ export class ThreadComponent {
   userService = inject(UserService);
   channelService = inject(ChannelService);
   messageService = inject(MessageService);
-  reactionService=inject(ReactionService);
+  reactionService = inject(ReactionService);
   message: any;
   threadMessage: any;
   currentReciever: any;
@@ -41,7 +41,7 @@ export class ThreadComponent {
 
     this.openThreadContent();
     //this.threadStarts = false;
-   // localStorage.setItem('threadStarts', JSON.stringify(this.threadStarts));
+    // localStorage.setItem('threadStarts', JSON.stringify(this.threadStarts));
   }
   async ngOnInit() {
     await this.loadUsers();
@@ -171,7 +171,7 @@ export class ThreadComponent {
     this.message = this.currentReciever.messages[this.currentIndex];
     localStorage.setItem('message', JSON.stringify(this.message));
     this.threadMessage = '';
-
+    this.channelService.reloadChannelData(this.currentReciever.id);
   }
 
   loadThreadMessages() {

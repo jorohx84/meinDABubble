@@ -4,7 +4,7 @@ import { Message } from './models/message.class';
 import { SharedService } from './shared.service';
 import { UserService } from './user.service';
 import { ChannelService } from './channel.service';
-import { Observable, share } from 'rxjs';
+import { findIndex, Observable, share } from 'rxjs';
 @Injectable({
     providedIn: 'root',
 })
@@ -15,6 +15,11 @@ export class MessageService {
     channelService = inject(ChannelService);
     editInput: string = '';
     isEdit: boolean = false;
+    editIndex: number = 0;
+    messageContent: string = '';
+    thisChat: string = '';
+    message: any;
+    chatOrChannel: string = '';
     constructor() { }
 
     // sendMessage
@@ -47,6 +52,7 @@ export class MessageService {
         const messageData = this.createMessageData(msg);
         const currentUserRef = doc(this.firestore, `${collection}/${currentUser.id}`);
         const currentReceiverRef = doc(this.firestore, `${collection}/${currentReciever.id}`);
+        console.log(messageData);
 
         if (currentReciever.id !== currentUser.id) {
             await updateDoc(currentReceiverRef, {
@@ -59,7 +65,17 @@ export class MessageService {
                 messages: arrayUnion(messageData),
             });
         }
-        this.channelService.reloadChannelData(currentReciever.id);
+        console.log(collection);
+
+        if (collection === 'channels') {
+            this.channelService.reloadChannelData(currentReciever.id);
+        }
+
+        if (collection === 'users') {
+            this.loadMessages(currentUser, currentReciever, 'user')
+
+        }
+
     }
 
 
@@ -172,19 +188,123 @@ export class MessageService {
         }
 
     }
+    toggelIsEdit(index: number, message: any, type: string) {
+        this.thisChat = type;
+        this.message = message;
+        this.isEdit = !this.isEdit
+        this.editIndex = index;
+        this.messageContent = message.content;
+        this.sharedService.isOverlay = true;
+    }
 
 
-    async editMessage(mes: any, index: number, receiver: any) {
-        const messages = receiver.messages;
-        const message = messages[index];
+    async editMessage(reciever: any, user: any) {
+        if (this.thisChat === 'thread') {
+            await this.editThreadMessages(reciever);
+        }
+        if (this.thisChat === 'chat') {
+            this.sharedService.getDataFromLocalStorage('chat');
+            this.chatOrChannel = this.sharedService.data;
+
+            if (this.chatOrChannel === 'user') {
+       
+
+                //finde die message im user
+                const userID = user.id;
+                const currentUser = await this.userService.findCurrentUser(userID);
+                const userMessages = currentUser.messages;
+                const userMessageIndex = userMessages.findIndex((message: any) => message.id === this.message.id);
+                if (userMessageIndex >= 0) {
+                    const userMessage = userMessages[userMessageIndex];
+                    userMessage.content = this.editInput;
+                    const userDocRef = doc(this.firestore, `users/${currentUser.id}`);
+                    await updateDoc(userDocRef, {
+                        messages: userMessages,
+                    });
+                    localStorage.setItem('user', JSON.stringify(currentUser));
+                } else {
+                    console.log('Keine UserNachricht mit dieser ID gefunden');
+
+                }
+
+                //finde die message im reciever
+
+                const recieverID = reciever.id;
+                const currentReciever = await this.userService.findCurrentUser(recieverID);
+                const recieverMessages = currentReciever.messages;
+                const recieverMessageIndex = recieverMessages.findIndex((message: any) => message.id === this.message.id);
+                if (recieverMessageIndex >= 0) {
+                    const recieverMessage = recieverMessages[recieverMessageIndex];
+                    recieverMessage.content = this.editInput;
+                    const recieverDocRef = doc(this.firestore, `users/${currentReciever.id}`);
+                    await updateDoc(recieverDocRef, {
+                        messages: recieverMessages,
+                    });
+
+                    localStorage.setItem('reciever', JSON.stringify(currentReciever));
+
+                } else {
+                    console.log('Keine RecieverNachricht mit dieser ID gefunden');
+
+                }
+            }
+
+
+
+
+            if (this.chatOrChannel === 'channel') {
+
+                console.log(reciever);
+                const messages = reciever.messages;
+                console.log(messages);
+                console.log(this.editIndex);
+
+                const message = messages[this.editIndex];
+                console.log(message);
+
+                message.content = this.editInput;
+                const channelDocRef = doc(this.firestore, `channels/${reciever.id}`);
+                await updateDoc(channelDocRef, {
+                    messages: messages,
+                })
+                this.channelService.reloadChannelData(reciever.id);
+            }
+
+            this.isEdit = false
+            this.sharedService.isOverlay = false;
+        }
+    }
+
+
+    async editThreadMessages(reciever: any) {
+        console.log(reciever);
+
+        const messages = reciever.messages
+        this.sharedService.getDataFromLocalStorage('messageIndex');
+        const chatIndex = this.sharedService.data;
+        console.log(chatIndex);
+        const thread = reciever.messages[chatIndex].thread
+        const message = thread[this.editIndex];
+        console.log(message);
         message.content = this.editInput;
+        console.log(message);
+        console.log(thread);
+        console.log(messages);
 
-        const channelDocRef = doc(this.firestore, `channels/${receiver.id}`);
+
+
+        const channelDocRef = doc(this.firestore, `channels/${reciever.id}`);
         await updateDoc(channelDocRef, {
             messages: messages,
         })
-        this.channelService.reloadChannelData(receiver.id)
-        this.isEdit = false
+        this.closeEdit();
+    }
+
+
+    closeEdit() {
+        this.isEdit = false;
+        this.sharedService.isOverlay = false;
+        this.editInput = '';
     }
 
 }
