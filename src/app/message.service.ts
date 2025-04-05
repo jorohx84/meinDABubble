@@ -203,96 +203,72 @@ export class MessageService {
             await this.editThreadMessages(reciever);
         }
         if (this.thisChat === 'chat') {
-            this.sharedService.getDataFromLocalStorage('chat');
-            this.chatOrChannel = this.sharedService.data;
-
-            if (this.chatOrChannel === 'user') {
-       
-
-                //finde die message im user
-                const userID = user.id;
-                const currentUser = await this.userService.findCurrentUser(userID);
-                const userMessages = currentUser.messages;
-                const userMessageIndex = userMessages.findIndex((message: any) => message.id === this.message.id);
-                if (userMessageIndex >= 0) {
-                    const userMessage = userMessages[userMessageIndex];
-                    userMessage.content = this.editInput;
-                    const userDocRef = doc(this.firestore, `users/${currentUser.id}`);
-                    await updateDoc(userDocRef, {
-                        messages: userMessages,
-                    });
-                    localStorage.setItem('user', JSON.stringify(currentUser));
-                } else {
-                    console.log('Keine UserNachricht mit dieser ID gefunden');
-
-                }
-
-                //finde die message im reciever
-
-                const recieverID = reciever.id;
-                const currentReciever = await this.userService.findCurrentUser(recieverID);
-                const recieverMessages = currentReciever.messages;
-                const recieverMessageIndex = recieverMessages.findIndex((message: any) => message.id === this.message.id);
-                if (recieverMessageIndex >= 0) {
-                    const recieverMessage = recieverMessages[recieverMessageIndex];
-                    recieverMessage.content = this.editInput;
-                    const recieverDocRef = doc(this.firestore, `users/${currentReciever.id}`);
-                    await updateDoc(recieverDocRef, {
-                        messages: recieverMessages,
-                    });
-
-                    localStorage.setItem('reciever', JSON.stringify(currentReciever));
-
-                } else {
-                    console.log('Keine RecieverNachricht mit dieser ID gefunden');
-
-                }
-            }
-
-
-
-
-            if (this.chatOrChannel === 'channel') {
-
-                console.log(reciever);
-                const messages = reciever.messages;
-                console.log(messages);
-                console.log(this.editIndex);
-
-                const message = messages[this.editIndex];
-                console.log(message);
-
-                message.content = this.editInput;
-                const channelDocRef = doc(this.firestore, `channels/${reciever.id}`);
-                await updateDoc(channelDocRef, {
-                    messages: messages,
-                })
-                this.channelService.reloadChannelData(reciever.id);
-            }
-
+            await this.chooseChat(reciever, user);
             this.isEdit = false
             this.sharedService.isOverlay = false;
         }
     }
 
 
-    async editThreadMessages(reciever: any) {
-        console.log(reciever);
+    async chooseChat(reciever:any, user:any) {
+        this.sharedService.getDataFromLocalStorage('chat');
+        this.chatOrChannel = this.sharedService.data;
+        if (this.chatOrChannel === 'user') {
+            await this.saveChatEdit(user.id);
+            await this.saveChatEdit(reciever.id);
+        }
+        if (this.chatOrChannel === 'channel') {
+            await this.saveChannelEdit(reciever);
+        }
 
+    }
+
+
+    async saveChannelEdit(reciever: any) {
+        const messages = reciever.messages;
+        const message = messages[this.editIndex];
+        message.content = this.editInput;
+        const channelDocRef = doc(this.firestore, `channels/${reciever.id}`);
+        await updateDoc(channelDocRef, {
+            messages: messages,
+        })
+        this.channelService.reloadChannelData(reciever.id);
+
+    }
+
+    async saveChatEdit(ID: string) {
+        const dataID = ID;
+        const currentData = await this.userService.findCurrentUser(dataID);
+        const allMessages = currentData.messages;
+        const messageIndex = allMessages.findIndex((message: any) => message.id === this.message.id);
+        if (messageIndex >= 0) {
+            await this.saveEditedMessageInFirestore(allMessages, messageIndex, dataID)
+        } else {
+            console.log('Keine Nachricht mit dieser ID gefunden');
+
+        }
+
+    }
+
+
+    async saveEditedMessageInFirestore(allMessages: any[], messageIndex: number, dataID: string) {
+        const messageToEdit = allMessages[messageIndex];
+        messageToEdit.content = this.editInput;
+        const dataDocRef = doc(this.firestore, `users/${dataID}`);
+        await updateDoc(dataDocRef, {
+            messages: allMessages,
+        })
+
+    }
+
+
+    async editThreadMessages(reciever: any) {
         const messages = reciever.messages
         this.sharedService.getDataFromLocalStorage('messageIndex');
         const chatIndex = this.sharedService.data;
-        console.log(chatIndex);
         const thread = reciever.messages[chatIndex].thread
         const message = thread[this.editIndex];
-        console.log(message);
         message.content = this.editInput;
-        console.log(message);
-        console.log(thread);
-        console.log(messages);
-
-
-
         const channelDocRef = doc(this.firestore, `channels/${reciever.id}`);
         await updateDoc(channelDocRef, {
             messages: messages,
