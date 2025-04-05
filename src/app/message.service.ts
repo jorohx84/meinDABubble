@@ -214,8 +214,8 @@ export class MessageService {
         this.sharedService.getDataFromLocalStorage('chat');
         this.chatOrChannel = this.sharedService.data;
         if (this.chatOrChannel === 'user') {
-            await this.saveChatEdit(user.id);
             await this.saveChatEdit(reciever.id);
+            await this.saveChatEdit(user.id);
         }
         if (this.chatOrChannel === 'channel') {
             await this.saveChannelEdit(reciever);
@@ -238,7 +238,7 @@ export class MessageService {
 
     async saveChatEdit(ID: string) {
         const dataID = ID;
-        const currentData = await this.userService.findCurrentUser(dataID);
+        const currentData = await this.userService.findCurrentUser(dataID, );
         const allMessages = currentData.messages;
         const messageIndex = allMessages.findIndex((message: any) => message.id === this.message.id);
         if (messageIndex >= 0) {

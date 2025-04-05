@@ -48,7 +48,7 @@ this.isEdit=!this.isEdit;
     await updateDoc(profileDocRef, {
       name: this.input,
     });
-    this.currentProfile = await this.userService.findCurrentUser(this.currentProfile.id);
+    this.currentProfile = await this.userService.findCurrentUser(this.currentProfile.id,);
     this.sharedService.currentProfile = this.currentProfile;
     this.sharedService.userObserve();
     localStorage.setItem('user', JSON.stringify(this.currentProfile));
