@@ -70,7 +70,7 @@
 
                     <div [ngClass]="{'reverse': index % 2 !== 0}" class="reactions">
                         <button><img src="./img/addreaction.svg" alt=""></button>
-                        <div (click)="reactionService.findAllReactions(message, currentReciever.id, currentUser.id, 'thread', index)"
+                        <div *ngIf="message.reactionLength>0"  (click)="reactionService.findAllReactions(message, currentReciever.id, currentUser.id, 'thread', index)"
                             class="iconContainer">
                             <img src="{{message?.lastReaction}}" alt="">
                             <span>{{message?.reactionLength}}</span>

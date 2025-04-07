@@ -111,17 +111,9 @@ export class ReactionService {
 
     async getReactionCount(docRef: any) {
         try {
-            // Hole die Dokumente aus der reactions-Sammlung
             const querySnapshot = await getDocs(docRef);
-
-            // Die Anzahl der Dokumente in der Sammlung
             const reactionCount = querySnapshot.size;
-
-            // Gebe die Anzahl der Reaktionen aus
             console.log('Anzahl der Reaktionen:', reactionCount);
-
-            // Wenn du die Anzahl irgendwo speichern oder verwenden möchtest, kannst du sie hier speichern
-            console.log(reactionCount);
             return reactionCount
         } catch (error) {
             console.error('Fehler beim Abrufen der Reaktionen:', error);
