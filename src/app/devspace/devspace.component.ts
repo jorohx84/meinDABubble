@@ -7,6 +7,7 @@ import { ChannelService } from '../channel.service';
 import { SharedService } from '../shared.service';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { MessageService } from '../message.service';
 @Injectable({
   providedIn: 'root',
 })
@@ -17,7 +18,7 @@ import { Subscription } from 'rxjs';
   styleUrl: './devspace.component.scss'
 })
 export class DevspaceComponent {
-
+messageService=inject(MessageService);
   public channels: any = [];
   public users: any = [];
   active: boolean = false;
@@ -50,7 +51,7 @@ export class DevspaceComponent {
     await this.loadUsers();
     await this.loadChannels();
     this.relaodSubscription = this.channelService.reloadChannel$.subscribe(() => {
-  
+
       this.loadChannels();
 
     })
@@ -60,7 +61,7 @@ export class DevspaceComponent {
       await this.loadChannels();
 
     })
-    this.emptyChannelSubscribtion=this.channelService.loadEmptyChannel$.subscribe(()=>{
+    this.emptyChannelSubscribtion = this.channelService.loadEmptyChannel$.subscribe(() => {
       this.loadChannels();
     })
 
@@ -81,7 +82,7 @@ export class DevspaceComponent {
       const channelData = await this.channelService.getChannels();
 
       this.channelService.findChannels(channelData, this.currentUser);
-      this.channels=this.channelService.channels;
+      this.channels = this.channelService.channels;
     } catch (error) {
       console.error('Error loading channels in component:', error);
     }
@@ -89,17 +90,24 @@ export class DevspaceComponent {
 
 
 
-  openChannel(index: any) {
+  async openChannel(index: any) {
+    console.log(index);
+    //hier mus eine funktion im messagesservice aufgerufen werden der die akutellen messages lädt und im ls speichert
     this.currentReceiver = this.channels[index];
     this.currentChat = 'channel';
     this.sharedservice.getReciever(this.currentReceiver, this.currentUser, this.currentChat);
+    await this.messageService.getCurrentMessages(this.currentUser, this.currentReceiver, this.currentChat);
     this.sharedservice.loadChat();
   }
 
-  openPersonalChat(index: any) {
+  async openPersonalChat(index: any) {
+    console.log(index);
+    
+    //hier mus eine funktion im messagesservice aufgerufen werden der die akutellen messages lädt und im ls speichert
     this.currentReceiver = this.users[index];
     this.currentChat = 'user';
     this.sharedservice.getReciever(this.currentReceiver, this.currentUser, this.currentChat);
+    await this.messageService.getCurrentMessages(this.currentUser, this.currentReceiver, this.currentChat);
     this.sharedservice.loadChat();
   }
 

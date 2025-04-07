@@ -1,4 +1,4 @@
-<section>
+<section (click)="reactionService.isReaction=false">
     <div (click)="closeThread()" class="header">
         <img src="./img/1. Logo animation.svg" alt="">
         <div class="search">
@@ -18,14 +18,15 @@
             <button (click)="toggleProfile()">Profil</button>
             <button (click)="logoutUser()">Logout</button>
         </div>
-        
+
     </div>
-    <div [ngClass]="{'receiverProfile':sharedservice.isReceiver}" *ngIf="sharedservice.isProfileOpen" class="profileOverlay">
+    <div [ngClass]="{'receiverProfile':sharedservice.isReceiver}" *ngIf="sharedservice.isProfileOpen"
+        class="profileOverlay">
         <app-profile></app-profile>
     </div>
 
     <div class="content">
-        <div class="devspace">
+        <div [ngClass]="{'hideDevspace': devSlide}" class="devspace">
             <app-devspace></app-devspace>
         </div>
 
@@ -74,4 +75,13 @@
     </div>
 
     <div (click)="sharedservice.closeOverlay()" *ngIf="sharedservice.isOverlay" class="overlay"></div>
+
+    <div (click)="toogleDevspace()" class="toogleDevspace">
+        <div>
+            <span>Workspace-Menü öffnen</span>
+            <img *ngIf="!devSlide" src="./img/hidedevspace.svg" alt="">
+            <img class="showdev" *ngIf="devSlide" src="./img/showdevspace.svg" alt="">
+        </div>
+
+    </div>
 </section>

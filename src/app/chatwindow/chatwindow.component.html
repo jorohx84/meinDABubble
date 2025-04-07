@@ -114,12 +114,12 @@
                     </div>
                     <div [ngClass]="{'reverse': isUser(message)}" *ngIf="isChannel" class="threadlink">
                         <a (click)="openThread(message,index, $event)">
-                            <span>{{message.thread?.length}}</span>
+                            <span>{{message.threadLength}}</span>
                             <span>Antworten</span>
                         </a>
                         <div>
                             <span>Letzte Antwort</span>
-                            <span>{{message.thread[message.thread.length-1]?.time | date:'d MMMM, HH:mm'}}
+                            <span>{{message.lastMessage | date:'d MMMM, HH:mm'}}
                                 Uhr</span><!---->
                         </div>
                         <div class="reactionContainer">
@@ -201,21 +201,21 @@
 
                             <div *ngIf="reactionService.isFooterIconBar" class="iconBar footerIcon">
                                 <button
-                                    (click)="reactionService.addReaction('./img/checkmark.svg',index, currentUser, currentReciever.id, 'check')"
+                                    (click)="reactionService.addReaction('./img/checkmark.svg',index, currentUser, currentReciever.id, 'check', 'chat')"
                                     class="checkmark"><img
                                         [ngClass]="{'hoverCheck': reactionService.checkDuplikate(message.reactions, currentUser,'check')}"
                                         src="./img/checkmark.svg" alt=""></button>
                                 <button
-                                    (click)="reactionService.addReaction('./img/ThumbsUp.svg', index, currentUser, currentReciever.id, 'thumb')"
+                                    (click)="reactionService.addReaction('./img/ThumbsUp.svg', index, currentUser, currentReciever.id, 'thumb', 'chat')"
                                     class="ThumbsUp"><img
                                         [ngClass]="{'hoverThumb': reactionService.checkDuplikate(message.reactions, currentUser,'thumb')}"
                                         src="./img/ThumbsUp.svg" alt=""></button>
                                 <button class="bg"
-                                    (click)="reactionService.addReaction('./img/rocket.svg',index, currentUser, currentReciever.id, 'rocket')"
+                                    (click)="reactionService.addReaction('./img/rocket.svg',index, currentUser, currentReciever.id, 'rocket', 'chat')"
                                     [ngClass]="{'hoverRocket': reactionService.checkDuplikate(message.reactions, currentUser,'rocket')}"><img
                                         src="./img/rocket.svg" alt=""></button>
                                 <button class="bg"
-                                    (click)="reactionService.addReaction('./img/nerd.svg',index, currentUser, currentReciever.id, 'nerd')"
+                                    (click)="reactionService.addReaction('./img/nerd.svg',index, currentUser, currentReciever.id, 'nerd', 'chat')"
                                     [ngClass]="{'hoverRocket': reactionService.checkDuplikate(message.reactions, currentUser,'nerd')}"><img
                                         src="./img/nerd.svg" alt=""></button>
                             </div>
@@ -225,12 +225,12 @@
                 </div>
                 <div [ngClass]="{'menubarposition': isUser(message)}" class="menubar">
                     <button
-                        (click)="reactionService.addReaction('./img/checkmark.svg',index, currentUser, currentReciever.id, 'check')"
+                        (click)="reactionService.addReaction('./img/checkmark.svg',message, currentUser, currentReciever.id, 'check', 'chat')"
                         class="checkmark"><img
                             [ngClass]="{'hoverCheck': reactionService.checkDuplikate(message.reactions, currentUser,'check')}"
                             src="./img/checkmark.svg" alt=""></button>
                     <button
-                        (click)="reactionService.addReaction('./img/ThumbsUp.svg', index, currentUser, currentReciever.id, 'thumb')"
+                        (click)="reactionService.addReaction('./img/ThumbsUp.svg', message, currentUser, currentReciever.id, 'thumb', 'chat')"
                         class="ThumbsUp"><img
                             [ngClass]="{'hoverThumb': reactionService.checkDuplikate(message.reactions, currentUser,'thumb')}"
                             src="./img/ThumbsUp.svg" alt=""></button>
@@ -246,21 +246,21 @@
                         [ngClass]="{'reverseIcon': !isUser(message), 'footerIcon':reactionService.isFooterIconBar}"
                         class="iconBar">
                         <button
-                            (click)="reactionService.addReaction('./img/checkmark.svg',index, currentUser, currentReciever.id, 'check')"
+                            (click)="reactionService.addReaction('./img/checkmark.svg',index, currentUser, currentReciever.id, 'check', 'chat')"
                             class="checkmark"><img
                                 [ngClass]="{'hoverCheck': reactionService.checkDuplikate(message.reactions, currentUser,'check')}"
                                 src="./img/checkmark.svg" alt=""></button>
                         <button
-                            (click)="reactionService.addReaction('./img/ThumbsUp.svg', index, currentUser, currentReciever.id, 'thumb')"
+                            (click)="reactionService.addReaction('./img/ThumbsUp.svg', index, currentUser, currentReciever.id, 'thumb', 'chat')"
                             class="ThumbsUp"><img
                                 [ngClass]="{'hoverThumb': reactionService.checkDuplikate(message.reactions, currentUser,'thumb')}"
                                 src="./img/ThumbsUp.svg" alt=""></button>
                         <button class="bg"
-                            (click)="reactionService.addReaction('./img/rocket.svg',index, currentUser, currentReciever.id, 'rocket')"
+                            (click)="reactionService.addReaction('./img/rocket.svg',index, currentUser, currentReciever.id, 'rocket', 'chat')"
                             [ngClass]="{'hoverRocket': reactionService.checkDuplikate(message.reactions, currentUser,'rocket')}"><img
                                 src="./img/rocket.svg" alt=""></button>
                         <button class="bg"
-                            (click)="reactionService.addReaction('./img/nerd.svg',index, currentUser, currentReciever.id, 'nerd')"
+                            (click)="reactionService.addReaction('./img/nerd.svg',index, currentUser, currentReciever.id, 'nerd', 'chat')"
                             [ngClass]="{'hoverRocket': reactionService.checkDuplikate(message.reactions, currentUser,'nerd')}"><img
                                 src="./img/nerd.svg" alt=""></button>
                     </div>
@@ -281,28 +281,28 @@
             </div>-->
         </div>
     </div>
-        <div class="startContainer" *ngIf="isEmpty">
-            <div class="userContainer">
-                <img *ngIf="isChannel" class="channelImg" src="./img/tag_black.svg" alt="">
-                <img *ngIf="!isChannel" [src]="currentReciever?.avatar" alt="">
-                <span>{{currentReciever?.name}}</span>
-            </div>
-            <div *ngIf="!isChannel" class="welcomeText">
-                <p *ngIf="!isYou">Diese Unterhaltung findet nur zwischen <a href="">&commat;{{currentReciever?.name}}
-                    </a>und dir statt.</p>
-                <p *ngIf="isYou"><span> Dieser Raum ist nur für dich da.</span> Mache dir Notizen, liste deine To-dos
-                    auf oder bewahre Links und Dateien griffbereit auf. Du kannst hier auch gerne Dinge mit dir selbst
-                    besprechen.</p>
-            </div>
-            <div *ngIf="isChannel" class="welcomeText">
-                <p *ngIf="!isYou">Du hast diesen Channel heute erstellt. Das ist der Anfang des Channels <a
-                        href="">&commat;{{currentReciever?.name}}
-                    </a></p>
-
-            </div>
+    <div class="startContainer" *ngIf="isEmpty">
+        <div class="userContainer">
+            <img *ngIf="isChannel" class="channelImg" src="./img/tag_black.svg" alt="">
+            <img *ngIf="!isChannel" [src]="currentReciever?.avatar" alt="">
+            <span>{{currentReciever?.name}}</span>
         </div>
+        <div *ngIf="!isChannel" class="welcomeText">
+            <p *ngIf="!isYou">Diese Unterhaltung findet nur zwischen <a href="">&commat;{{currentReciever?.name}}
+                </a>und dir statt.</p>
+            <p *ngIf="isYou"><span> Dieser Raum ist nur für dich da.</span> Mache dir Notizen, liste deine To-dos
+                auf oder bewahre Links und Dateien griffbereit auf. Du kannst hier auch gerne Dinge mit dir selbst
+                besprechen.</p>
+        </div>
+        <div *ngIf="isChannel" class="welcomeText">
+            <p *ngIf="!isYou">Du hast diesen Channel heute erstellt. Das ist der Anfang des Channels <a
+                    href="">&commat;{{currentReciever?.name}}
+                </a></p>
 
-  
+        </div>
+    </div>
+
+
 
 
 
@@ -348,7 +348,8 @@
             <img src="./img/smiley.svg" alt="">
             <div>
                 <button (click)="messageService.closeEdit()" class="btn-white">Abbrechen</button>
-                <button (click)="messageService.editMessage(currentReciever, currentUser)" class="btn-purple">Speichern</button>
+                <button (click)="messageService.editMessage(currentReciever, currentUser)"
+                    class="btn-purple">Speichern</button>
             </div>
         </div>
     </div>

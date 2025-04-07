@@ -28,14 +28,14 @@ export class SharedService {
     userObserver$ = this.userObserver.asObservable();
     private closeMember = new Subject<void>();
     closeMember$ = this.closeMember.asObservable();
-    private editObserver=new Subject<void>();
-    editObserver$=this.editObserver.asObservable();
+    private editObserver = new Subject<void>();
+    editObserver$ = this.editObserver.asObservable();
     reciever: any;
     chat: string = '';
     message: any;
-  
+
     isReceiver: boolean = false;
-    messageIndex: number = 0;
+
     isChange: boolean = false;
     isSearch: boolean = false;
     isOverlay: boolean = false;
@@ -80,9 +80,11 @@ export class SharedService {
         this.openChannelOverlay.next();
     }
 
-  
+
 
     loadChat() {
+        console.log('works');
+        
         this.loadChatWindow.next();
     }
 
@@ -95,14 +97,7 @@ export class SharedService {
 
     }
 
-    setMessage(message: any, index: number) {
-        this.messageIndex = index;
-        localStorage.setItem('messageIndex', JSON.stringify(index));
-        console.log(this.messageIndex);
 
-        this.message = message;
-        localStorage.setItem('message', JSON.stringify(this.message));
-    }
 
     setUser(userData: any) {
         this.user = userData;
@@ -120,8 +115,8 @@ export class SharedService {
     }
 
     //openOverlay() {
-      //  this.isOverlay = !this.isOverlay
-        //this.openGeneralOverlay.next();
+    //  this.isOverlay = !this.isOverlay
+    //this.openGeneralOverlay.next();
     //}
 
     logoutUser() {
@@ -167,11 +162,11 @@ export class SharedService {
         this.isOverlay = false;
         this.isLogout = false;
         this.isProfileOpen = false;
-        this.isEdit=false;
+        this.isEdit = false;
 
     }
 
-    changeIsChange(event:Event) {
+    changeIsChange(event: Event) {
         this.isChange = false;
         event.stopPropagation();
     }
@@ -181,13 +176,13 @@ export class SharedService {
 
 
         if (this.isRecieverProfile === true) {
-            this.isOverlay=false;
+            this.isOverlay = false;
 
         }
         this.isRecieverProfile = false;
         this.isMember = false;
         this.isProfileOpen = false;
- 
+
     }
 
 
@@ -208,7 +203,7 @@ export class SharedService {
         //this.sharedservice.openOverlay();
     }
 
-    triggerEditChannel(reciever:any){
+    triggerEditChannel(reciever: any) {
 
         console.log(reciever);
         this.editObserver.next(reciever);

@@ -24,7 +24,7 @@
 
     </div>
     <div class="divider">
-        <span>{{currentReciever?.messages[currentIndex]?.thread?.length}} Antworten</span>
+        <span>{{currentMessages.length}} Antworten</span>
         <div class="line">
 
         </div>
@@ -34,8 +34,9 @@
         <div *ngFor="let message of currentMessages; let index=index">
             <div class="message">
                 <div [ngClass]="{'reverse': index % 2 !== 0}" class="content">
-                    <img [src]="message?.photo" alt="">
-                    <div [ngClass]="{'flex-end': index % 2 !== 0}">
+
+                    <img class="image" [src]="message?.photo" alt="">
+                    <div class="textDiv" [ngClass]="{'flex-end': index % 2 !== 0}">
                         <div [ngClass]="{'reverse': index % 2 !== 0}" class="textData">
                             <span>{{message?.name}}</span>
                             <p>{{message?.time | date:'HH:mm'}} Uhr</p>
@@ -44,13 +45,46 @@
                             <span>{{message?.content}}</span>
                         </div>
                     </div>
+
+
                     <div [ngClass]="{'menubarposition':  index % 2 !== 0}" class="menubar">
 
-                        <button><img src="./img/addreaction.svg" alt=""></button>
+                        <button (click)="toogleIconBar()"><img src="./img/addreaction.svg" alt=""></button>
                         <button (click)="messageService.toggelIsEdit(index, message, 'thread')"
                             *ngIf="isUser(message)"><img src="./img/dots.svg" alt=""></button>
+                        <div *ngIf="isIconBar" class="iconBar">
+                            <button
+                                (click)="reactionService.addReaction('./img/checkmark.svg',message,currentUser, currentReciever.id, 'check', 'thread' )"><img
+                                    src="./img/checkmark.svg" alt=""></button>
+                            <button
+                                (click)="reactionService.addReaction('./img/ThumbsUp.svg',message,currentUser, currentReciever.id, 'thumb', 'thread' )"><img
+                                    src="./img/ThumbsUp.svg" alt=""></button>
+                            <button
+                                (click)="reactionService.addReaction('./img/rocket.svg',message,currentUser, currentReciever.id, 'rocket', 'thread' )"><img
+                                    src="./img/rocket.svg" alt=""></button>
+                            <button
+                                (click)="reactionService.addReaction('./img/nerd.svg',message,currentUser, currentReciever.id, 'nerd', 'thread' )"><img
+                                    src="./img/nerd.svg" alt=""></button>
+                        </div>
+                    </div>
+
+                    <div [ngClass]="{'reverse': index % 2 !== 0}" class="reactions">
+                        <button><img src="./img/addreaction.svg" alt=""></button>
+                        <div (click)="reactionService.findAllReactions(message, currentReciever.id, currentUser.id, 'thread', index)"
+                            class="iconContainer">
+                            <img src="{{message?.lastReaction}}" alt="">
+                            <span>{{message?.reactionLength}}</span>
+                            <div *ngIf="reactionService.isReaction && reactionService.reactionIndex===index"
+                                class="reactionList">
+                                <div class="reactionsRow" *ngFor="let reaction of reactionService.allReactions">
+                                    <img src="{{reaction?.icon}}" alt="">
+                                    <span>{{reaction?.name}}</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
@@ -84,5 +118,5 @@
             </div>
         </div>
     </div>
-   
+
 </section>

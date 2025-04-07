@@ -54,7 +54,7 @@ p {
 
 .message {
     width: 100%;
-    min-height: 150px;
+    min-height: 200px;
     padding: 18px 25px 0 0;
     box-sizing: border-box;
 
@@ -63,16 +63,24 @@ p {
 
 .content {
     width: 100%;
-    height: 100%;
+    height: 160px;
     box-sizing: border-box;
     padding: 20px 40px;
     display: flex;
+
     justify-content: flex-start;
     align-items: flex-start;
     gap: 20px;
     position: relative;
 
-    >div {
+
+    >img {
+        width: 70px !important;
+        height: 70px;
+        border-radius: 40px;
+    }
+
+    .textDiv {
         width: 100%;
         max-width: 278px;
         display: flex;
@@ -80,11 +88,8 @@ p {
         gap: 8px;
     }
 
-    >img {
-        width: 70px;
-        height: 70px;
-        border-radius: 40px;
-    }
+
+
 
     &:hover:not(.startmessage) {
         background-color: var(--bg-color);
@@ -93,12 +98,18 @@ p {
             display: flex !important;
         }
 
+        .reactions{
+            display: flex;
+        }
+
         .bubbleBG {
             background-color: white !important;
         }
 
     }
 }
+
+
 
 .addreaction {
     >img {
@@ -359,7 +370,13 @@ textarea:focus {
 
 .reverse {
     display: flex;
-    flex-direction: row-reverse;
+    flex-direction: row-reverse !important;
+
+    .reactions {
+
+        right: 100px;
+        left: unset;
+    }
 
     >.text {
         background-color: var(--purple2) !important;
@@ -423,7 +440,7 @@ textarea:focus {
     display: flex;
     align-items: center;
     gap: 10px;
-    top: -40px;
+    top: -35px;
     left: -190px;
     height: 46px;
     border: solid;
@@ -437,8 +454,68 @@ textarea:focus {
     >button {
         width: 40px;
         height: 40px;
+        border-radius: 100px;
 
+        &:hover {
+            background-color: var(--bg-color);
+        }
 
     }
 }
 
+.reactions {
+    display: flex;
+    width: 100%;
+    max-width: 250px;
+    position: absolute;
+    bottom: 0;
+    left: 100px;
+    display: none;
+}
+
+.iconContainer {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    box-sizing: border-box;
+    padding: 5px 10px;
+    width: 64px;
+    height: 34px;
+    border: solid;
+    border-width: 1px;
+    border-color: var(--border-light);
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.reactionList {
+    
+    position: absolute;
+    right: -180px;
+    bottom: -195px;
+    width: 200px;
+    height: 200px;
+    border-radius: 0 30px 30px 30px;
+    background-color: var(--purple1);
+    box-sizing: border-box;
+    padding: 15px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+   z-index: 9;
+    gap: 10px;
+    color: white;
+    overflow-y: scroll;
+}
+
+.reactionsRow{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    >img{
+        width: 18px;
+    }
+}

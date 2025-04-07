@@ -66,4 +66,6 @@ export class ChannelService {
         this.loadEmptyChannel.next();
 
     }
+
+    
 }

@@ -240,7 +240,7 @@ height: 100% !important;
     margin-top: 25px;
     display: flex;
     justify-content: center;
-  
+  cursor: pointer;
     &:hover {
       > div > button > img {
         content: url(/img/add_circle_hover.svg);
@@ -419,4 +419,12 @@ height: 100% !important;
 position: absolute;
 top: 50%;
 left: 50%;
+}
+
+@media(max-width: 407px){
+    section{
+        width: 100vw;
+        border-radius: 0px;
+    }
+  
 }

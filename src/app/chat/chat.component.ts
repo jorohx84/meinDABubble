@@ -13,6 +13,7 @@ import { Firestore, collection, addDoc, doc, updateDoc } from '@angular/fire/fir
 import { ThreadComponent } from '../thread/thread.component';
 import { ProfileComponent } from '../profile/profile.component';
 import { ChannelService } from '../channel.service';
+import { ReactionService } from '../reactions.service';
 
 @Injectable({
   providedIn: 'root',
@@ -26,7 +27,8 @@ import { ChannelService } from '../channel.service';
 })
 export class ChatComponent {
   auth = inject(Auth);
-channelService=inject(ChannelService);
+  channelService = inject(ChannelService);
+  reactionService=inject(ReactionService);
   userID: string = '';
   currentUser: any;
   currentReciever: any;
@@ -47,14 +49,16 @@ channelService=inject(ChannelService);
   userObserver = this.userservice.user$;
   threadIsOpen: boolean = false;
   threadSubscription: Subscription | null = null;
-  
+  devSlide: boolean = false;
 
   constructor() {
     this.sharedservice.getDataFromLocalStorage('reciever')
     this.currentReciever = this.sharedservice.data;
-    console.log(this.currentReciever);
     this.sharedservice.getDataFromLocalStorage('thread')
     this.threadIsOpen = this.sharedservice.data;
+    this.sharedservice.getDataFromLocalStorage('devSlide');
+    this.devSlide=this.sharedservice.data
+
   }
 
   async ngOnInit() {
@@ -63,7 +67,7 @@ channelService=inject(ChannelService);
       this.toggleChannelOverlay();
     })
 
-  //  this.overlaySubscription = this.sharedservice.openGeneralOverlay$.subscribe(() => {
+    //  this.overlaySubscription = this.sharedservice.openGeneralOverlay$.subscribe(() => {
     //  this.isOverlay = !this.isOverlay;
     //})
 
@@ -73,13 +77,13 @@ channelService=inject(ChannelService);
 
     this.userSubscription = this.sharedservice.userObserver$.subscribe(() => {
       this.currentUser = this.sharedservice.currentProfile;
- 
+
 
     });
-    this.threadSubscription = this.sharedservice.openThread$.subscribe((key:string) => {
-      if (key==='close') {
+    this.threadSubscription = this.sharedservice.openThread$.subscribe((key: string) => {
+      if (key === 'close') {
         this.threadIsOpen = false;
-      }else{
+      } else {
         this.threadIsOpen = true;
       }
       localStorage.setItem('thread', JSON.stringify(this.threadIsOpen));
@@ -106,7 +110,7 @@ channelService=inject(ChannelService);
 
     if (this.currentUser) {
 
-     
+
       console.log('user wurde direkt geladen', this.currentUser);
 
     } else {
@@ -127,7 +131,7 @@ channelService=inject(ChannelService);
     this.showChannel = !this.showChannel;
   }
 
- 
+
 
   toggleProfile() {
     this.sharedservice.isReceiver = false;
@@ -193,9 +197,9 @@ channelService=inject(ChannelService);
     await signOut(this.auth);
     this.emptyLogalStorage();
 
-  //  setTimeout(() => {
-      this.sharedservice.navigateToPath('/login');
-   // }, 1000);
+    //  setTimeout(() => {
+    this.sharedservice.navigateToPath('/login');
+    // }, 1000);
 
   }
 
@@ -205,8 +209,8 @@ channelService=inject(ChannelService);
   emptyLogalStorage() {
     this.currentUser = null;
     this.currentReciever = null;
-    this.threadIsOpen=false;
-    localStorage.setItem('thread',JSON.stringify (this.threadIsOpen))
+    this.threadIsOpen = false;
+    localStorage.setItem('thread', JSON.stringify(this.threadIsOpen))
     localStorage.setItem('reciever', JSON.stringify(this.currentReciever));
     localStorage.setItem('user', JSON.stringify(this.currentUser));
     this.sharedservice.logoutUser();
@@ -215,8 +219,13 @@ channelService=inject(ChannelService);
 
 
 
-  closeThread(){
-   this.threadIsOpen=false;
+  closeThread() {
+    this.threadIsOpen = false;
+  }
+
+  toogleDevspace() {
+this.devSlide=!this.devSlide;
+localStorage.setItem('devSlide',JSON.stringify (this.devSlide))
   }
 }
 

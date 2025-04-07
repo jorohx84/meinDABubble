@@ -1,7 +1,7 @@
 import { Component, inject, Injectable, ElementRef, ViewChild, AfterViewInit, AfterViewChecked, ChangeDetectorRef } from '@angular/core';
 import { SharedService } from '../shared.service';
 import { CommonModule } from '@angular/common';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../user.service';
 import { ChannelService } from '../channel.service';
@@ -61,9 +61,9 @@ export class ChatwindowComponent implements AfterViewChecked {
   searchList: any[] = [];
   isHeaderSearch: boolean = false;
   currentInput: string = '';
-
+  threadLengths: number[] = []; // Array, das die Thread-Längen speichert
   editIndex: number = 0;
- 
+
   constructor() {
 
 
@@ -90,7 +90,25 @@ export class ChatwindowComponent implements AfterViewChecked {
   async ngOnInit() {
     await this.loadChannels();
     await this.loadUsers();
+    this.loadCurrentWindow();
+   
     this.loadDataSubscription = this.sharedservice.loadChatWindow$.subscribe(() => {
+      console.log('arrived');
+      this.currentMessages = this.messageService.currentMessages;
+      console.log(this.currentMessages);
+      /*
+      this.currentUser = this.messageService.currentUser;
+      this.currentReciever = this.messageService.currentReciever;
+      this.currentChat = this.messageService.currentChat;
+      console.log(this.currentUser);
+      console.log(this.currentReciever);
+      this.messageService.getCurrentMessages(this.currentUser, this.currentReciever, this.currentChat);
+     
+      this.currentMessages = this.messageService.currentMessages;
+      this.sortMessages();
+      this.checkMessages();
+*/
+
       this.getDataFromDevspace();
       this.loadCurrentWindow();
 
@@ -208,6 +226,11 @@ export class ChatwindowComponent implements AfterViewChecked {
       this.currentChat = 'new';
       localStorage.setItem('chat', this.currentChat);
     }
+    console.log(this.currentReciever);
+
+
+    console.log(this.currentMessages);
+
     this.loadMessages();
     //loadReactions()
   }
@@ -336,11 +359,13 @@ export class ChatwindowComponent implements AfterViewChecked {
     }
   }
 
-  openThread(message: any[], index: number, event: Event) {
+  async openThread(message: any, index: number, event: Event) {
+    console.log(message);
+
 
     this.sharedservice.setReciever(this.currentReciever);
     this.sharedservice.setUser(this.currentUser);
-    this.sharedservice.setMessage(message, index);
+    await this.messageService.setMessage(message, index, this.currentReciever);
     this.sharedservice.initializeThread('');
     event.stopPropagation();
   }
@@ -393,11 +418,11 @@ export class ChatwindowComponent implements AfterViewChecked {
     this.sharedservice.isEdit = true;
     this.sharedservice.triggerEditChannel(this.currentReciever);
   }
-/*
-  toggelIsEdit(index: number) {
-    this.editIndex = index;
-    this.messageService.isEdit = !this.messageService.isEdit;
-  }
-    */
+  /*
+    toggelIsEdit(index: number) {
+      this.editIndex = index;
+      this.messageService.isEdit = !this.messageService.isEdit;
+    }
+      */
 
 }
