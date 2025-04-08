@@ -171,21 +171,21 @@
                         [ngClass]="{'reverseIcon': !isUser(message), 'footerIcon':reactionService.isFooterIconBar}"
                         class="iconBar">
                         <button
-                            (click)="reactionService.addReaction('./img/checkmark.svg',index, currentUser, currentReciever, 'check', 'chat')"
+                            (click)="reactionService.addReaction('./img/checkmark.svg',message, currentUser, currentReciever, 'check', 'chat')"
                             class="checkmark"><img
                                
                                 src="./img/checkmark.svg" alt=""></button>
                         <button
-                            (click)="reactionService.addReaction('./img/ThumbsUp.svg', index, currentUser, currentReciever, 'thumb', 'chat')"
+                            (click)="reactionService.addReaction('./img/ThumbsUp.svg', message, currentUser, currentReciever, 'thumb', 'chat')"
                             class="ThumbsUp"><img
                           
                                 src="./img/ThumbsUp.svg" alt=""></button>
                         <button class="bg"
-                            (click)="reactionService.addReaction('./img/rocket.svg',index, currentUser, currentReciever, 'rocket', 'chat')"
+                            (click)="reactionService.addReaction('./img/rocket.svg',message, currentUser, currentReciever, 'rocket', 'chat')"
                            ><img
                                 src="./img/rocket.svg" alt=""></button>
                         <button class="bg"
-                            (click)="reactionService.addReaction('./img/nerd.svg',index, currentUser, currentReciever, 'nerd', 'chat')"
+                            (click)="reactionService.addReaction('./img/nerd.svg',message, currentUser, currentReciever, 'nerd', 'chat')"
                           ><img
                                 src="./img/nerd.svg" alt=""></button>
                     </div>
