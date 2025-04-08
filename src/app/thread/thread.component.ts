@@ -40,42 +40,28 @@ export class ThreadComponent {
   threadStarts: boolean = false;
   messageID: string = '';
   isIconBar: boolean = false;
+
+  
   constructor(private cdRef: ChangeDetectorRef) {
 
-    this.openThreadContent();
+    this.loadThreadData();
+    this.loadThreadMessages();
+
     //this.threadStarts = false;
     // localStorage.setItem('threadStarts', JSON.stringify(this.threadStarts));
   }
   async ngOnInit() {
-    await this.loadUsers();
-    await this.loadChannels();
+    // await this.loadUsers();
+    //await this.loadChannels();
 
 
     //this.currentMessages = await this.getThreadData();
     console.log(this.currentMessages);
     this.threadSubscription = this.sharedService.openThread$.subscribe(async (key) => {
-
-
       if (key === 'close') {
         this.threadStarts = false;
       } else {
-        this.threadStarts = true;
-        this.currentMessages = this.messageService.currentThreadMessages;
-        localStorage.setItem('threadStarts', JSON.stringify(this.threadStarts));
-        console.log('openThread ausgelöst!');
-        await this.loadUsers();
-        await this.loadChannels();
-        await this.openThreadContent();
-        this.loadThreadMessages();
-        console.log(this.currentMessages.length);
-
-        if (this.currentMessages.length === 0) {
-          this.sharedService.getDataFromLocalStorage('threadMessages');
-          this.currentMessages = this.sharedService.data;
-        } else {
-
-        }
-
+        await this.startThread()
       }
 
     })
@@ -91,39 +77,67 @@ export class ThreadComponent {
       this.threadSubscription.unsubscribe();
     }
   }
+  async startThread() {
+    this.threadStarts = true;
+    localStorage.setItem('threadStarts', JSON.stringify(this.threadStarts));
 
+    //await this.loadUsers();
+    //await this.loadChannels();
+    this.loadThreadData();
+    this.loadThreadMessages();
+    console.log('openThread ausgelöst!');
+  }
 
-
-
-
-
-  async openThreadContent() {
+  loadThreadData() {
     this.sharedService.getDataFromLocalStorage('threadStarts');
     this.threadStarts = this.sharedService.data;
-    if (this.sharedService.user && this.sharedService.reciever && this.sharedService.message && this.messageService.messageIndex) {
-      await this.setData();
+    if (this.sharedService.user && this.sharedService.reciever && this.messageService.message && this.messageService.messageIndex && this.currentMessages.length > 0) {
+      this.setData();
     } else {
       this.reloadDataFromLocalStorage();
     }
     if (this.currentReciever) {
-      this.currentReciever = await this.channelService.setCurrentReciever(this.currentReciever.id);
+      //  this.currentReciever = await this.channelService.setCurrentReciever(this.currentReciever.id);
+      //this.messageService.getThreadData(this.currentReciever);
     }
+
 
   }
 
   async setData() {
-    //this.currentMessages = await this.getThreadData();
-    this.message = this.sharedService.message;
+    this.currentMessages = this.messageService.currentThreadMessages;
+    this.message = this.messageService.message;
+    this.messageID = this.messageService.messageID;
     this.currentIndex = this.messageService.messageIndex;
     this.currentUser = this.sharedService.user;
     this.currentReciever = this.sharedService.reciever;
     console.log('Daten direkt geladen', this.currentReciever, this.currentUser);
-    console.log(this.currentReciever);
-
   }
+
+
   reloadDataFromLocalStorage() {
+       /*
+      // Definiere die Keys und die entsprechenden Variablen, die gesetzt werden sollen
+  const keysToLoad = [
+    { key: 'threadMessages', variable: 'currentMessages' },
+    { key: 'user', variable: 'currentUser' },
+    { key: 'reciever', variable: 'currentReciever' },
+    { key: 'message', variable: 'message' },
+    { key: 'messageIndex', variable: 'currentIndex' },
+    { key: 'messageID', variable: 'messageID' },
+  ];
+
+  // Iteriere durch die Keys und lade die Daten
+  keysToLoad.forEach(({ key, variable }) => {
+    this.sharedService.getDataFromLocalStorage(key);
+    this[variable] = this.sharedService.data;
+  });
+
+  console.log('Daten aus localStorage geladen', this.currentReciever, this.currentUser);
+
+  */
     this.sharedService.getDataFromLocalStorage('threadMessages');
-    this.currentMessages = this.sharedService.data;
+    this.sharedService.data;
     this.sharedService.getDataFromLocalStorage('user');
     this.currentUser = this.sharedService.data;
     this.sharedService.getDataFromLocalStorage('reciever');
@@ -132,8 +146,10 @@ export class ThreadComponent {
     this.message = this.sharedService.data;
     this.sharedService.getDataFromLocalStorage('messageIndex');
     this.currentIndex = this.sharedService.data
-
+    this.sharedService.getDataFromLocalStorage('messageID');
+    this.messageID = this.sharedService.data;
     console.log('Daten aus localStorage geladen', this.currentReciever, this.currentUser);
+   
   }
 
 
@@ -258,32 +274,18 @@ export class ThreadComponent {
     }
   */
 
-
-
-
-
-
   async loadThreadMessages() {
     this.getMessageID()
-
     if (this.threadStarts && this.currentReciever) {
-      // Die Referenz zur Thread-Nachrichtensammlung
       const messagesCollection = collection(this.firestore, `channels/${this.currentReciever.id}/messages/${this.messageID}/thread`);
-
-      // Eine Query erstellen, um nach 'time' zu sortieren (vom ältesten zum neuesten)
-      const q = query(messagesCollection, orderBy('time', 'asc')); // 'asc' für aufsteigende Reihenfolge, d.h. ältere Nachrichten zuerst
-
-      // Verwende onSnapshot, um Nachrichten in Echtzeit zu beobachten
+      const q = query(messagesCollection, orderBy('time', 'asc'));
       onSnapshot(q, (querySnapshot) => {
         const messages = querySnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
-
-        // Jetzt sind die Nachrichten nach 'time' sortiert
         console.log('Nachrichten nach Zeit sortiert:', messages);
 
-        // Update die UI oder speichere die Nachrichten
         this.currentMessages = messages;
         localStorage.setItem('threadMessages', JSON.stringify(messages));
 
@@ -323,9 +325,9 @@ export class ThreadComponent {
     return message.from === this.currentUser.id;
   }
 
-  toogleIconBar(){
-    this.isIconBar=!this.isIconBar;
+  toogleIconBar() {
+    this.isIconBar = !this.isIconBar;
   }
 
-  
+
 }

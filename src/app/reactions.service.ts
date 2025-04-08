@@ -3,7 +3,7 @@ import { Firestore, updateDoc, doc, addDoc, setDoc, docSnapshots } from "@angula
 import { ChannelService } from "./channel.service";
 import { reload } from "firebase/auth";
 import { UserService } from "./user.service";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, CollectionReference, DocumentData, getDocs } from "firebase/firestore";
 import { MessageService } from "./message.service";
 import { share } from "rxjs";
 import { SharedService } from "./shared.service";
@@ -31,13 +31,18 @@ export class ReactionService {
     allReactions: any[] = [];
     isReaction: boolean = false;
     reactionIndex: number = 0;
-    async addReaction(icon: string, message: any, user: any, recieverID: string, reactionType: string, chatKey: string) {
+    messageObject: any;
+    currentReaction:any;
+    async addReaction(icon: string, message: any, user: any, reciever: any, reactionType: string, chatKey: string) {
+
 
         this.sharedService.getDataFromLocalStorage('chat');
+        this.messageObject = message;
         const currentChat = this.sharedService.data;
+
         const messageID = message.id;
         const reactor = user;
-
+        const recieverID = reciever.id
 
 
 
@@ -50,22 +55,25 @@ export class ReactionService {
         //}
 
         const reaction = this.getReactionObject(reactor, icon, reactionType);
+       this.currentReaction=reaction;
+        console.log(this.currentReaction);
+        
         if (chatKey === 'thread') {
             this.sharedService.getDataFromLocalStorage('message');
             const chatMessage = this.sharedService.data;
             const chatMessageID = chatMessage.id
-            console.log(chatMessage);
             const threadMessage = message;
             const threadID = threadMessage.id;
-            console.log(threadMessage);
-            console.log(user);
-            console.log(recieverID);
+            const threadReactionDocRef = collection(this.firestore, `channels/${recieverID}/messages/${chatMessageID}/thread/${threadID}/reactions`);
 
-            const docRef = collection(this.firestore, `channels/${recieverID}/messages/${chatMessageID}/thread/${threadID}/reactions`);
-            console.log(docRef);
+            const duplicate = await this.checkDuplikate(threadReactionDocRef, user.id, reactionType, recieverID, chatMessageID, threadID, currentChat, chatKey)
+            if (duplicate) {
+                console.log('Duplikat');
+                return
+            }
 
-            await addDoc(docRef, reaction);
-            await this.addReactionData(docRef, chatMessageID, threadID, icon, recieverID);
+            await addDoc(threadReactionDocRef, reaction);
+            await this.addReactionData(threadReactionDocRef, chatMessageID, threadID, icon, recieverID, chatKey, currentChat);
 
         } else {
 
@@ -73,12 +81,13 @@ export class ReactionService {
                 const firestoreID = this.messageService.generateFirestoreID();
                 console.log(firestoreID);
 
-                await this.saveChatReactions(user.id, messageID, reaction, firestoreID);
-                await this.saveChatReactions(recieverID, messageID, reaction, firestoreID);
+                await this.saveChatReactions(user.id, messageID, reaction, firestoreID, icon, chatKey, currentChat);
+                await this.saveChatReactions(recieverID, messageID, reaction, firestoreID, icon, chatKey, currentChat);
             }
             if (currentChat === 'channel') {
-                const reactionDocRef = collection(this.firestore, `channels/${recieverID}/messages/${messageID}/reactions`);
-                await addDoc(reactionDocRef, reaction);
+                const channelReactionDocRef = collection(this.firestore, `channels/${recieverID}/messages/${messageID}/reactions`);
+                await addDoc(channelReactionDocRef, reaction);
+                await this.addReactionData(channelReactionDocRef, messageID, '', icon, recieverID, chatKey, currentChat);
                 this.channelService.reloadChannelData(recieverID);
             }
 
@@ -91,17 +100,104 @@ export class ReactionService {
 
     }
 
+    async checkDuplikate(docRef: CollectionReference<DocumentData>, userID: string, type: string, recieverID: string, chatMessageID: string, threadID: string, currentChat: string, chatKey: string) {
+        console.log(docRef);
+
+        console.log(userID);
+        if (docRef && userID) {
+            const docSnap = await getDocs(docRef);
+            const reactions = docSnap.docs.map((doc) => ({
+
+                docID: doc.id,
+                ...doc.data(),
+            }));
+            console.log(reactions);
+            const duplicate = await this.isDuplikate(reactions, userID, type, recieverID, chatMessageID, threadID, currentChat, chatKey);
+            console.log(duplicate);
+            if (duplicate) {
+                console.log('Duplikat', duplicate);
+
+                return true
+            }
+            console.log('kein Duplikat', duplicate);
+            return false;
+        }
+        console.log('kein User oder DocRef ');
+        return true
+    }
+
+    async isDuplikate(reactions: any[], userID: string, type: string, recieverID: string, chatMessageID: string, threadID: string, currentChat: string, chatKey: string) {
+        const duplicate = reactions.find(reaction => reaction.id === userID);
+        if (duplicate) {
+            console.log('Es wurde bereits reagiert', duplicate.docID);
+            if (duplicate.type !== type) {
+                console.log('type stimmt nicht überein', type);
+                console.log(currentChat);
+                console.log(chatKey);
+
+                await this.updateReaction(recieverID, chatMessageID, threadID, currentChat, chatKey, userID, duplicate);
+              
+            }else{
+         
+                console.log('type stimmt überein', type);
+            }
+            return true
+        }
+
+        return false
+
+    }
+
+    async updateReaction(recieverID: string, chatMessageID: string, threadID: string, currentChat: string, chatKey: string, userID: string, duplicate: any) {
+        console.log(recieverID);
+        console.log(chatMessageID);
+        console.log(threadID);
+        console.log(currentChat);
+        console.log(chatKey);
+
+        console.log(userID);
+        console.log(duplicate.icon);
+console.log(this.currentReaction);
+console.log(this.currentReaction.icon);
 
 
 
-    async saveChatReactions(ID: string, messageID: string, reaction: any, firestoreID: string) {
+        if (chatKey === 'thread') {
+            console.log('thread');
+
+            const threadRactionRef = doc(this.firestore, `channels/${recieverID}/messages/${chatMessageID}/thread/${threadID}/reactions/${duplicate.docID}`);
+            await updateDoc(threadRactionRef, this.currentReaction)
+            const threadRef = doc(this.firestore, `channels/${recieverID}/messages/${chatMessageID}/thread/${threadID}`);
+            await updateDoc(threadRef, {
+                lastReaction: this.currentReaction.icon,
+            });
+        }
+
+
+    }
+
+    async saveChatReactions(ID: string, messageID: string, reaction: any, firestoreID: string, icon: string, chatKey: string, currentChat: string) {
+        const userReactionDocRef = collection(this.firestore, `users/${ID}/messages/${messageID}/reactions`)
         const chatReactionRef = doc(this.firestore, `users/${ID}/messages/${messageID}/reactions/${firestoreID}`)
         await setDoc(chatReactionRef, reaction);
+        await this.addReactionData(userReactionDocRef, messageID, '', icon, ID, chatKey, currentChat);
     }
 
 
-    async addReactionData(docRef: any, chatMessageID: string, threadID: string, icon: string, recieverID: string) {
-        const messageDocRef = doc(this.firestore, `channels/${recieverID}/messages/${chatMessageID}/thread/${threadID}`)
+
+    async addReactionData(docRef: any, chatMessageID: string, threadID: string, icon: string, recieverID: string, chatKey: string, currentChat: string) {
+        let messageDocRef: any;
+        if (chatKey === 'thread') {
+            messageDocRef = doc(this.firestore, `channels/${recieverID}/messages/${chatMessageID}/thread/${threadID}`)
+        }
+        if (chatKey === 'chat') {
+            if (currentChat === 'channel') {
+                messageDocRef = doc(this.firestore, `channels/${recieverID}/messages/${chatMessageID}`)
+            }
+            if (currentChat === 'user') {
+                messageDocRef = doc(this.firestore, `users/${recieverID}/messages/${chatMessageID}`)
+            }
+        }
         await updateDoc(messageDocRef, {
             reactionLength: await this.getReactionCount(docRef),
             lastReaction: icon,
@@ -123,43 +219,38 @@ export class ReactionService {
     }
 
     async findAllReactions(message: any, recieverID: string, userID: string, type: string, index: number) {
+        const chat = this.sharedService.getDataFromLocalStorage('chat');
+        console.log(chat);
+        let docRef;
+        if (type === 'thread') {
+            this.sharedService.getDataFromLocalStorage('messageID')
+            const messageID = this.sharedService.data;
+            console.log(messageID);//thread
+            const threadID = message.id;
+            docRef = collection(this.firestore, `channels/${recieverID}/messages/${messageID}/thread/${threadID}/reactions`);
+        }
+        if (type === 'chat') {
+            let collectionName = chat === 'channel' ? 'channels' : chat === 'user' ? 'users' : '';
+            docRef = collection(this.firestore, `${collectionName}/${recieverID}/messages/${message.id}/reactions`);
+
+        }
+        if (docRef) {
+            const docsnap = await getDocs(docRef)
+            const reactions = docsnap.docs.map((doc) => ({
+                id: doc.id,
+                ...doc.data(),
+            }));
+            console.log(reactions);
+            this.allReactions = reactions;
+            console.log(docsnap);
+        }
         this.reactionIndex = index;
-        this.sharedService.getDataFromLocalStorage('messageID')
-        const messageID = this.sharedService.data;
-        console.log(messageID);
-        console.log(message);
-        console.log(recieverID);
-        console.log(userID);
-        console.log(type);
-        const threadID = message.id;
-        const docRef = collection(this.firestore, `channels/${recieverID}/messages/${messageID}/thread/${threadID}/reactions`);
-        const docsnap = await getDocs(docRef)
-        const reactions = docsnap.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-        }));
-        console.log(reactions);
-        this.allReactions = reactions;
-        console.log(docsnap);
-
         this.isReaction = true;
-
     }
 
-    checkDuplikate(reactions: any[], user: any, reactionType: string) {
-        let duplikate = false;
-        reactions.forEach(reaction => {
-            if (reaction.id === user.id) {
-                if (reaction.type === reactionType) {
-                    duplikate = true;
-                }
-
-            }
-        })
-        return duplikate;
 
 
-    }
+
 
     getReactionObject(reactor: any, icon: string, reactionType: string) {
         console.log(reactor);

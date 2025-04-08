@@ -361,8 +361,6 @@ export class ChatwindowComponent implements AfterViewChecked {
 
   async openThread(message: any, index: number, event: Event) {
     console.log(message);
-
-
     this.sharedservice.setReciever(this.currentReciever);
     this.sharedservice.setUser(this.currentUser);
     await this.messageService.setMessage(message, index, this.currentReciever);

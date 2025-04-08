@@ -71,8 +71,10 @@ export class SharedService {
                 this.data = storedData;
                 console.log('Daten aus localStorage wiederhergestellt (als String):', this.data);
             }
+            return storedData
         } else {
             console.log('Keine Daten im localStorage gefunden');
+            return null
         }
     }
 
