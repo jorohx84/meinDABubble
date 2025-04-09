@@ -118,9 +118,9 @@ export class ChatwindowComponent implements AfterViewChecked {
       this.checkReciever();
       this.loadCurrentWindow();
     
-      setTimeout(() => {
+     
         this.currentMessages = this.messageService.currentMessages;
-    }, 1000);
+   
     });
     this.searchSubscription = this.searchService.openSearchList$.subscribe((key) => {
       if (key = 'new') {
