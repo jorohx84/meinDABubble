@@ -25,7 +25,7 @@
         </div>
         <div class="buttons">
             <button [disabled]="userauth.invalid" class="btn-purple">Anmelden</button>
-            <button class="btn-white">Gäste-Login</button>
+            <button (click)="guestLogin()" class="btn-white">Gäste-Login</button>
         </div>
 
     </form>
