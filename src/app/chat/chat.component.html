@@ -56,8 +56,11 @@
                     <img src="./img/tag.svg" alt="">
                     <input #name="ngModel" [(ngModel)]="channelName" type="text" name="name"
                         placeholder="z.B. Kooperationsprojekte" required>
+                     
                 </div>
-
+                @if(name.touched && !name.valid){
+                    <span class="error">Bitte geben Sie einen Namen ein</span>
+                }
             </div>
             <div class="inputContainer">
                 <span>Beschreibung (optional)</span>

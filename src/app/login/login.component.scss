@@ -4,12 +4,17 @@ section {
     position: relative;
     background-color: var(--bg-color);
     font-family: 'Nunito';
-    >span{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    >span {
         position: absolute;
-        top:75px;
+        top: 75px;
         right: 32px;
     }
-    >button{
+
+    >button {
         padding: 10px 15px;
         background-color: transparent;
         border: none;
@@ -17,32 +22,35 @@ section {
         font-size: 18px;
         font-weight: 400;
         position: absolute;
-        top:100px;
+        top: 100px;
         right: 20px;
     }
 }
 
 .logo {
     position: absolute;
-    top: 75px;
-    left: 75px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
 }
 
-.login{
+.login {
     width: 100%;
     max-width: 606px;
     height: 100%;
     max-height: 769px;
     background-color: white;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    position: relative;
+    // position: absolute;
+    // top: 50%;
+    // left: 50%;
+    // transform: translate(-50%, -50%);
     border-radius: 30px;
     box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.08);
 }
 
-.header{
+.header {
     width: 100%;
     max-width: 486px;
     height: 100%;
@@ -54,20 +62,22 @@ section {
     position: absolute;
     top: 50px;
     left: 60px;
-    >h1{
+
+    >h1 {
         font-size: 46px;
         font-weight: 700;
         color: var(--purple1);
         margin: 0;
     }
-    >span{
+
+    >span {
         text-align: center;
         font-size: 18px;
         font: 300;
     }
 }
 
-.inputfields{
+.inputfields {
     width: 100%;
     max-width: 500px;
     height: 100%;
@@ -79,7 +89,8 @@ section {
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    >div{
+
+    >div {
         width: 100%;
         height: 60px;
         box-sizing: border-box;
@@ -90,9 +101,10 @@ section {
         display: flex;
         justify-content: flex-start;
         gap: 10px;
-     
+
     }
-    >button{
+
+    >button {
         background-color: transparent;
         border: none;
         color: var(--purple2);
@@ -103,52 +115,155 @@ section {
 input {
     background-color: transparent;
     border: none;
-     width: 100%;
-    
-    }
-    
-    input:focus {
-        outline: none;
-        box-shadow: none;
-    }
-    
-    input:focus::placeholder{
-        opacity: 0;
-    }
-    
-    
-    input:-webkit-autofill:focus {
-        background-color: transparent !important;
-        color: white !important;
-    }
-    
-    input:-webkit-autofill {
-        background-color: transparent !important;
-        color: white !important;
-        transition: background-color 5000s ease-in-out 0s, color 5000s ease-in-out 0s;
-    }
+    width: 100%;
+
+}
+
+input:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+input:focus::placeholder {
+    opacity: 0;
+}
 
 
-    .buttons{
+input:-webkit-autofill:focus {
+    background-color: transparent !important;
+    color: white !important;
+}
+
+input:-webkit-autofill {
+    background-color: transparent !important;
+    color: white !important;
+    transition: background-color 5000s ease-in-out 0s, color 5000s ease-in-out 0s;
+}
+
+
+.buttons {
+    width: 100%;
+    max-width: 320px;
+    height: 100%;
+    max-height: 49px;
+    position: absolute;
+    bottom: 99px;
+    left: 143px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    >button {
         width: 100%;
-        max-width: 320px;
+        max-width: 137px;
         height: 100%;
         max-height: 49px;
-        position: absolute;
-        bottom: 99px;
-        left: 143px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        >button{
-            width: 100%;
-            max-width: 137px;
-            height: 100%;
-            max-height: 49px;
-           border: none;
-           border-radius: 25px;
-           padding: 12px 25px;
-        }
+        border: none;
+        border-radius: 25px;
+        padding: 12px 25px;
+    }
+}
+
+.intro {
+    width: 100%;
+    height: 100vh;
+    background: linear-gradient(to bottom, rgba(121, 126, 243, 1), rgba(49, 58, 229, 1));
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    background-color: white;
+    z-index: 11;
+}
+
+
+.logoContainer {
+    width: 100%;
+    max-width: 696px;
+    height: 184px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    >img {
+        width: 187px;
+        height: 184px;
+        transform: translateX(100%);
+        transition: transform 0.5s ease;
     }
 
+
+}
+
+.moveLeft {
+    transform: translateX(0) !important;
+}
+
+.title {
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.5s ease;
+
+    >span {
+        font-size: 96px;
+        font-weight: 700;
+        color: white;
+    }
+}
+
+.showTitle {
+    transform: scaleX(1);
+}
+
+.hideIntro {
+    animation: hideIntro 0.5s ease;
+    opacity: 0;
   
+
+}
+
+@keyframes hideIntro {
+    0% {
+        opacity: 1;
+
+    }
+
+    100% {
+        opacity: 0;
+       
+    }
+
+}
+
+.d_none{
+
+    display: none;
+}
+
+.moveToCorner {
+    animation: moveLogo 1s ease;
+    top: 75px;
+    left: 75px;
+    transform: translate(0);
+    transition: top 1s ease, left 1s ease;
+}
+
+@keyframes moveLogo {
+    0% {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+    }
+
+    100% {
+        top: 75px;
+        left: 75px;
+        transform: translate(0);
+    }
+
+}

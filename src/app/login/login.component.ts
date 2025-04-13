@@ -34,14 +34,44 @@ export class LoginComponent {
       setTimeout(() => {
         this.sharedservice.navigateToPath('/chat')
       }, 1000);
-   
+
     } catch (error) {
       console.log(error);
 
     }
 
   }
+  ngAfterViewInit() {
+    this.logoAnimation();
+  }
 
+
+  logoAnimation() {
+    const logoContainer = document.getElementById('logo');
+    const logoText = document.getElementById('title');
+    const intro = document.getElementById('intro');
+    const logo = document.getElementById('logoSmall');
+    const logoDiv = document.getElementById('logoDiv');
+    setTimeout(() => {
+      console.log('hallo');
+
+      logoContainer?.classList.add('moveLeft');
+    }, 1000);
+    setTimeout(() => {
+      logoText?.classList.add('showTitle');
+    }, 1400);
+    setTimeout(() => {
+      intro?.classList.add('hideIntro');
+    }, 4000);
+    setTimeout(() => {
+      logo?.classList.add('moveToCorner');
+      logoDiv?.classList.add('moveToCorner');
+    }, 4200);
+
+    setTimeout(() => {
+      intro?.classList.add('d_none');
+    }, 4400);
+  }
 
 
 }

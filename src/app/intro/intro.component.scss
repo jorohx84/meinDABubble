@@ -1,0 +1,37 @@
+
+.intro{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.logo{
+    width: 100%;
+    max-width: 696px;
+    height: 184px;
+display: flex;
+justify-content: center;
+align-items: center;
+    >img{
+        width: 187px;
+        height: 184px;
+        transform: translateX(100%);
+        transition: transform 0.5s ease;
+    }
+
+
+}
+
+.moveLeft{
+transform: translateX(0) !important;
+}
+
+.title{
+    >span{
+        font-size: 96px;
+        font-weight: 700;
+    }
+}

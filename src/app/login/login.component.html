@@ -1,5 +1,5 @@
 <section>
-    <div class="logo">
+    <div class="logo" id="logoSmall">
         <img src="./img/1. Logo animation.svg" alt="">
     </div>
     <span>Neu bei DABubble?</span>
@@ -21,7 +21,7 @@
                 <input #password="ngModel" [(ngModel)]="user.password" type="password" placeholder="Passwort" name="password" required>
                    
             </div>
-            <button>Passwort vergessen?</button>
+            <button (click)="sharedservice.navigateToPath('/remove')">Passwort vergessen?</button>
         </div>
         <div class="buttons">
             <button [disabled]="userauth.invalid" class="btn-purple">Anmelden</button>
@@ -29,4 +29,13 @@
         </div>
 
     </form>
+
+    <div class="intro" id="intro">
+        <div class="logoContainer" id="logoDiv" >
+            <img id="logo" src="./img/Logo.svg" alt="">
+            <div id="title" class="title">
+                <span>DABubble</span>
+            </div>
+        </div>
+    </div>
 </section>
