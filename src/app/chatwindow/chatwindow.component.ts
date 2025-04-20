@@ -88,18 +88,13 @@ export class ChatwindowComponent implements AfterViewChecked {
   }
 
   async ngOnInit() {
-  
+
     await this.loadChannels();
     await this.loadUsers();
     this.loadCurrentWindow();
 
     this.loadDataSubscription = this.sharedservice.loadChatWindow$.subscribe(() => {
       console.log('arrived');
-
-    
-        
-  
-      
       console.log(this.currentMessages);
       /*
       this.currentUser = this.messageService.currentUser;
@@ -117,10 +112,10 @@ export class ChatwindowComponent implements AfterViewChecked {
       this.getDataFromDevspace();
       this.checkReciever();
       this.loadCurrentWindow();
-    
-     
-        this.currentMessages = this.messageService.currentMessages;
-   
+
+
+      this.currentMessages = this.messageService.currentMessages;
+
     });
     this.searchSubscription = this.searchService.openSearchList$.subscribe((key) => {
       if (key = 'new') {
@@ -258,7 +253,8 @@ export class ChatwindowComponent implements AfterViewChecked {
     this.isPersonalChat = this.currentChat === 'user';
     this.isChannel = this.currentChat === 'channel';
     this.isNewMessage = this.currentChat === 'new';
-
+    this.sharedservice.getDataFromLocalStorage('resize720');
+    this.sharedservice.resize720 = this.sharedservice.data;
     if (this.isNewMessage) {
       this.currentMessages = [];
       this.isEmpty = false;

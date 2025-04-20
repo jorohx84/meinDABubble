@@ -98,7 +98,10 @@ export class DevspaceComponent {
     this.sharedservice.getReciever(this.currentReceiver, this.currentUser, this.currentChat);
     await this.messageService.getCurrentMessages(this.currentUser, this.currentReceiver, this.currentChat);
     this.sharedservice.loadChat();
-   this.hideDevspace();
+    if (window.innerWidth<=1050) {
+      this.sharedservice.toogleDevspace();
+    }
+  
   }
 
   async openPersonalChat(index: any) {
@@ -110,7 +113,9 @@ export class DevspaceComponent {
     this.sharedservice.getReciever(this.currentReceiver, this.currentUser, this.currentChat);
     await this.messageService.getCurrentMessages(this.currentUser, this.currentReceiver, this.currentChat);
     this.sharedservice.loadChat();
-    this.hideDevspace();
+    if (window.innerWidth<=1050) {
+      this.sharedservice.toogleDevspace();
+    }
   }
 
   openNewMessage() {
@@ -161,17 +166,4 @@ export class DevspaceComponent {
     this.sharedservice.initializeThread('close')
   }
 
-
-  hideDevspace() {
-    console.log(window.innerWidth);
-    
-    if (window.innerWidth<1050) {
-
-      this.sharedservice.devSlide = true;
-      console.log('hallo');
-      
-    }
-  console.log(this.sharedservice.devSlide);
-  
-  }
 }

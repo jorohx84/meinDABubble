@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, Injectable } from '@angular/core';
+import { Component, HostListener, inject, Injectable } from '@angular/core';
 import { UserService } from '../user.service';
 import { SharedService } from '../shared.service';
 import { Auth, user } from '@angular/fire/auth';
@@ -31,7 +31,7 @@ import { ReactionService } from '../reactions.service';
 export class ChatComponent {
   auth = inject(Auth);
   channelService = inject(ChannelService);
-  reactionService=inject(ReactionService);
+  reactionService = inject(ReactionService);
   userID: string = '';
   currentUser: any;
   currentReciever: any;
@@ -52,7 +52,27 @@ export class ChatComponent {
   userObserver = this.userservice.user$;
   threadIsOpen: boolean = false;
   threadSubscription: Subscription | null = null;
-  
+  screenWidth: number = window.innerWidth;
+
+  @HostListener('window:resize', [])
+  onRezise() {
+    console.log(this.screenWidth);
+    this.screenWidth = window.innerWidth
+    if (this.screenWidth <= 720) {
+      this.sharedservice.resize720 = true;
+      
+    } else {
+      this.sharedservice.resize720 = false;
+    }
+    if (this.screenWidth <= 407) {
+      this.sharedservice.resize407 = true;
+
+    } else {
+      this.sharedservice.resize407 = false;
+    }
+    this.test();
+    localStorage.setItem('resize720',JSON.stringify(this.sharedservice.resize720));
+  }
 
   constructor() {
     this.sharedservice.getDataFromLocalStorage('reciever')
@@ -60,8 +80,13 @@ export class ChatComponent {
     this.sharedservice.getDataFromLocalStorage('thread')
     this.threadIsOpen = this.sharedservice.data;
     this.sharedservice.getDataFromLocalStorage('devSlide');
-    this.sharedservice.devSlide=this.sharedservice.data
+    this.sharedservice.devSlide = this.sharedservice.data
 
+  }
+
+  test(){
+    console.log(this.sharedservice.resize720);
+    localStorage.setItem('resize720',JSON.stringify(this.sharedservice.resize720));
   }
 
   async ngOnInit() {
@@ -145,12 +170,12 @@ export class ChatComponent {
 
   async createChannel() {
     console.log(this.channelName);
-    
+
     if (!this.channelName) { return }
     const firstMember = this.getMember();
     const newChannel = new Channel(this.channelName, this.channelDescription, this.currentUser.name, this.currentUser.id, [firstMember], [], new Date().toISOString());
     await this.addChannelToFirestore(newChannel);
-  
+
   }
 
   async addChannelToFirestore(newChannel: any) {
@@ -229,9 +254,6 @@ export class ChatComponent {
     this.threadIsOpen = false;
   }
 
-  toogleDevspace() {
-this.sharedservice.devSlide=!this.sharedservice.devSlide;
-localStorage.setItem('devSlide',JSON.stringify (this.sharedservice.devSlide))
-  }
+
 }
 

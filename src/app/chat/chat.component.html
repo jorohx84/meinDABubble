@@ -1,6 +1,12 @@
 <section >  <!--(click)="reactionService.isReaction=false"  -->
     <div (click)="closeThread()" class="header">
-        <img src="./img/1. Logo animation.svg" alt="">
+        <img *ngIf="!sharedservice.resize720" class="headerLogo" src="./img/1. Logo animation.svg" alt="">
+        <div *ngIf="sharedservice.resize720" class="devspaceResp" (click)="sharedservice.toogleDevspace()">
+            <img *ngIf="sharedservice.devSlide" src="./img/arrow.svg" alt="">
+            <img *ngIf="sharedservice.devSlide" class="devlogo" src="./img/workspace-logo.svg" alt="">
+            <span *ngIf="sharedservice.devSlide">Devspace</span>
+            <img *ngIf="!sharedservice.devSlide" class="headerLogo" src="./img/1. Logo animation.svg" alt="">
+        </div>
         <div class="search">
             <input type="text" placeholder="Devspace durchsuchen">
             <button><img src="./img/search.svg" alt=""></button>
@@ -80,7 +86,7 @@
 
     <div (click)="sharedservice.closeOverlay()" *ngIf="sharedservice.isOverlay" class="overlay"></div>
 
-    <div (click)="toogleDevspace()" class="toogleDevspace">
+    <div (click)="sharedservice.toogleDevspace()" class="toogleDevspace">
         <div>
             <span>Workspace-Menü öffnen</span>
             <img *ngIf="!sharedservice.devSlide" src="./img/hidedevspace.svg" alt="">

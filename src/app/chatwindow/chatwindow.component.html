@@ -120,7 +120,7 @@
                                 <span>Antworten</span>
                             </a>
                             <div>
-                                <span>Letzte Antwort</span>
+                                <span *ngIf="!sharedservice.resize720">Letzte Antwort</span>
                                 <span>{{message.lastMessage | date:'d MMMM, HH:mm'}}
                                     Uhr</span>
                             </div>

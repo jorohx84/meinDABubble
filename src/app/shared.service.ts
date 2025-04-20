@@ -12,7 +12,7 @@ export class SharedService {
     currentProfile: any;
     private openChannelOverlay = new Subject<void>();
     openChannelOverlay$ = this.openChannelOverlay.asObservable();
-    screenWidth: number = window.innerWidth;
+
     private loadChatWindow = new Subject<void>();
     loadChatWindow$ = this.loadChatWindow.asObservable();
     private openThread = new Subject<string>();
@@ -36,7 +36,8 @@ export class SharedService {
     message: any;
     devSlide: boolean = false;
     isReceiver: boolean = false;
-
+    resize720: boolean = false;
+    resize407: boolean = false;
     isChange: boolean = false;
     isSearch: boolean = false;
     isOverlay: boolean = false;
@@ -47,6 +48,17 @@ export class SharedService {
     isProfileOpen: boolean = false;
     isEdit: boolean = false;
     isAddChannel: boolean = false;
+    screenWidth: number = 0;
+    hideDevResp: boolean = false;
+
+
+    ngOnInit(){
+        console.log(window.innerWidth);
+        
+        if (window.innerWidth<=720) {
+            this.resize720=true;
+        }
+    }
     navigateToPath(path: string) {
         this.router.navigate([path]);
     }
@@ -212,7 +224,14 @@ export class SharedService {
         console.log(reciever);
         this.editObserver.next(reciever);
     }
-
+    toogleDevspace() {
+        this.devSlide = !this.devSlide;
+        localStorage.setItem('devSlide', JSON.stringify(this.devSlide))
+        console.log(this.devSlide);
+        console.log(window.innerWidth);
+        
+        
+    }
 
 }
 
