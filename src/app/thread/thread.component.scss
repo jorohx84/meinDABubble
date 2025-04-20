@@ -519,7 +519,13 @@ textarea:focus {
         width: 18px;
     }
 }
+@media(max-width: 1050px){
 
+    .headline{
+        border-radius: 0;
+       }
+    
+}
 
 @media(max-height: 1050px){
 
@@ -531,5 +537,8 @@ textarea:focus {
     height: fit-content;
     max-height: 150px;
    }
+
+
+
 }
 

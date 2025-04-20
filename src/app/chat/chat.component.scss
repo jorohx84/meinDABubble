@@ -157,6 +157,7 @@ input::placeholder {
     justify-content: flex-start;
     align-items: flex-start;
     gap: 30px;
+    
 }
 
 .devspace {
@@ -390,6 +391,8 @@ border-radius: 30px;
     .chatwindow{
         position: absolute;
         height: calc(100vh - 155px);
+        height: calc(100vh - 115px);
+        border-radius: 0;
     }
     .toogleDevspace{
         display: none;
@@ -399,20 +402,25 @@ border-radius: 30px;
         z-index: 2;
         box-shadow: -6px 0px 10px 0px rgba(0, 0, 0, 0.2);
         border-radius: 30px;
-        height: calc(100vh - 155px);
+        height: calc(100vh - 115px);
     }
     .content{
         width: 100vw !important;
         justify-content: flex-start;
         padding: 0;
+      
     }
+
+    .thread{
+        height: calc(100vh - 115px);
+        border-radius: 0;
+    }
+
+    
 }
 
 @media(max-width: 800px){
-    .chatwindow{
-        position: absolute;
-        height: calc(100vh - 155px);
-    }
+
     .toogleDevspace{
         display: none;
     }

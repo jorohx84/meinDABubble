@@ -1100,3 +1100,12 @@ border: solid;
         max-width: 300px;
     }
 }
+
+@media(max-width: 1050px){
+    section{
+border-radius: 0;
+    }
+    .header{
+        border-radius: 0;
+    }
+}
