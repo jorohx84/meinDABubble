@@ -365,20 +365,77 @@ input::placeholder {
     width: 0px;
     opacity: 0;
     transform: translateX(-120%) !important;
+   display: none;
 }
 
-@media(max-width: 1500px){
-    .content{
-       
-        justify-content: center;
-    }
-    .chatwindow{
-        display: none;
-    }
+.addChannel{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+@media(max-width: 1600px){
     .thread{
-        display: none;
+        position: absolute;
+        right: 0;
+        height: calc(100vh - 155px);
+     box-shadow: 6px 0px 10px 0px rgba(0, 0, 0, 0.2);
+background-color: transparent;
+border-radius: 30px;
     }
 }
+
+@media(max-width: 1050px){
+    .chatwindow{
+        position: absolute;
+        height: calc(100vh - 155px);
+    }
+    .toogleDevspace{
+        display: none;
+    }
+    .devspace{
+        position: absolute;
+        z-index: 2;
+        box-shadow: -6px 0px 10px 0px rgba(0, 0, 0, 0.2);
+        border-radius: 30px;
+        height: calc(100vh - 155px);
+    }
+    .content{
+        width: 100vw !important;
+        justify-content: flex-start;
+        padding: 0;
+    }
+}
+
+@media(max-width: 800px){
+    .chatwindow{
+        position: absolute;
+        height: calc(100vh - 155px);
+    }
+    .toogleDevspace{
+        display: none;
+    }
+    .devspace{
+max-width: 100%;
+    }
+
+  
+}
+   
+
+// @media(max-width: 1500px){
+//     .content{
+       
+//         justify-content: center;
+//     }
+//     .chatwindow{
+//         display: none;
+//     }
+//     .thread{
+//         display: none;
+//     }
+// }
 
 @media(max-width: 407px){
 
@@ -386,11 +443,7 @@ input::placeholder {
         padding: 0;
     }
 
-    .content{
-        width: 100vw !important;
-        justify-content: flex-start;
-        padding: 0;
-    }
+ 
     .devspace{
 
         width: 100vw !important;

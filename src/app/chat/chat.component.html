@@ -1,4 +1,4 @@
-<section (click)="reactionService.isReaction=false">
+<section >  <!--(click)="reactionService.isReaction=false"  -->
     <div (click)="closeThread()" class="header">
         <img src="./img/1. Logo animation.svg" alt="">
         <div class="search">
@@ -26,7 +26,7 @@
     </div>
 
     <div class="content">
-        <div [ngClass]="{'hideDevspace': devSlide}" class="devspace">
+        <div [ngClass]="{'hideDevspace': sharedservice.devSlide}" class="devspace">
             <app-devspace></app-devspace>
         </div>
 
@@ -54,8 +54,7 @@
                 <span>Channel-Name</span>
                 <div>
                     <img src="./img/tag.svg" alt="">
-                    <input #name="ngModel" [(ngModel)]="channelName" type="text" name="name"
-                        placeholder="z.B. Kooperationsprojekte" required>
+                    <input #name="ngModel" [(ngModel)]="channelName" type="text" name="name" placeholder="z.B. Kooperationsprojekte" required>
                      
                 </div>
                 @if(name.touched && !name.valid){
@@ -71,20 +70,22 @@
 
             </div>
             <div class="buttonContainer">
-                <button [disabled]="newChannel.invalid" class="createButton">Erstellen</button>
+                <button type="submit" [disabled]="newChannel.invalid" class="createButton">Erstellen</button>
             </div>
-
+        
         </form>
     </div>
+
+    
 
     <div (click)="sharedservice.closeOverlay()" *ngIf="sharedservice.isOverlay" class="overlay"></div>
 
     <div (click)="toogleDevspace()" class="toogleDevspace">
         <div>
             <span>Workspace-Menü öffnen</span>
-            <img *ngIf="!devSlide" src="./img/hidedevspace.svg" alt="">
-            <img class="showdev" *ngIf="devSlide" src="./img/showdevspace.svg" alt="">
+            <img *ngIf="!sharedservice.devSlide" src="./img/hidedevspace.svg" alt="">
+            <img class="showdev" *ngIf="sharedservice.devSlide" src="./img/showdevspace.svg" alt="">
         </div>
-
+      
     </div>
 </section>

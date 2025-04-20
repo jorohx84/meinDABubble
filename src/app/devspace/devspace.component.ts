@@ -18,7 +18,7 @@ import { MessageService } from '../message.service';
   styleUrl: './devspace.component.scss'
 })
 export class DevspaceComponent {
-messageService=inject(MessageService);
+  messageService = inject(MessageService);
   public channels: any = [];
   public users: any = [];
   active: boolean = false;
@@ -98,17 +98,19 @@ messageService=inject(MessageService);
     this.sharedservice.getReciever(this.currentReceiver, this.currentUser, this.currentChat);
     await this.messageService.getCurrentMessages(this.currentUser, this.currentReceiver, this.currentChat);
     this.sharedservice.loadChat();
+   this.hideDevspace();
   }
 
   async openPersonalChat(index: any) {
     console.log(index);
-    
+
     //hier mus eine funktion im messagesservice aufgerufen werden der die akutellen messages lädt und im ls speichert
     this.currentReceiver = this.users[index];
     this.currentChat = 'user';
     this.sharedservice.getReciever(this.currentReceiver, this.currentUser, this.currentChat);
     await this.messageService.getCurrentMessages(this.currentUser, this.currentReceiver, this.currentChat);
     this.sharedservice.loadChat();
+    this.hideDevspace();
   }
 
   openNewMessage() {
@@ -152,10 +154,24 @@ messageService=inject(MessageService);
 
   showChannelOverlay() {
     this.sharedservice.openOverlayChannel();
+
   }
 
   closeThread() {
     this.sharedservice.initializeThread('close')
   }
 
+
+  hideDevspace() {
+    console.log(window.innerWidth);
+    
+    if (window.innerWidth<1050) {
+
+      this.sharedservice.devSlide = true;
+      console.log('hallo');
+      
+    }
+  console.log(this.sharedservice.devSlide);
+  
+  }
 }

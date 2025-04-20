@@ -5,13 +5,14 @@ import { BehaviorSubject, Subject, subscribeOn } from "rxjs";
     providedIn: 'root',
 })
 export class SharedService {
+
     router = inject(Router)
     user: any;
     data: any;
     currentProfile: any;
     private openChannelOverlay = new Subject<void>();
     openChannelOverlay$ = this.openChannelOverlay.asObservable();
-
+    screenWidth: number = window.innerWidth;
     private loadChatWindow = new Subject<void>();
     loadChatWindow$ = this.loadChatWindow.asObservable();
     private openThread = new Subject<string>();
@@ -33,7 +34,7 @@ export class SharedService {
     reciever: any;
     chat: string = '';
     message: any;
-
+    devSlide: boolean = false;
     isReceiver: boolean = false;
 
     isChange: boolean = false;
@@ -45,6 +46,7 @@ export class SharedService {
     isLogout: boolean = false;
     isProfileOpen: boolean = false;
     isEdit: boolean = false;
+    isAddChannel: boolean = false;
     navigateToPath(path: string) {
         this.router.navigate([path]);
     }
@@ -86,7 +88,7 @@ export class SharedService {
 
     loadChat() {
         console.log('works');
-        
+
         this.loadChatWindow.next();
     }
 

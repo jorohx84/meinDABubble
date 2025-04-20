@@ -591,9 +591,10 @@ box-sizing: border-box;
     box-sizing: border-box;
     padding: 15px;
     height: 55px;
-    width: fit-content;
+    max-width: 600px;
     background-color: var(--bg-color);
     border-radius: 0px 30px 30px 30px;
+  
 
     >span {
         font-size: 16px;
@@ -1077,4 +1078,25 @@ border: solid;
    border-color:var(--border-light) ;
    border-radius: 20px;
     font-size: 18px;
+}
+
+@media(max-width: 1800px){
+    .messageFooter{
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+@media(max-width: 1800px){
+
+    .messageBubble{
+        max-width: 400px;
+    }
+}
+
+@media(max-width: 1600px){
+
+    .messageBubble{
+        max-width: 300px;
+    }
 }

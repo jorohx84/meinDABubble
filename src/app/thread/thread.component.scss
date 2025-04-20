@@ -519,3 +519,17 @@ textarea:focus {
         width: 18px;
     }
 }
+
+
+@media(max-height: 1050px){
+
+   .message{
+    min-height: unset;
+    height: fit-content;
+   }
+   .content{
+    height: fit-content;
+    max-height: 150px;
+   }
+}
+

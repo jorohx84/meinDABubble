@@ -15,12 +15,15 @@ import { ProfileComponent } from '../profile/profile.component';
 import { ChannelService } from '../channel.service';
 import { ReactionService } from '../reactions.service';
 
+
+
 @Injectable({
   providedIn: 'root',
 })
 
 @Component({
   selector: 'app-chat',
+  standalone: true,
   imports: [CommonModule, DevspaceComponent, ChatwindowComponent, ThreadComponent, FormsModule, ProfileComponent],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.scss'
@@ -49,7 +52,7 @@ export class ChatComponent {
   userObserver = this.userservice.user$;
   threadIsOpen: boolean = false;
   threadSubscription: Subscription | null = null;
-  devSlide: boolean = false;
+  
 
   constructor() {
     this.sharedservice.getDataFromLocalStorage('reciever')
@@ -57,7 +60,7 @@ export class ChatComponent {
     this.sharedservice.getDataFromLocalStorage('thread')
     this.threadIsOpen = this.sharedservice.data;
     this.sharedservice.getDataFromLocalStorage('devSlide');
-    this.devSlide=this.sharedservice.data
+    this.sharedservice.devSlide=this.sharedservice.data
 
   }
 
@@ -141,10 +144,13 @@ export class ChatComponent {
 
 
   async createChannel() {
+    console.log(this.channelName);
+    
     if (!this.channelName) { return }
     const firstMember = this.getMember();
     const newChannel = new Channel(this.channelName, this.channelDescription, this.currentUser.name, this.currentUser.id, [firstMember], [], new Date().toISOString());
     await this.addChannelToFirestore(newChannel);
+  
   }
 
   async addChannelToFirestore(newChannel: any) {
@@ -224,8 +230,8 @@ export class ChatComponent {
   }
 
   toogleDevspace() {
-this.devSlide=!this.devSlide;
-localStorage.setItem('devSlide',JSON.stringify (this.devSlide))
+this.sharedservice.devSlide=!this.sharedservice.devSlide;
+localStorage.setItem('devSlide',JSON.stringify (this.sharedservice.devSlide))
   }
 }
 

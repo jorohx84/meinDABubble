@@ -1,4 +1,4 @@
-<section>
+<section (click)="reactionService.isReaction=false">
     <div [ngClass]="{'newMessageHeader': isNewMessage}" class="header">
         <div (click)="openProfile()" *ngIf="isPersonalChat" class="profile">
             <div class="imageContainer">
