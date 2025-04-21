@@ -50,7 +50,7 @@
             </div>
         </div>
         <div class="listContainer" *ngIf="sharedservice.isChange">
-            <div (click)="sharedservice.openMemberProfile(member)" *ngFor="let member of users; let index=index"
+            <div (click)="sharedservice.openMemberProfile(member)" *ngFor="let member of currentReciever.members; let index=index"
                 class="listrow">
                 <div class="imageContainer">
                     <img class="profile-image" [src]="member?.avatar" alt="">

@@ -1,0 +1,13 @@
+# Aktiviert das Rewrite-Modul
+RewriteEngine On
+
+# Prüft, ob die angeforderte Datei oder ein Verzeichnis existiert
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Leitet alle anderen Anfragen an index.html weiter, damit Angular das Routing übernehmen kann
+RewriteRule ^ index.html [QSA,L]
+
+# Umleitung auf HTTPS (falls erforderlich)
+RewriteCond %{HTTPS} off
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]

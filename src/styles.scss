@@ -16,18 +16,20 @@ button {
     cursor: pointer;
     border: none;
     background-color: transparent;
-    &:active{
+
+    &:active {
         transform: scale(0.95);
     }
+
     font-family: 'Nunito';
 }
 
-.btn-purple{
+.btn-purple {
     background-color: var(--purple1);
     color: white;
 }
 
-.btn-white{
+.btn-white {
     background-color: white;
     border: solid !important;
     border-width: 1px !important;
@@ -70,4 +72,5 @@ input:-webkit-autofill {
     --purple3: rgba(83, 90, 241, 1);
     --border-light: rgba(173, 176, 217, 1);
     --text-grey: rgba(104, 104, 104, 1);
+    --vh: 1vh:
 }

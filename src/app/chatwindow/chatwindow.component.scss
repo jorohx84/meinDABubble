@@ -1115,6 +1115,12 @@ textarea:focus {
     .header {
         border-radius: 0;
     }
+
+    .editChannel{
+        left: 50%;
+        top:50%;
+        transform: translate(-50%, -50%);
+    }
 }
 
 @media(max-width: 750px) {
@@ -1184,6 +1190,15 @@ textarea:focus {
     }
     .textContainer{
         width: 100%;
+    }
+
+    .editChannel{
+        height: 100vh;
+        max-height: unset;
+        top: -80px;
+        left: 0;
+        transform: translate(0);
+        border-radius: 0;
     }
 }
 

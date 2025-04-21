@@ -80,6 +80,7 @@ export class ChatComponent {
     }
 
     localStorage.setItem('resize720', JSON.stringify(this.sharedservice.resize720));
+    this.setViewportHeight();
   }
 
   constructor() {
@@ -95,6 +96,7 @@ export class ChatComponent {
 
 
   async ngOnInit() {
+    this.setViewportHeight();
     this.loadChannels();
     this.loadUsers();
     this.loadCurrentUser();
@@ -123,6 +125,24 @@ export class ChatComponent {
       }
       localStorage.setItem('thread', JSON.stringify(this.threadIsOpen));
     })
+
+  }
+
+  setViewportHeight(): void {
+    const vh = window.innerHeight;
+    console.log(vh);
+    document.documentElement.style.setProperty('--vh', `${vh}px`)
+  }
+
+  checkWidth() {
+    console.log('Emmiter läuft');
+
+    this.setViewportHeight();
+    if (window.innerWidth <= 720) {
+      this.sharedservice.resize720 = true;
+      console.log(this.sharedservice.resize720);
+      
+    }
 
   }
 

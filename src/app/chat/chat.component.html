@@ -45,7 +45,7 @@
 
     <div class="content">
         <div [ngClass]="{'hideDevspace': sharedservice.devSlide}" class="devspace">
-            <app-devspace></app-devspace>
+            <app-devspace (initializedView)="checkWidth()"></app-devspace>
         </div>
 
         <div class="chatwindow">

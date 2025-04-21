@@ -45,6 +45,18 @@
             <p>{{currentReciever?.creator}}</p>
         </div>
     </div>
+    <div class="memberList">
+        <div (click)="sharedService.openMemberProfile(member)" class="listrow" *ngFor="let member of currentReciever.members; let index=index">
+            <div class="imageContainer">
+                <img class="profile-image" [src]="member?.avatar" alt="">
+                <div class="status-dot" [ngClass]="{'green': member?.online}"></div>
+            </div>
+            <div>
+                <span>{{ member?.name}}</span>
+            </div>
+        </div>
+  
+    </div>
     <div class="leaveBtn">
         <button (click)="leaveChannel()">Channel Verlassen</button>
     </div>

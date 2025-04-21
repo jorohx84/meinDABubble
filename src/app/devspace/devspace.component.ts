@@ -1,6 +1,6 @@
 
 import { CommonModule } from '@angular/common';
-import { Component, inject, Injectable } from '@angular/core';
+import { Component, EventEmitter, inject, Injectable, Output, output } from '@angular/core';
 import { Firestore } from '@angular/fire/firestore';
 import { UserService } from '../user.service';
 import { ChannelService } from '../channel.service';
@@ -38,7 +38,7 @@ export class DevspaceComponent {
   currentReceiver: any;
   userID: string = '';
   currentChat: string = '';
-
+  @Output() initializedView = new EventEmitter<void>();
 
   constructor() {
     this.sharedservice.getUserFromLocalStorage();
@@ -51,6 +51,7 @@ export class DevspaceComponent {
   }
 
   async ngOnInit() {
+    this.initializedView.emit();
     await this.loadUsers();
     await this.loadChannels();
     this.relaodSubscription = this.channelService.reloadChannel$.subscribe(() => {
@@ -190,8 +191,8 @@ export class DevspaceComponent {
   }
 
 
-  test(){
+  test() {
     console.log('juhu es funtkioniert');
-    
+
   }
 }
