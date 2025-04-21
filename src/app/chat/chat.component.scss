@@ -36,7 +36,10 @@ section {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: relative;
 }
+
+
 
 input {
     min-height: 33px;
@@ -44,6 +47,81 @@ input {
 
 input::placeholder {
     font-size: 18px;
+}
+.searchContainer{
+width: 300px;
+height: 300px;
+    border: solid;
+    position: absolute;
+    top: 70px;
+    left: 80px;
+    z-index: 1;
+    background-color: white;
+    width: 100%;
+    max-width: 350px;
+    height: 467px;
+    border-width: 1px;
+    border-color: var(--border-light);
+    border-radius: 0px 20px 20px 20px ;
+    box-sizing: border-box;
+    padding: 20px 21px;
+    background-color: white;
+    overflow-y: scroll;
+}
+.listrow {
+    display: flex;
+    justify-content: flex-start !important;
+    align-items: center;
+    width: 100%;
+    gap: 15px;
+    box-sizing: border-box;
+    padding: 4px 20px;
+    cursor: pointer;
+
+    >span {
+        font-size: 18px;
+        font-weight: 400;
+    }
+
+    &:hover {
+        background-color: var(--bg-color);
+        border-radius: 30px;
+
+        >.tag {
+            content: url(./../../../public/img/tag-purple.svg) !important;
+        }
+    }
+}
+.imageContainer {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+}
+
+.profile-image {
+    width: 50px;
+    border-radius: 42px;
+}
+
+.status-dot {
+    position: absolute;
+    bottom: 0;
+    right: -2px;
+    width: 12px;
+    height: 12px;
+    border: solid;
+    background-color: gray;
+    border-radius: 50%;
+    border-color: #eceefe;
+    border-width: 2px;
+  
+}
+
+.green {
+    background-color: #92c83e;
 }
 
 .profile {

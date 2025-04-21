@@ -26,6 +26,7 @@ export class SearchService {
     currentChat: string = '';
     searchInput: string = '';
     isDevSearch: boolean = false;
+    isChatSearch: boolean = false;
     openMemberList(input: string, users: any[]) {
         if (input.length < 3) {
             this.searchIsOpen = false;
@@ -185,17 +186,26 @@ export class SearchService {
 
     }
 
- 
+
 
     searchInDevspace(inputKey: string, users: any[], channels: any[]) {
         console.log(this.searchInput);
         console.log(inputKey);
-
-        if (this.searchInput.length > 0) {
-            this.isDevSearch = true;
+        if (window.innerWidth<=720) {
+            if (this.searchInput.length > 0) {
+                this.isDevSearch = true;
+            } else {
+                this.isDevSearch = false;
+            }
         } else {
-            this.isDevSearch = false;
+            if (this.searchInput.length > 0) {
+                this.isChatSearch = true;
+            } else {
+                this.isChatSearch = false;
+            }
+
         }
+
         if (this.searchInput.length <= 2) {
             if (this.searchInput.includes('@')) {
                 this.currentList = users;

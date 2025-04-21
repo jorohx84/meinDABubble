@@ -177,7 +177,6 @@ export class DevspaceComponent {
 
 
     if (this.searchService.isChannel === true) {
-      this.openChannel(index);
       const currentIndex = this.channels.findIndex((object: any) => object.id === searchID);
       console.log(currentIndex);
       this.openChannel(currentIndex);
@@ -190,4 +189,9 @@ export class DevspaceComponent {
     this.sharedservice.devSlide = true;
   }
 
+
+  test(){
+    console.log('juhu es funtkioniert');
+    
+  }
 }

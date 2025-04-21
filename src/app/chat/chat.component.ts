@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostListener, inject, Injectable } from '@angular/core';
+import { Component, HostListener, inject, Injectable, ViewChild } from '@angular/core';
 import { UserService } from '../user.service';
 import { SharedService } from '../shared.service';
 import { Auth, user } from '@angular/fire/auth';
@@ -14,6 +14,7 @@ import { ThreadComponent } from '../thread/thread.component';
 import { ProfileComponent } from '../profile/profile.component';
 import { ChannelService } from '../channel.service';
 import { ReactionService } from '../reactions.service';
+import { SearchService } from '../search.service';
 
 
 
@@ -32,6 +33,8 @@ export class ChatComponent {
   auth = inject(Auth);
   channelService = inject(ChannelService);
   reactionService = inject(ReactionService);
+  userService = inject(UserService);
+  searchService = inject(SearchService);
   userID: string = '';
   currentUser: any;
   currentReciever: any;
@@ -53,6 +56,11 @@ export class ChatComponent {
   threadIsOpen: boolean = false;
   threadSubscription: Subscription | null = null;
   screenWidth: number = window.innerWidth;
+  users: any[] = [];
+  channels: any[] = [];
+  @ViewChild(DevspaceComponent)
+  devspaceComponent!: DevspaceComponent;
+
 
   @HostListener('window:resize', [])
   onRezise() {
@@ -60,7 +68,7 @@ export class ChatComponent {
     this.screenWidth = window.innerWidth
     if (this.screenWidth <= 720) {
       this.sharedservice.resize720 = true;
-      
+
     } else {
       this.sharedservice.resize720 = false;
     }
@@ -70,8 +78,8 @@ export class ChatComponent {
     } else {
       this.sharedservice.resize407 = false;
     }
-    this.test();
-    localStorage.setItem('resize720',JSON.stringify(this.sharedservice.resize720));
+
+    localStorage.setItem('resize720', JSON.stringify(this.sharedservice.resize720));
   }
 
   constructor() {
@@ -84,12 +92,11 @@ export class ChatComponent {
 
   }
 
-  test(){
-    console.log(this.sharedservice.resize720);
-    localStorage.setItem('resize720',JSON.stringify(this.sharedservice.resize720));
-  }
+
 
   async ngOnInit() {
+    this.loadChannels();
+    this.loadUsers();
     this.loadCurrentUser();
     this.channelSubscription = this.sharedservice.openChannelOverlay$.subscribe(() => {
       this.toggleChannelOverlay();
@@ -117,6 +124,26 @@ export class ChatComponent {
       localStorage.setItem('thread', JSON.stringify(this.threadIsOpen));
     })
 
+  }
+
+  async loadUsers() {
+    try {
+      this.users = await this.userService.getUsers();
+    } catch (error) {
+      console.error('Error loading users in component:', error);
+    }
+  }
+
+  async loadChannels() {
+
+    try {
+      const channelData = await this.channelService.getChannels();
+
+      this.channelService.findChannels(channelData, this.currentUser);
+      this.channels = this.channelService.channels;
+    } catch (error) {
+      console.error('Error loading channels in component:', error);
+    }
   }
 
 
@@ -248,12 +275,28 @@ export class ChatComponent {
     this.sharedservice.initializeThread('close');
   }
 
-
-
   closeThread() {
     this.threadIsOpen = false;
   }
 
+  loadChatWindow(index: number) {
+    const searchedObject = this.searchService.currentList[index];
+    console.log(searchedObject);
+    const searchID = searchedObject.id;
+    console.log(searchID);
+    if (this.searchService.isChannel === true) {
+      const currentIndex = this.channels.findIndex((object: any) => object.id === searchID);
+      console.log(currentIndex);
+      this.devspaceComponent.openChannel(currentIndex);
+    } else {
 
+      const currentIndex = this.users.findIndex((object: any) => object.id === searchID);
+      console.log(currentIndex);
+      this.devspaceComponent.openPersonalChat(currentIndex);
+    }
+    this.searchService.isChatSearch = false
+  }
 }
+
+
 

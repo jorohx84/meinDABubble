@@ -8,8 +8,20 @@
             <img *ngIf="!sharedservice.devSlide" class="headerLogo" src="./img/1. Logo animation.svg" alt="">
         </div>
         <div class="search">
-            <input type="text" placeholder="Devspace durchsuchen">
+            <input (input)="searchService.searchInDevspace('chat', users, channels)" [(ngModel)]="searchService.searchInput" type="text" placeholder="Devspace durchsuchen">
             <button><img src="./img/search.svg" alt=""></button>
+            <div *ngIf="searchService.isChatSearch" class="searchContainer">
+                <div (click)="loadChatWindow(index)" class="listrow" *ngFor="let object of searchService.currentList; let index=index">
+                    <div *ngIf="!searchService.isChannel" class="imageContainer">
+                        <img class="profile-image" [src]="object?.avatar" alt="">
+                        <div class="status-dot" [ngClass]="{'green': object?.online}"></div>
+                    </div>
+                    <img class="tag" *ngIf="searchService.isChannel" src="./img/tag.svg" alt="">
+                    <div>
+                        <span>{{ object?.name}}</span>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="profile" (click)="sharedservice.toggleLogout()">

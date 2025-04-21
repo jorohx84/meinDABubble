@@ -17,7 +17,7 @@
     </div>
   </div>
 
-  <div *ngIf="searchService.isDevSearch" class="searchList">
+  <div *ngIf="searchService.isDevSearch && sharedservice.resize720" class="searchList">
     <div (click)="openChats(index)" class="contactsrow" *ngFor="let object of searchService.currentList; let index=index">
       <div>
         <img src="./img/tag.svg" alt="">
