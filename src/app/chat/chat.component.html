@@ -12,13 +12,13 @@
             <button><img src="./img/search.svg" alt=""></button>
         </div>
 
-        <div class="profile">
+        <div class="profile" (click)="sharedservice.toggleLogout()">
             <span>{{currentUser?.name}}</span>
             <div class="imageContainer">
                 <img class="profile-image" [src]="currentUser?.avatar" alt="" />
                 <div class="status-dot" [ngClass]="{ green: currentUser?.online }"></div>
             </div>
-            <button (click)="sharedservice.toggleLogout()"><img src="./img/arrow_down.svg" alt=""></button>
+            <button class="arrowDown" ><img src="./img/arrow_down.svg" alt=""></button>
         </div>
         <div *ngIf="sharedservice.isLogout" class="logoutContainer">
             <button (click)="toggleProfile()">Profil</button>

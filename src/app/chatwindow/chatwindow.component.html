@@ -32,7 +32,7 @@
 
         <div *ngIf="isNewMessage" class="newMessage">
             <span>Neue Nachricht</span>
-            <input (input)="searchForReciever()" ng [(ngModel)]="currentInput" type="text"
+            <input (input)="searchForReciever()" [(ngModel)]="currentInput" type="text"
                 placeholder="An: #channel, oder @jemand oder E-Mail Adresse">
         </div>
     </div>

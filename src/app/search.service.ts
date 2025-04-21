@@ -24,7 +24,8 @@ export class SearchService {
     reciever: any;
     result: string = '';
     currentChat: string = '';
-
+    searchInput: string = '';
+    isDevSearch: boolean = false;
     openMemberList(input: string, users: any[]) {
         if (input.length < 3) {
             this.searchIsOpen = false;
@@ -182,5 +183,15 @@ export class SearchService {
 
 
 
+    }
+
+    searchInDevspace() {
+        console.log(this.searchInput);
+
+        if (this.searchInput.length >= 3) {
+            this.isDevSearch = true;
+        } else {
+            this.isDevSearch = false;
+        }
     }
 }

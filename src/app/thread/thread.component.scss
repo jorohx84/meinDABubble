@@ -98,7 +98,7 @@ p {
             display: flex !important;
         }
 
-        .reactions{
+        .reactions {
             display: flex;
         }
 
@@ -491,7 +491,7 @@ textarea:focus {
 }
 
 .reactionList {
-    
+
     position: absolute;
     right: -180px;
     bottom: -195px;
@@ -504,41 +504,63 @@ textarea:focus {
     display: flex;
     flex-direction: column;
     align-items: center;
-   z-index: 9;
+    z-index: 9;
     gap: 10px;
     color: white;
     overflow-y: scroll;
 }
 
-.reactionsRow{
+.reactionsRow {
     width: 100%;
     display: flex;
     align-items: center;
     gap: 10px;
-    >img{
+
+    >img {
         width: 18px;
     }
 }
-@media(max-width: 1050px){
 
-    .headline{
+@media(max-width: 1050px) {
+
+    .headline {
         border-radius: 0;
-       }
-    
-}
 
-@media(max-height: 1050px){
-
-   .message{
-    min-height: unset;
-    height: fit-content;
-   }
-   .content{
-    height: fit-content;
-    max-height: 150px;
-   }
-
-
+    }
 
 }
 
+@media(max-height: 1050px) {
+
+    .message {
+        min-height: unset;
+        height: fit-content;
+    }
+
+    .content {
+        height: fit-content;
+        max-height: 150px;
+    }
+
+
+
+}
+
+@media(max-height: 1000px) {
+    .textContainer {
+
+        height: 145px;
+        padding: 20px;
+
+        >div {
+            height: 100%;
+            width: 100%;
+        }
+    }
+
+    .headline {
+        height: 60px;
+        padding: 10px 16px;
+    }
+
+}

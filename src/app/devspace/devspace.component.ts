@@ -8,17 +8,20 @@ import { SharedService } from '../shared.service';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { MessageService } from '../message.service';
+import { SearchService } from '../search.service';
+import { FormsModule } from '@angular/forms';
 @Injectable({
   providedIn: 'root',
 })
 @Component({
   selector: 'app-devspace',
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './devspace.component.html',
   styleUrl: './devspace.component.scss'
 })
 export class DevspaceComponent {
   messageService = inject(MessageService);
+  searchService = inject(SearchService);
   public channels: any = [];
   public users: any = [];
   active: boolean = false;
@@ -35,7 +38,7 @@ export class DevspaceComponent {
   currentReceiver: any;
   userID: string = '';
   currentChat: string = '';
-
+  
 
   constructor() {
     this.sharedservice.getUserFromLocalStorage();
@@ -98,10 +101,10 @@ export class DevspaceComponent {
     this.sharedservice.getReciever(this.currentReceiver, this.currentUser, this.currentChat);
     await this.messageService.getCurrentMessages(this.currentUser, this.currentReceiver, this.currentChat);
     this.sharedservice.loadChat();
-    if (window.innerWidth<=1050) {
+    if (window.innerWidth <= 1050) {
       this.sharedservice.toogleDevspace();
     }
-  
+
   }
 
   async openPersonalChat(index: any) {
@@ -113,7 +116,7 @@ export class DevspaceComponent {
     this.sharedservice.getReciever(this.currentReceiver, this.currentUser, this.currentChat);
     await this.messageService.getCurrentMessages(this.currentUser, this.currentReceiver, this.currentChat);
     this.sharedservice.loadChat();
-    if (window.innerWidth<=1050) {
+    if (window.innerWidth <= 1050) {
       this.sharedservice.toogleDevspace();
     }
   }
@@ -159,7 +162,7 @@ export class DevspaceComponent {
 
   showChannelOverlay() {
     this.sharedservice.openOverlayChannel();
-
+    this.sharedservice.toogleDevspace();
   }
 
   closeThread() {

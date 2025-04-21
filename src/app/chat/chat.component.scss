@@ -54,7 +54,7 @@ input::placeholder {
     width: 100%;
     max-width: 342px;
     height: 70px;
-
+cursor: pointer;
     >span {
         font-size: 28px;
         font-weight: 600;
@@ -384,7 +384,7 @@ input::placeholder {
     width: 100%;
     max-width: 175px;
     height: 57px;
-
+cursor: pointer;
 }
 
 .devlogo{
@@ -395,7 +395,7 @@ input::placeholder {
     .thread {
         position: absolute;
         right: 0;
-        height: calc(100vh - 155px);
+        height: calc(100svh - 155px);
         box-shadow: 6px 0px 10px 0px rgba(0, 0, 0, 0.2);
         background-color: transparent;
         border-radius: 30px;
@@ -405,7 +405,7 @@ input::placeholder {
 @media(max-width: 1050px) {
     .chatwindow {
         position: absolute;
-        height: calc(100vh - 80px);
+        height: calc(100svh - 80px);
         border-radius: 0;
     }
 
@@ -416,7 +416,7 @@ input::placeholder {
         z-index: 2;
         box-shadow: -6px 0px 10px 0px rgba(0, 0, 0, 0.2);
         border-radius: 30px;
-        height: calc(100vh - 80px);
+        height: calc(100svh - 80px);
         border-radius: 0;
     }
 
@@ -428,7 +428,7 @@ input::placeholder {
     }
 
     .thread {
-        height: calc(100vh - 80px);
+        height: calc(100svh - 80px);
         
      
             display: none;
@@ -442,11 +442,12 @@ input::placeholder {
         width: fit-content;
     }
 
-    .profile span,
-    button {
+    .profile span {
         display: none;
     }
-
+.arrowDown{
+    display: none;
+}
     .header {
         height: 80px;
     }
@@ -471,7 +472,11 @@ input::placeholder {
     .imageContainer img {
         width: 50px;
     }
-
+    .createChannel{
+        height: 100svh;
+        max-height: unset;
+        border-radius: 0;
+    }
 }
 
 @media(max-width: 800px) {
@@ -498,6 +503,13 @@ input::placeholder {
 }
 
 
+@media(max-width: 540px) {
+
+.textfield{
+    height: fit-content;
+}
+
+}
 
 
 // @media(max-width: 1500px){
@@ -526,6 +538,7 @@ input::placeholder {
 
         width: 100vw !important;
         border-radius: none;
+        box-shadow: unset;
     }
 
     .toogleDevspace {
@@ -534,6 +547,7 @@ input::placeholder {
 
 .thread{
     border-radius: 0;
+    box-shadow: unset;
 }
 
 
