@@ -6,7 +6,7 @@ import { UserService } from '../user.service';
 import { ChannelService } from '../channel.service';
 import { SharedService } from '../shared.service';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { findIndex, Subscription } from 'rxjs';
 import { MessageService } from '../message.service';
 import { SearchService } from '../search.service';
 import { FormsModule } from '@angular/forms';
@@ -38,7 +38,7 @@ export class DevspaceComponent {
   currentReceiver: any;
   userID: string = '';
   currentChat: string = '';
-  
+
 
   constructor() {
     this.sharedservice.getUserFromLocalStorage();
@@ -167,6 +167,27 @@ export class DevspaceComponent {
 
   closeThread() {
     this.sharedservice.initializeThread('close')
+  }
+
+  openChats(index: number) {
+    const searchedObject = this.searchService.currentList[index];
+    console.log(searchedObject);
+    const searchID = searchedObject.id;
+    console.log(searchID);
+
+
+    if (this.searchService.isChannel === true) {
+      this.openChannel(index);
+      const currentIndex = this.channels.findIndex((object: any) => object.id === searchID);
+      console.log(currentIndex);
+      this.openChannel(currentIndex);
+    } else {
+
+      const currentIndex = this.users.findIndex((object: any) => object.id === searchID);
+      console.log(currentIndex);
+      this.openPersonalChat(currentIndex);
+    }
+    this.sharedservice.devSlide = true;
   }
 
 }

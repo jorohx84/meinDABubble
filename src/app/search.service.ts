@@ -185,13 +185,34 @@ export class SearchService {
 
     }
 
-    searchInDevspace() {
-        console.log(this.searchInput);
+ 
 
-        if (this.searchInput.length >= 3) {
+    searchInDevspace(inputKey: string, users: any[], channels: any[]) {
+        console.log(this.searchInput);
+        console.log(inputKey);
+
+        if (this.searchInput.length > 0) {
             this.isDevSearch = true;
         } else {
             this.isDevSearch = false;
         }
+        if (this.searchInput.length <= 2) {
+            if (this.searchInput.includes('@')) {
+                this.currentList = users;
+                this.isChannel = false;
+            }
+            if (this.searchInput.includes('#')) {
+                this.currentList = channels;
+                this.isChannel = true;
+            }
+
+        } else {
+            this.getCurrentList(this.searchInput, users, channels);
+            console.log(this.currentList);
+
+        }
+
+
     }
+
 }

@@ -11,12 +11,25 @@
     <button *ngIf="!sharedservice.resize720" (click)="openNewMessage()"><img src="./img/edit_square.svg"
         alt="" /></button>
     <div *ngIf="sharedservice.resize720" class="devSearch">
-      <input (input)="searchService.searchInDevspace()" [(ngModel)]="searchService.searchInput" type="text"
-        placeholder="Devspace durchsuchen">
+      <input (input)="searchService.searchInDevspace('dev', users, channels)" [(ngModel)]="searchService.searchInput"
+        type="text" placeholder="Devspace durchsuchen">
       <button><img src="./img/search.svg" alt=""></button>
     </div>
   </div>
 
+  <div *ngIf="searchService.isDevSearch" class="searchList">
+    <div (click)="openChats(index)" class="contactsrow" *ngFor="let object of searchService.currentList; let index=index">
+      <div>
+        <img src="./img/tag.svg" alt="">
+        <div *ngIf="!searchService.isChannel" class="imageContainer">
+          <img class="profile-image" [src]="object.avatar" alt="" />
+          <div class="status-dot" [ngClass]="{ green: object.online }"></div>
+        </div>
+
+        <span>{{ object.name }}</span>
+      </div>
+    </div>
+  </div>
 
   <div *ngIf="!searchService.isDevSearch" class="contactbar">
     <div class="channels">
