@@ -1,21 +1,22 @@
 <section (click)="closeThread()">
   <div class="headline">
-    <div *ngIf="!sharedservice.resize720">
+    <div *ngIf="!sharedservice.checkLowerWidth(720)">
       <img src="./img/workspace-logo.svg" alt="" />
       <h1>Devspace</h1>
     </div>
-    <div *ngIf="sharedservice.resize720 && searchService.isDevSearch" class="devSearchHeader">
+    <div *ngIf="sharedservice.checkLowerWidth(720) && searchService.isDevSearch" class="devSearchHeader">
       <span>Search</span>
       <button><img src="./img/close.svg" alt=""></button>
     </div>
-    <button *ngIf="!sharedservice.resize720" (click)="openNewMessage()"><img src="./img/edit_square.svg"
+    <button *ngIf="!sharedservice.checkLowerWidth(720)" (click)="openNewMessage()"><img src="./img/edit_square.svg"
         alt="" /></button>
-    <div *ngIf="sharedservice.resize720" class="devSearch">
-      <input (input)="searchService.searchInDevspace('dev', users, channels)" [(ngModel)]="searchService.searchInput"
-        type="text" placeholder="Devspace durchsuchen">
-      <button><img src="./img/search.svg" alt=""></button>
-    </div>
+        <div *ngIf="sharedservice.checkLowerWidth(720)" class="devSearch">
+          <input (input)="searchService.searchInDevspace('dev', users, channels)" [(ngModel)]="searchService.searchInput"
+            type="text" placeholder="Devspace durchsuchen">
+          <button><img src="./img/search.svg" alt=""></button>
+        </div>
   </div>
+ 
 
   <div *ngIf="searchService.isDevSearch" class="searchList">
     <div (click)="openChats(index)" class="contactsrow" *ngFor="let object of searchService.currentList; let index=index">
@@ -86,4 +87,5 @@
       </div>
     </div>
   </div>
+
 </section>

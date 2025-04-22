@@ -37,8 +37,11 @@
         </div>
     </div>
 
-    <div [ngClass]="{'changeAddMember': sharedservice.isChange}" *ngIf="sharedservice.isSearch" class="addMember">
+    <div [ngClass]="{'changeAddMember': sharedservice.isChange, 'transform':sharedservice.transformSearch}" *ngIf="sharedservice.isSearch || sharedservice.checkLowerWidth(540)" class="addMember">
         <div>
+            <div class="headDivider">
+                <div></div>
+            </div>
             <div>
                 <span>{{sharedservice.isChange ? 'Mitglieder' : 'Leute hinzufügen' }}</span>
                 <button (click)="sharedservice.toggleSearch($event)"><img src="./img/close.svg" alt=""></button>

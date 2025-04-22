@@ -402,6 +402,11 @@ export class ChatwindowComponent implements AfterViewChecked {
     const currentChannel = this.channels.find(channel => channel.id === this.currentReciever.id);
     localStorage.setItem('reciever', JSON.stringify(currentChannel));
     this.currentReciever = currentChannel;
+    if (this.sharedservice.checkLowerWidth(540)) {
+      console.log('responsive EditChannel');
+      
+      this.openEditChannel()
+    }
   }
 
   openProfile() {
@@ -412,6 +417,7 @@ export class ChatwindowComponent implements AfterViewChecked {
     this.sharedservice.currentProfile = this.currentReciever;
     this.sharedservice.isOverlay = true;
     //this.sharedservice.profileObserve('receiver');
+    this.sharedservice.isMember=true;
   }
 
 

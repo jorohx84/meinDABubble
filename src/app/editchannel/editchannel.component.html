@@ -9,8 +9,10 @@
     <div [ngClass]="{'noBorder':isEditName}" class="editName">
         <div class="margin">
             <span>Channel-Name</span>
-            <button *ngIf="!isEditName" (click)="editChannel('name')">Bearbeiten</button>
-            <button *ngIf="isEditName" (click)="saveEdit('name', inputName)">Speichern</button>
+            <button *ngIf="!isEditName && !sharedService.checkLowerWidth(540)" (click)="editChannel('name')">Bearbeiten</button>
+            <button *ngIf="isEditName && !sharedService.checkLowerWidth(540)" (click)="saveEdit('name', inputName)">Speichern</button>
+            <button *ngIf="!isEditName && sharedService.checkLowerWidth(540)" (click)="editChannel('name')"><img src="./img/edit.svg" alt=""></button>
+            <button *ngIf="isEditName && sharedService.checkLowerWidth(540)" (click)="saveEdit('name', inputName)"><img src="./img/edit_check.svg" alt=""></button>
         </div>
         <div>
             <div *ngIf="!isEditName" class="channelName">
@@ -27,8 +29,10 @@
     <div [ngClass]="{'noBorder':isEditDescription}" class="editName height">
         <div class="margin">
             <span>Beschreibung</span>
-            <button *ngIf="!isEditDescription" (click)="editChannel('description')">Bearbeiten</button>
-            <button *ngIf="isEditDescription" (click)="saveEdit('description', inputDescription)">Speichern</button>
+            <button *ngIf="!isEditDescription && !sharedService.checkLowerWidth(540)" (click)="editChannel('description')">Bearbeiten</button>
+            <button *ngIf="isEditDescription && !sharedService.checkLowerWidth(540)" (click)="saveEdit('description', inputDescription)">Speichern</button>
+            <button *ngIf="!isEditDescription && sharedService.checkLowerWidth(540)" (click)="editChannel('description')"><img src="./img/edit.svg" alt=""></button>
+            <button *ngIf="isEditDescription && sharedService.checkLowerWidth(540)" (click)="saveEdit('description', inputDescription)"><img src="./img/edit_check.svg" alt=""></button>
         </div>
         <div *ngIf="!isEditDescription" class="description">
             <span>{{currentReciever?.description}}</span>
@@ -55,9 +59,15 @@
                 <span>{{ member?.name}}</span>
             </div>
         </div>
-  
+        <div (click)="sharedService.toggleSearch($event)" class="addMemberBtn">
+            <img src="./img/add_members.svg" alt="">
+            <span>Mitglieder hinzufügen</span>
+        </div>
     </div>
     <div class="leaveBtn">
         <button (click)="leaveChannel()">Channel Verlassen</button>
+    </div>
+    <div class="profile" *ngIf="sharedService.editProfile">
+        <app-profile></app-profile>
     </div>
 </section>

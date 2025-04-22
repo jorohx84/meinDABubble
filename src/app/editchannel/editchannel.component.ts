@@ -6,15 +6,17 @@ import { FormsModule } from '@angular/forms';
 import { Firestore, doc, updateDoc } from '@angular/fire/firestore';
 import { ChannelService } from '../channel.service';
 import { deleteDoc } from 'firebase/firestore';
+import { ProfileComponent } from '../profile/profile.component';
 @Component({
   selector: 'app-editchannel',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ProfileComponent],
   templateUrl: './editchannel.component.html',
   styleUrl: './editchannel.component.scss'
 })
 export class EditchannelComponent {
   firestore = inject(Firestore);
   channelService = inject(ChannelService);
+
   currentUser: any;
   currentReciever: any;
   sharedService = inject(SharedService);

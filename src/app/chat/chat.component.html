@@ -106,4 +106,6 @@
         </div>
       
     </div>
+
+    <button *ngIf="sharedservice.checkLowerWidth(720) && !sharedservice.devSlide" class="newMessageBtn" (click)="devspaceComponent.openNewMessage()"><img src="./img/edit_square_white.svg" alt=""></button>
 </section>

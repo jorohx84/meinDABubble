@@ -92,7 +92,7 @@
 
     <div [ngClass]="{'show': isClicked}" class="lists">
         <div (click)="getReciever(index, $event)" [ngClass]="{'channelStyle': isChannelList}" class="listrow"
-            *ngFor="let object of currentList; let index = index">
+            *ngFor="let object of currentReciever.members; let index = index">
             <div *ngIf="!isChannelList" class="imageContainer">
                 <img class="profile-image" [src]="object?.avatar" alt="">
                 <div *ngIf="!isChannelList" class="status-dot" [ngClass]="{'green': object?.online}"></div>

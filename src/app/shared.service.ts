@@ -50,13 +50,13 @@ export class SharedService {
     isAddChannel: boolean = false;
     screenWidth: number = 0;
     hideDevResp: boolean = false;
-
-
-    ngOnInit(){
+    transformSearch: boolean = false;
+    editProfile: boolean = false;
+    ngOnInit() {
         console.log(window.innerWidth);
-        
-        if (window.innerWidth<=720) {
-            this.resize720=true;
+
+        if (window.innerWidth <= 720) {
+            this.resize720 = true;
         }
     }
     navigateToPath(path: string) {
@@ -169,6 +169,10 @@ export class SharedService {
         this.isOverlay = !this.isOverlay;
         this.isChange = false;
         event.stopPropagation();
+        if (this.checkLowerWidth(540)) {
+
+            this.transformSearch = !this.transformSearch
+        }
 
     }
 
@@ -179,6 +183,7 @@ export class SharedService {
         this.isLogout = false;
         this.isProfileOpen = false;
         this.isEdit = false;
+        this.transformSearch = false;
 
     }
 
@@ -189,8 +194,6 @@ export class SharedService {
 
     closeProfile() {
         //this.profileObserve('');
-
-
         if (this.isRecieverProfile === true) {
             this.isOverlay = false;
 
@@ -199,6 +202,9 @@ export class SharedService {
         this.isMember = false;
         this.isProfileOpen = false;
 
+        if (this.checkLowerWidth(540)) {
+            this.editProfile = false;
+        }
     }
 
 
@@ -211,6 +217,9 @@ export class SharedService {
         this.currentProfile = receiver;
         this.isLogout = false;
         this.recieverObserver.next('');
+        if (this.checkLowerWidth(540)) {
+            this.editProfile = true;
+        }
     }
 
     toggleLogout() {
@@ -229,10 +238,14 @@ export class SharedService {
         localStorage.setItem('devSlide', JSON.stringify(this.devSlide))
         console.log(this.devSlide);
         console.log(window.innerWidth);
-        
-        
-    }
 
+
+    }
+    checkLowerWidth(widthToCheck: number) {
+        console.log('check width');
+
+        return window.innerWidth < widthToCheck;
+    }
 }
 
 

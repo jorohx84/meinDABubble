@@ -135,7 +135,7 @@ input::placeholder {
     width: 100%;
     max-width: 342px;
     height: 70px;
-    z-index: 1000;
+    z-index: 0;
     cursor: pointer;
 
     >span {
@@ -220,7 +220,6 @@ input::placeholder {
     position: absolute;
     right: 20px;
     top: 100px;
-    z-index: 11;
 }
 
 .receiverProfile {
@@ -472,6 +471,17 @@ input::placeholder {
 
 .devlogo {
     width: 50px;
+}
+
+.newMessageBtn {
+    position: absolute;
+    bottom: 30px;
+    left: 255px;
+    width: 60px;
+    height: 60px;
+    background-color: var(--purple1);
+    border-radius: 100px;
+    z-index: 10;
 }
 
 @media(max-width: 1600px) {

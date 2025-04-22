@@ -11,6 +11,7 @@ section {
   align-items: center;
   gap: 25px;
   overflow-y: scroll;
+  position: relative;
 }
 
 .devSearch {
@@ -150,7 +151,7 @@ button {
         }
 
         >.image-right {
-          content: url(./../../../public/img/arrow_drop_down-2-purple.svg);
+          // content: url(./../../../public/img/arrow_drop_down-2-purple.svg);
         }
       }
     }
@@ -446,6 +447,8 @@ button {
   box-shadow: 0 2px 10px 0 rgba(0,0,0,0.08);
 
 }
+
+
 
 @media(max-width: 720px) {
   .headline {

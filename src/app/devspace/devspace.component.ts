@@ -72,6 +72,8 @@ export class DevspaceComponent {
 
   }
 
+
+
   async loadUsers() {
     try {
       this.users = await this.userService.getUsers();
@@ -125,6 +127,7 @@ export class DevspaceComponent {
   openNewMessage() {
     this.currentChat = 'new';
     this.sharedservice.getReciever(this.currentReceiver, this.currentUser, this.currentChat);
+    this.messageService.currentMessages = [];
     this.sharedservice.loadChat();
   }
 
