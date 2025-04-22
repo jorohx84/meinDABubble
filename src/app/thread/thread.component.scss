@@ -521,6 +521,37 @@ textarea:focus {
     }
 }
 
+@media(max-width: 1400px) {
+    .textContainer {
+
+        height: 145px;
+        padding: 20px;
+
+        >div {
+            height: 100%;
+            width: 100%;
+        }
+    }
+
+    .headline {
+        height: 60px;
+        padding: 10px 16px;
+    }
+
+    .content{
+        padding: 5px 10px;
+        height: fit-content;
+        margin-bottom: 5px;
+    }
+    .message{
+        min-height: unset;
+        height: fit-content;
+    }
+    .chat-content{
+        padding-top: 20px;
+    }
+}
+
 @media(max-width: 1050px) {
 
     .headline {
@@ -546,21 +577,14 @@ textarea:focus {
 
 }
 
-@media(max-height: 1000px) {
-    .textContainer {
-
-        height: 145px;
-        padding: 20px;
-
-        >div {
-            height: 100%;
-            width: 100%;
-        }
+@media(max-width: 540px) {
+    .lists{
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 120px;
     }
-
-    .headline {
-        height: 60px;
-        padding: 10px 16px;
+    section{
+        border-radius: 0;
     }
-
+ 
 }

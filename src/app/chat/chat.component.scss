@@ -135,7 +135,7 @@ input::placeholder {
     width: 100%;
     max-width: 342px;
     height: 70px;
-    z-index: 0;
+ 
     cursor: pointer;
 
     >span {
@@ -220,6 +220,7 @@ input::placeholder {
     position: absolute;
     right: 20px;
     top: 100px;
+    z-index: 10;
 }
 
 .receiverProfile {
@@ -402,7 +403,7 @@ input::placeholder {
     box-shadow: 4px 4px 7px 0 rgba(0, 0, 0, 0.2);
     background-color: white;
     gap: 10px;
-
+cursor: pointer;
     &:hover {
         >div>img {
             content: url(./../../../public/img/hidedevspace_hover.svg);
@@ -476,7 +477,7 @@ input::placeholder {
 .newMessageBtn {
     position: absolute;
     bottom: 30px;
-    left: 255px;
+    left: 290px;
     width: 60px;
     height: 60px;
     background-color: var(--purple1);

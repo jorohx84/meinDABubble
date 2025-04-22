@@ -41,7 +41,7 @@ export class ThreadComponent {
   messageID: string = '';
   isIconBar: boolean = false;
 
-  
+
   constructor(private cdRef: ChangeDetectorRef) {
 
     this.loadThreadData();
@@ -116,26 +116,26 @@ export class ThreadComponent {
 
 
   reloadDataFromLocalStorage() {
-       /*
-      // Definiere die Keys und die entsprechenden Variablen, die gesetzt werden sollen
-  const keysToLoad = [
-    { key: 'threadMessages', variable: 'currentMessages' },
-    { key: 'user', variable: 'currentUser' },
-    { key: 'reciever', variable: 'currentReciever' },
-    { key: 'message', variable: 'message' },
-    { key: 'messageIndex', variable: 'currentIndex' },
-    { key: 'messageID', variable: 'messageID' },
-  ];
+    /*
+   // Definiere die Keys und die entsprechenden Variablen, die gesetzt werden sollen
+const keysToLoad = [
+ { key: 'threadMessages', variable: 'currentMessages' },
+ { key: 'user', variable: 'currentUser' },
+ { key: 'reciever', variable: 'currentReciever' },
+ { key: 'message', variable: 'message' },
+ { key: 'messageIndex', variable: 'currentIndex' },
+ { key: 'messageID', variable: 'messageID' },
+];
 
-  // Iteriere durch die Keys und lade die Daten
-  keysToLoad.forEach(({ key, variable }) => {
-    this.sharedService.getDataFromLocalStorage(key);
-    this[variable] = this.sharedService.data;
-  });
+// Iteriere durch die Keys und lade die Daten
+keysToLoad.forEach(({ key, variable }) => {
+ this.sharedService.getDataFromLocalStorage(key);
+ this[variable] = this.sharedService.data;
+});
 
-  console.log('Daten aus localStorage geladen', this.currentReciever, this.currentUser);
+console.log('Daten aus localStorage geladen', this.currentReciever, this.currentUser);
 
-  */
+*/
     this.sharedService.getDataFromLocalStorage('threadMessages');
     this.sharedService.data;
     this.sharedService.getDataFromLocalStorage('user');
@@ -149,21 +149,28 @@ export class ThreadComponent {
     this.sharedService.getDataFromLocalStorage('messageID');
     this.messageID = this.sharedService.data;
     console.log('Daten aus localStorage geladen', this.currentReciever, this.currentUser);
-   
+
   }
 
 
   getReciever(index: number, event: Event) {
     if (this.isChannelList) {
       const currentChannel = this.currentList[index];
-      this.threadMessage = this.threadMessage + currentChannel?.name.replace(/ /g, '');;
+      this.threadMessage = this.threadMessage + currentChannel?.name;
     } else {
-      const currentReciever = this.currentList[index];
-      this.threadMessage = this.threadMessage + currentReciever?.name.replace(/ /g, '');;
+
+      const currentReciever = this.currentReciever.members[index];
+      console.log(currentReciever);
+      console.log(this.threadMessage);
+
+      this.threadMessage = this.threadMessage + ' ' + '@' + currentReciever?.name;
     }
     this.isClicked = false;
     event.stopPropagation();
   }
+
+
+
 
   getList(event: Event) {
     const containsHash = this.threadMessage.includes('#');

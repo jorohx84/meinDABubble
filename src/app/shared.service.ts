@@ -170,7 +170,7 @@ export class SharedService {
         this.isChange = false;
         event.stopPropagation();
         if (this.checkLowerWidth(540)) {
-
+          
             this.transformSearch = !this.transformSearch
         }
 
@@ -242,8 +242,6 @@ export class SharedService {
 
     }
     checkLowerWidth(widthToCheck: number) {
-        console.log('check width');
-
         return window.innerWidth < widthToCheck;
     }
 }

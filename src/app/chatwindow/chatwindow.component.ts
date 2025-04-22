@@ -267,21 +267,32 @@ export class ChatwindowComponent implements AfterViewChecked {
 
     this.isClicked = containsHash || containsAt;
     this.isChannelList = containsHash;
-    this.currentList = containsHash ? this.channels : containsAt ? this.users : [];
+    const memberList: any = this.getcurrentUserList();
+    console.log(memberList);
+
+    this.currentList = containsHash ? this.channels : containsAt ? memberList : [];
 
     // Falls weder # noch @ enthalten sind, isClicked bleibt false und currentList bleibt leer.
     if (!containsHash && !containsAt) {
       this.isClicked = false;
     }
   }
+  getcurrentUserList() {
+    console.log(this.isChannel);
+    if (this.isChannel) {
+      return this.currentReciever.members;
+    } else {
+      return this.users
+    }
 
+  }
   getReciever(index: number) {
     if (this.isChannelList) {
       const currentChannel = this.currentList[index];
-      this.message = this.message + currentChannel?.name.replace(/ /g, '');;
+      this.message = this.message + ' ' + '@' + currentChannel?.name;
     } else {
       const currentReciever = this.currentList[index];
-      this.message = this.message + currentReciever?.name.replace(/ /g, '');;
+      this.message = this.message + ' ' + '@' + currentReciever?.name;
     }
     this.isClicked = false;
   }
@@ -289,7 +300,15 @@ export class ChatwindowComponent implements AfterViewChecked {
   toggleList(event: Event) {
     this.isChannelList = false;
     this.isClicked = !this.isClicked;
-    this.currentList = this.users;
+
+    if (this.isChannel) {
+      console.log('isChannel');
+      this.currentList = this.currentReciever.members;
+    } else {
+      console.log('isChat');
+      this.currentList = this.users;
+    }
+
     event.stopPropagation();
   }
 
@@ -394,6 +413,9 @@ export class ChatwindowComponent implements AfterViewChecked {
     this.openSearch = false;
   }
   async addPerson() {
+    if (this.searchInput.length>0) {
+      
+    
     await this.searchService.addMember(this.currentReciever);
     this.searchInput = '';
     this.sharedservice.isSearch = false;
@@ -404,9 +426,11 @@ export class ChatwindowComponent implements AfterViewChecked {
     this.currentReciever = currentChannel;
     if (this.sharedservice.checkLowerWidth(540)) {
       console.log('responsive EditChannel');
-      
-      this.openEditChannel()
+
+      this.openEditChannel();
+      this.sharedservice.transformSearch = false;
     }
+  }
   }
 
   openProfile() {
@@ -417,7 +441,7 @@ export class ChatwindowComponent implements AfterViewChecked {
     this.sharedservice.currentProfile = this.currentReciever;
     this.sharedservice.isOverlay = true;
     //this.sharedservice.profileObserve('receiver');
-    this.sharedservice.isMember=true;
+    this.sharedservice.isMember = true;
   }
 
 
