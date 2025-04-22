@@ -3,13 +3,19 @@
     font-family: 'Nunito';
     src: url('./assets/fonts/Nunito-VariableFont_wght.ttf')
 }
-
+html{
+    height: var(--vh);
+    overflow-y: auto;
+}
 body {
     margin: 0;
     padding: 0;
     overflow-x: hidden;
-    overflow-y: hidden;
+    overflow-y: auto;
     font-family: 'Nunito';
+ width: 100vw;
+ height: var(--vh);
+
 }
 
 button {
@@ -72,5 +78,5 @@ input:-webkit-autofill {
     --purple3: rgba(83, 90, 241, 1);
     --border-light: rgba(173, 176, 217, 1);
     --text-grey: rgba(104, 104, 104, 1);
-    --vh: 1vh:
+    --vh: 100vh:
 }

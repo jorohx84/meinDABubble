@@ -97,6 +97,7 @@ export class ChatComponent {
 
   async ngOnInit() {
     this.setViewportHeight();
+    window.addEventListener('focusin', this.handleFocus);
     this.loadChannels();
     this.loadUsers();
     this.loadCurrentUser();
@@ -127,7 +128,12 @@ export class ChatComponent {
     })
 
   }
-
+  handleFocus = (e: FocusEvent): void => {
+    const target = e.target as HTMLElement;
+    if (target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement || target.isContentEditable) {
+      this.setViewportHeight
+    }
+  }
   setViewportHeight(): void {
     const vh = window.innerHeight;
     console.log(vh);
@@ -141,7 +147,7 @@ export class ChatComponent {
     if (window.innerWidth <= 720) {
       this.sharedservice.resize720 = true;
       console.log(this.sharedservice.resize720);
-      
+
     }
 
   }
