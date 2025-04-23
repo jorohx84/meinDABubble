@@ -280,7 +280,7 @@ export class ChatComponent {
     await this.userservice.setOnlineStatus('logout');
     await signOut(this.auth);
     this.emptyLogalStorage();
-
+    this.sharedservice.toggleLogout();
     //  setTimeout(() => {
     this.sharedservice.navigateToPath('/login');
     // }, 1000);

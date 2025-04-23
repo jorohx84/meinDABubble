@@ -94,9 +94,9 @@ p {
     &:hover:not(.startmessage) {
         background-color: var(--bg-color);
 
-        >.menubar {
-            display: flex !important;
-        }
+        // >.menubar {
+        //     display: flex !important;
+        // }
 
         .reactions {
             display: flex;
@@ -408,12 +408,12 @@ textarea:focus {
     box-sizing: border-box;
     padding: 3px 13px;
     background-color: white;
-    display: flex;
+    display: none;
     flex-direction: row !important;
     justify-content: center;
     align-items: center;
 
-    display: none !important;
+   
 
     >button {
         padding: 0;
@@ -465,12 +465,15 @@ textarea:focus {
 
 .reactions {
     display: flex;
+    align-items: center;
     width: 100%;
     max-width: 250px;
-    position: absolute;
-    bottom: 0;
-    left: 100px;
-    display: none;
+
+    
+}
+
+.showMenubar{
+    display: flex !important;
 }
 
 .iconContainer {

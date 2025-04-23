@@ -52,6 +52,7 @@ export class SharedService {
     hideDevResp: boolean = false;
     transformSearch: boolean = false;
     editProfile: boolean = false;
+    menuBarIndex: number | null = null;
     ngOnInit() {
         console.log(window.innerWidth);
 
@@ -170,7 +171,7 @@ export class SharedService {
         this.isChange = false;
         event.stopPropagation();
         if (this.checkLowerWidth(540)) {
-          
+
             this.transformSearch = !this.transformSearch
         }
 
@@ -244,6 +245,16 @@ export class SharedService {
     checkLowerWidth(widthToCheck: number) {
         return window.innerWidth < widthToCheck;
     }
-}
 
+    toggleMenuBar(index: number) {
+        if (this.menuBarIndex === index) {
+            this.menuBarIndex = null;
+        } else {
+            this.menuBarIndex = index
+        }
+
+        console.log(this.menuBarIndex);
+
+    }
+}
 

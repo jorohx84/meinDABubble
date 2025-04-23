@@ -1,7 +1,7 @@
 <section >  <!--(click)="reactionService.isReaction=false"  -->
     <div (click)="closeThread()" class="header">
-        <img *ngIf="!sharedservice.resize720" class="headerLogo" src="./img/1. Logo animation.svg" alt="">
-        <div *ngIf="sharedservice.resize720" class="devspaceResp" (click)="sharedservice.toogleDevspace()">
+        <img *ngIf="!sharedservice.checkLowerWidth(720)" class="headerLogo" src="./img/1. Logo animation.svg" alt="">
+        <div *ngIf="sharedservice.checkLowerWidth(720)" class="devspaceResp" (click)="sharedservice.toogleDevspace()">
             <img *ngIf="sharedservice.devSlide" src="./img/arrow.svg" alt="">
             <img *ngIf="sharedservice.devSlide" class="devlogo" src="./img/workspace-logo.svg" alt="">
             <span *ngIf="sharedservice.devSlide">Devspace</span>

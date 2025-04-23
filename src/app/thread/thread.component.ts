@@ -40,7 +40,7 @@ export class ThreadComponent {
   threadStarts: boolean = false;
   messageID: string = '';
   isIconBar: boolean = false;
-
+  threadMenuBarIndex: number | null = null;
 
   constructor(private cdRef: ChangeDetectorRef) {
 
@@ -336,5 +336,12 @@ console.log('Daten aus localStorage geladen', this.currentReciever, this.current
     this.isIconBar = !this.isIconBar;
   }
 
-
+  toggleMenuBar(index: number) {
+    console.log(index);
+    if (this.threadMenuBarIndex === index) {
+      this.threadMenuBarIndex = null;
+    } else {
+      this.threadMenuBarIndex = index;
+    }
+  }
 }

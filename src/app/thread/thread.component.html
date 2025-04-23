@@ -33,7 +33,8 @@
     <div class="chat-content">
         <div *ngFor="let message of currentMessages; let index=index">
             <div class="message">
-                <div [ngClass]="{'reverse': index % 2 !== 0}" class="content">
+                <div (mouseover)="!sharedService.checkLowerWidth(540) ? threadMenuBarIndex = index : null"
+                    [ngClass]="{'reverse': index % 2 !== 0}" class="content">
 
                     <img class="image" [src]="message?.photo" alt="">
                     <div class="textDiv" [ngClass]="{'flex-end': index % 2 !== 0}">
@@ -44,10 +45,32 @@
                         <div [ngClass]="{'reverseColor': index % 2 !== 0, 'bubbleBG': index % 2 === 0}" class="text">
                             <span>{{message?.content}}</span>
                         </div>
+
+                        <div [ngClass]="{'reverse': index % 2 !== 0}" class="reactions">
+                            <button *ngIf="sharedService.checkLowerWidth(540)" (click)="toggleMenuBar(index)"><img src="./img/addreaction.svg"
+                                    alt=""></button>
+                            <div *ngIf="message.reactionLength>0"
+                                (click)="reactionService.findAllReactions(message, currentReciever.id, currentUser.id, 'thread', index)"
+                                class="iconContainer">
+                                <img src="{{message?.lastReaction}}" alt="">
+                                <span>{{message?.reactionLength}}</span>
+                                <div *ngIf="reactionService.isReaction && reactionService.reactionIndex===index"
+                                    class="reactionList">
+                                    <div class="reactionsRow" *ngFor="let reaction of reactionService.allReactions">
+                                        <img src="{{reaction?.icon}}" alt="">
+                                        <span>{{reaction?.name}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
                     </div>
 
 
-                    <div [ngClass]="{'menubarposition':  index % 2 !== 0}" class="menubar">
+                    <div [ngClass]="{'menubarposition':  index % 2 !== 0, 'showMenubar':threadMenuBarIndex===index}"
+                        class="menubar">
 
                         <button (click)="toogleIconBar()"><img src="./img/addreaction.svg" alt=""></button>
                         <button (click)="messageService.toggelIsEdit(index, message, 'thread')"
@@ -68,7 +91,7 @@
                         </div>
                     </div>
 
-                    <div [ngClass]="{'reverse': index % 2 !== 0}" class="reactions">
+                    <!-- <div [ngClass]="{'reverse': index % 2 !== 0}" class="reactions">
                         <button><img src="./img/addreaction.svg" alt=""></button>
                         <div *ngIf="message.reactionLength>0"
                             (click)="reactionService.findAllReactions(message, currentReciever.id, currentUser.id, 'thread', index)"
@@ -83,7 +106,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
 
             </div>
@@ -93,7 +116,7 @@
 
     <div [ngClass]="{'show': isClicked}" class="lists">
         <div (click)="getReciever(index, $event)" [ngClass]="{'channelStyle': isChannelList}" class="listrow"
-            *ngFor="let object of currentReciever.members; let index = index">
+            *ngFor="let object of currentReciever?.members; let index = index">
             <div *ngIf="!isChannelList" class="imageContainer">
                 <img class="profile-image" [src]="object?.avatar" alt="">
                 <div *ngIf="!isChannelList" class="status-dot" [ngClass]="{'green': object?.online}"></div>

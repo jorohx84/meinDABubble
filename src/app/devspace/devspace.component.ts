@@ -104,7 +104,7 @@ export class DevspaceComponent {
     this.sharedservice.getReciever(this.currentReceiver, this.currentUser, this.currentChat);
     await this.messageService.getCurrentMessages(this.currentUser, this.currentReceiver, this.currentChat);
     this.sharedservice.loadChat();
-    if (window.innerWidth <= 1050) {
+    if (this.sharedservice.checkLowerWidth(1050)) {
       this.sharedservice.toogleDevspace();
     }
 
@@ -119,7 +119,7 @@ export class DevspaceComponent {
     this.sharedservice.getReciever(this.currentReceiver, this.currentUser, this.currentChat);
     await this.messageService.getCurrentMessages(this.currentUser, this.currentReceiver, this.currentChat);
     this.sharedservice.loadChat();
-    if (window.innerWidth <= 1050) {
+    if (this.sharedservice.checkLowerWidth(1050)) {
       this.sharedservice.toogleDevspace();
     }
   }

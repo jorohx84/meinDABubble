@@ -37,7 +37,8 @@
         </div>
     </div>
 
-    <div [ngClass]="{'changeAddMember': sharedservice.isChange, 'transform':sharedservice.transformSearch}" *ngIf="sharedservice.isSearch || sharedservice.checkLowerWidth(540)" class="addMember">
+    <div [ngClass]="{'changeAddMember': sharedservice.isChange, 'transform':sharedservice.transformSearch}"
+        *ngIf="sharedservice.isSearch || sharedservice.checkLowerWidth(540)" class="addMember">
         <div>
             <div class="headDivider">
                 <div></div>
@@ -49,12 +50,12 @@
 
             <div *ngIf="!sharedservice.isChange" class="nameOfChannel">
                 <img src="./img/tag_purple2.svg" alt="">
-                <span>{{currentReciever.name}}</span>
+                <span>{{currentReciever?.name}}</span>
             </div>
         </div>
         <div class="listContainer" *ngIf="sharedservice.isChange">
-            <div (click)="sharedservice.openMemberProfile(member)" *ngFor="let member of currentReciever.members; let index=index"
-                class="listrow">
+            <div (click)="sharedservice.openMemberProfile(member)"
+                *ngFor="let member of currentReciever.members; let index=index" class="listrow">
                 <div class="imageContainer">
                     <img class="profile-image" [src]="member?.avatar" alt="">
                     <div class="status-dot" [ngClass]="{'green': member?.online}"></div>
@@ -102,7 +103,9 @@
                     <p>{{isToday(message.time)? 'Heute' : (message.time | date:'EEEE, d MMMM':'de')}}</p>
                 </div>
             </div>
-            <div [ngClass]="{'reverse': isUser(message)}" class="messagerow">
+            <div (mouseover)="!sharedservice.checkLowerWidth(540) ? sharedservice.menuBarIndex=index:null"
+                (mouseleave)="sharedservice.menuBarIndex=null" [ngClass]="{'reverse': isUser(message)}"
+                class="messagerow">
                 <div class="image">
                     <img [src]="message.photo" alt="">
                 </div>
@@ -132,7 +135,9 @@
                         </div>
                         <!--REATCIONS-->
                         <div [ngClass]="{'reactionReverse': isUser(message)}" class="reactions">
-                            <button><img src="./img/addreaction.svg" alt=""></button>
+                            <button *ngIf="sharedservice.checkLowerWidth(540)"
+                                (click)="sharedservice.toggleMenuBar(index)"><img src="./img/addreaction.svg"
+                                    alt=""></button>
                             <!---->
                             <div *ngIf="message.reactionLength>0"
                                 (click)="reactionService.findAllReactions(message, currentReciever.id, currentUser.id, 'chat', index)"
@@ -151,17 +156,14 @@
                         <!--REATCIONS-->
                     </div>
                 </div>
-                <div [ngClass]="{'menubarposition': isUser(message)}" class="menubar">
+                <div [ngClass]="{'menubarposition': isUser(message), 'showMenubar':sharedservice.menuBarIndex===index}"
+                    class="menubar" id="menubar{{index}}">
                     <button
                         (click)="reactionService.addReaction('./img/checkmark.svg',message, currentUser, currentReciever, 'check', 'chat')"
-                        class="checkmark"><img
-                          
-                            src="./img/checkmark.svg" alt=""></button>
+                        class="checkmark"><img src="./img/checkmark.svg" alt=""></button>
                     <button
                         (click)="reactionService.addReaction('./img/ThumbsUp.svg', message, currentUser, currentReciever, 'thumb', 'chat')"
-                        class="ThumbsUp"><img
-                          
-                            src="./img/ThumbsUp.svg" alt=""></button>
+                        class="ThumbsUp"><img src="./img/ThumbsUp.svg" alt=""></button>
                     <button (click)="reactionService.toogleIconBar()" class="addreaction"><img
                             src="./img/addreaction.svg" alt=""></button>
                     <button (click)="openThread(message,index, $event)" class="Answer"><img src="./img/Answer.svg"
@@ -175,21 +177,15 @@
                         class="iconBar">
                         <button
                             (click)="reactionService.addReaction('./img/checkmark.svg',message, currentUser, currentReciever, 'check', 'chat')"
-                            class="checkmark"><img
-                               
-                                src="./img/checkmark.svg" alt=""></button>
+                            class="checkmark"><img src="./img/checkmark.svg" alt=""></button>
                         <button
                             (click)="reactionService.addReaction('./img/ThumbsUp.svg', message, currentUser, currentReciever, 'thumb', 'chat')"
-                            class="ThumbsUp"><img
-                          
-                                src="./img/ThumbsUp.svg" alt=""></button>
+                            class="ThumbsUp"><img src="./img/ThumbsUp.svg" alt=""></button>
                         <button class="bg"
-                            (click)="reactionService.addReaction('./img/rocket.svg',message, currentUser, currentReciever, 'rocket', 'chat')"
-                           ><img
+                            (click)="reactionService.addReaction('./img/rocket.svg',message, currentUser, currentReciever, 'rocket', 'chat')"><img
                                 src="./img/rocket.svg" alt=""></button>
                         <button class="bg"
-                            (click)="reactionService.addReaction('./img/nerd.svg',message, currentUser, currentReciever, 'nerd', 'chat')"
-                          ><img
+                            (click)="reactionService.addReaction('./img/nerd.svg',message, currentUser, currentReciever, 'nerd', 'chat')"><img
                                 src="./img/nerd.svg" alt=""></button>
                     </div>
 

@@ -425,9 +425,9 @@ input {
     &:hover {
         background-color: var(--bg-color);
 
-        >.menubar {
-            display: flex;
-        }
+        // >.menubar {
+        //     display: flex;
+        // }
 
         .bubbleBG {
             background-color: white;
@@ -438,6 +438,10 @@ input {
         }
 
     }
+}
+
+.showMenubar{
+    display: flex !important;
 }
 
 .menubar {
@@ -1115,7 +1119,7 @@ textarea:focus {
 }
 
 
-@media(max-width: 1400px){
+@media(max-width: 1400px) {
     .header {
         padding: 10px 16px;
         height: 60px;
@@ -1135,9 +1139,11 @@ textarea:focus {
         }
 
     }
-    .members{
+
+    .members {
         width: fit-content;
     }
+
     .textContainer {
 
         height: 145px;
@@ -1149,11 +1155,12 @@ textarea:focus {
         }
     }
 
-    .newMessage{
+    .newMessage {
         justify-content: center;
     }
 
 }
+
 @media(max-width: 1800px) {
 
     .messageBubble {
@@ -1219,7 +1226,7 @@ textarea:focus {
     }
 
 
- 
+
 
     .image {
         img {
@@ -1259,23 +1266,29 @@ textarea:focus {
         transform: translateY(100%);
     }
 
-    .lists{
+    .lists {
         left: 50%;
         transform: translateX(-50%);
-bottom: 125px;
+        bottom: 125px;
 
     }
-    .memberlist{
+
+    .memberlist {
         top: unset !important;
         left: 50% !important;
         transform: translateX(-50%) !important;
         bottom: 170px !important;
         height: 500px !important;
-        border-radius: 30px 30px 30px 0px !important; 
+        border-radius: 30px 30px 30px 0px !important;
+    }
+
+    .iconBar {
+        left: 20px !important;
+    }
+    .menubar{
+        left: 50%;
+        transform: translateX(-50%);
     }
 }
 
-@media(max-height: 1000px) {
-
-
-}
+@media(max-height: 1000px) {}
