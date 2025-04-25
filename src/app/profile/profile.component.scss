@@ -222,3 +222,11 @@ input{
         background-color: var(--purple2);
     }
 }
+
+@media(max-width: 540px){
+    section{
+        width: 100%;
+        border-radius: 30px;
+        height: fit-content;
+    }
+}

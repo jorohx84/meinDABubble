@@ -607,7 +607,14 @@ cursor: pointer;
     .textfield {
         height: fit-content;
     }
-
+    .profileOverlay{
+        width: calc(100vw - 20px);
+        border-radius: 30px ;
+        top: 50% ;
+        left: 50% ;
+        transform: translate(-50%, -50%);
+        height: fit-content;
+    }
 }
 
 

@@ -126,7 +126,7 @@ export class DevspaceComponent {
 
   openNewMessage() {
     this.currentChat = 'new';
-    this.sharedservice.getReciever(this.currentReceiver, this.currentUser, this.currentChat);
+    this.sharedservice.getReciever(null, this.currentUser, this.currentChat);
     this.messageService.currentMessages = [];
     this.sharedservice.loadChat();
   }

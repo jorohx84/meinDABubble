@@ -103,7 +103,7 @@
                     <p>{{isToday(message.time)? 'Heute' : (message.time | date:'EEEE, d MMMM':'de')}}</p>
                 </div>
             </div>
-            <div (mouseover)="!sharedservice.checkLowerWidth(540) ? sharedservice.menuBarIndex=index:null"
+            <div (mouseover)="!sharedservice.checkLowerWidth(540) ? sharedservice.menuBarIndex=index:null; reactionService.isReaction=false"
                 (mouseleave)="sharedservice.menuBarIndex=null" [ngClass]="{'reverse': isUser(message)}"
                 class="messagerow">
                 <div class="image">

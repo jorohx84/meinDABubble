@@ -30,6 +30,7 @@ export class ReactionService {
     nerd: any[] = [];
     allReactions: any[] = [];
     isReaction: boolean = false;
+    isThreadReaction: boolean = false;
     reactionIndex: number = 0;
     messageObject: any;
     currentReaction: any;
@@ -250,7 +251,12 @@ export class ReactionService {
             this.allReactions = reactions;
         }
         this.reactionIndex = index;
-        this.isReaction = true;
+        if (type === 'thread') {
+            this.isThreadReaction = !this.isThreadReaction
+        } else {
+            this.isReaction = !this.isReaction
+        }
+
     }
 
     getThreadDocRef(message: any, recieverID: string) {

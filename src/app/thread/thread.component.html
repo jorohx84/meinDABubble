@@ -33,7 +33,7 @@
     <div class="chat-content">
         <div *ngFor="let message of currentMessages; let index=index">
             <div class="message">
-                <div (mouseover)="!sharedService.checkLowerWidth(540) ? threadMenuBarIndex = index : null"
+                <div (mouseover)="!sharedService.checkLowerWidth(540) ? threadMenuBarIndex = index : null;reactionService.isThreadReaction=false"
                     [ngClass]="{'reverse': index % 2 !== 0}" class="content">
 
                     <img class="image" [src]="message?.photo" alt="">
@@ -54,7 +54,7 @@
                                 class="iconContainer">
                                 <img src="{{message?.lastReaction}}" alt="">
                                 <span>{{message?.reactionLength}}</span>
-                                <div *ngIf="reactionService.isReaction && reactionService.reactionIndex===index"
+                                <div *ngIf="reactionService.isThreadReaction && reactionService.reactionIndex===index"
                                     class="reactionList">
                                     <div class="reactionsRow" *ngFor="let reaction of reactionService.allReactions">
                                         <img src="{{reaction?.icon}}" alt="">
