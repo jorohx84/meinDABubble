@@ -14,13 +14,18 @@
             <div>
                 <img src="./img/mail.svg" alt="">
                 <input #email="ngModel" [(ngModel)]="user.email" type="email" name="email" placeholder="beispielname@email.com" required >
+             
             </div>
-
+            @if(email.touched && email.invalid){
+                <span class="error">E-Mail-Adresse ungültig</span>
+            }
             <div>
                 <img src="./img/lock.svg" alt="">
-                <input #password="ngModel" [(ngModel)]="user.password" type="password" placeholder="Passwort" name="password" required>
-                   
+                <input #password="ngModel" [(ngModel)]="user.password" type="password" placeholder="Passwort" name="password" required>   
             </div>
+            @if(password.touched && password.invalid){
+                <span class="error">Passwort oder E-Mail prüfen</span>
+            }
             <button (click)="sharedservice.navigateToPath('/remove')">Passwort vergessen?</button>
         </div>
         <div class="buttons">

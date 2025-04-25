@@ -274,14 +274,14 @@ input:-webkit-autofill {
             left: 50%;
             transform: translateX(-50%);
             width: fit-content;
-            top: 675px;
+            top: 600px;
         }
 
         >button {
             left: 50%;
             transform: translateX(-50%);
             width: fit-content;
-            top: 715px;
+            top: 650px;
             border: solid;
             border-radius: 100px;
             border-width: 1px;
@@ -296,7 +296,7 @@ input:-webkit-autofill {
 
     .login {
         margin-top: 75px;
-        max-height: 552px;
+        max-height: fit-content
     }
 
     .logo {
