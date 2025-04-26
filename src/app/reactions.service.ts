@@ -297,8 +297,9 @@ export class ReactionService {
         })
     }
 
-    toogleIconBar() {
+    toogleIconBar(event: Event) {
         this.isIconBar = !this.isIconBar
+        event.stopPropagation();
     }
 
     toggleFooterIconBar() {

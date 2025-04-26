@@ -18,7 +18,8 @@ export class AvatarComponent {
   currentUser: any;
   image: string = '';
   auth = getAuth();
-
+  avatarIndex: number | null = null
+  isCreate: boolean = false;
   avatars = [
     './img/avatare/avatar1.svg',
     './img/avatare/avatar2.svg',
@@ -35,13 +36,19 @@ export class AvatarComponent {
     this.sharedservice.navigateToPath(path)
   }
 
-  selectAvatar(path: string) {
+  selectAvatar(path: string, index: number) {
     this.image = path;
     this.currentUser.avatar = this.image;
     console.log(this.currentUser);
+    this.checkIndex(index)
+  }
+  checkIndex(index: number) {
+
+    this.avatarIndex = index;
+    console.log(this.avatarIndex);
+
 
   }
-
   async createUser() {
     await createUserWithEmailAndPassword(this.auth, this.currentUser.email, this.currentUser.password)
       .then((userCredential) => {
@@ -57,14 +64,21 @@ export class AvatarComponent {
             avatar: this.currentUser.avatar,
             messages: [],
             online: false,
-            login:''
+            login: ''
           });
         });
+      }).then(() => {
+        this.isCreate = true;
+        setTimeout(() => {
+          this.isCreate = false
+        }, 2000);
       })
-      .then(()=>{
-        setTimeout(()=>{
+      .then(() => {
+        setTimeout(() => {
           this.sharedservice.navigateToPath('/login');
         }, 2000);
       })
+
   }
+
 }

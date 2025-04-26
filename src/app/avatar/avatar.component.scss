@@ -4,6 +4,9 @@ section {
     position: relative;
     background-color: var(--bg-color);
     font-family: 'Nunito';
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .logo {
@@ -13,17 +16,21 @@ section {
 }
 
 .selection {
+    position: relative;
     width: 100%;
     max-width: 606px;
     height: 100%;
     max-height: 669px;
     background-color: white;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    box-sizing: border-box;
+    padding: 40px;
     border-radius: 30px;
     box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 45px;
 }
 
 .goback {
@@ -39,10 +46,8 @@ section {
     width: 100%;
     max-width: 486px;
     height: 100%;
-    max-height: 136px;
-    position: absolute;
-    top: 40px;
-    left: 67px;
+    max-height: fit-content;
+    text-align: center;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -57,9 +62,7 @@ section {
 }
 
 .profile {
-    position: absolute;
-    top: 151px;
-    left: 67px;
+
     width: 100%;
     max-width: 472px;
     height: 100%;
@@ -111,16 +114,23 @@ section {
             width: 64px;
             height: 64px;
             border-radius: 41px;
+
         }
     }
 
+}
+
+.border{
+    border: solid;
+    border-color:var(--purple1);
+    border-width: 3px;
 }
 
 .createButton {
     width: 107px;
     height: 48px;
     position: absolute;
-    top: 580px;
+   bottom: 20px;
     right: 60px;
     background-color: var(--purple1);
     border: none;
@@ -132,5 +142,86 @@ section {
 
     &:active {
         transform: scale(0.95);
+    }
+}
+
+.slider{
+   background-color: var(--purple1);
+   color: white;
+   border-radius: 30px 30px 0 30px;
+   box-sizing: border-box;
+   padding: 20px 30px;
+   position: absolute;
+   bottom: 200px;
+   transform: translateX(100vw);
+   transition: transform 1s ease-in-out;
+}
+
+.translatex{
+    transform: translateX(0);
+}
+
+@media(max-width:670px) {
+    section {
+        box-sizing: border-box;
+        padding: 20px !important;
+    }
+
+    .logo {
+        top: 25px;
+        left: unset;
+        width: 200px;
+
+        >img {
+            width: 200px;
+        }
+    }
+
+    .selection {
+        max-height: 450px;
+        gap: 20px;
+        padding: 20px;
+    }
+
+    .header {
+        margin-top: 20px;
+        max-height: fit-content;
+
+        >h1 {
+            font-size: 28px;
+        }
+    }
+
+    .profile {
+        justify-content: unset;
+
+        img {
+            width: 100px;
+            height: 100px;
+        }
+
+    }
+
+    .avatarContainer {
+        gap: 8px;
+
+        >p {
+            font-size: 28px;
+        }
+    }
+
+    .avatare {
+        >div {
+            width: 44px;
+
+            >img {
+                width: 44px;
+                height: 44px;
+            }
+        }
+
+    }
+    .goback{
+        top:10px
     }
 }

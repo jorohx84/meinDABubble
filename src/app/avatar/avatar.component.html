@@ -2,26 +2,31 @@
     <div class="logo">
         <img src="./img/1. Logo animation.svg" alt="">
     </div>
-<div class="selection">
-    <button (click)="routeToSignin('/signin')"  class="goback"><img src="./img/goback.svg" alt=""></button>
-    <div class="header"> <h1>Wähle deinen Avatar</h1></div>
-
-    <div class="profile">
-        <img src="./img/profile.svg" alt="">
-        <div class="avatarContainer">
-     
-                <p>{{currentUser.name}}</p>
-       
-            <span>Aus der Liste wählen</span>
-            <div class="avatare">
-                <div  *ngFor="let avatar of avatars">
-                    <img (click)="selectAvatar(avatar)" [src]="avatar" alt="">
-                </div>
-            </div>
+    <div class="selection">
+        <button (click)="routeToSignin('/signin')" class="goback"><img src="./img/goback.svg" alt=""></button>
+        <div class="header">
+            <h1>Wähle deinen Avatar</h1>
         </div>
 
-    </div>
-    <button class="createButton" (click)="createUser()" >Weiter</button>
-</div>
+        <div class="profile">
+            <img src="./img/profile.svg" alt="">
+            <div class="avatarContainer">
 
+                <p>{{currentUser.name}}</p>
+
+                <span>Aus der Liste wählen</span>
+                <div class="avatare">
+                    <div *ngFor="let avatar of avatars;let index=index">
+                        <img [ngClass]="{'border':avatarIndex===index }" (click)="selectAvatar(avatar, index)"
+                            [src]="avatar" alt="">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <button class="createButton" (click)="createUser()">Weiter</button>
+    </div>
+    <div class="slider" [ngClass]="{'translatex': isCreate}">
+        <span>Konto erfolgreich erstellt</span>
+    </div>
 </section>

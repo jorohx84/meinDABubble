@@ -16,13 +16,14 @@ export class RemovepasswordComponent {
   firestore = inject(Firestore);
   auth = inject(Auth);
   sharedService = inject(SharedService);
+  isSend: boolean = false;
   reset() {
     if (this.input) {
       const email = this.input;
       sendPasswordResetEmail(this.auth, email)
         .then(() => {
           console.log("Passwort zurücksetzen E-Mail gesendet!");
-          alert("Wir haben dir eine E-Mail zum Zurücksetzen des Passworts geschickt.");
+         
         })
         .then(() => {
           setTimeout(() => {
@@ -31,7 +32,10 @@ export class RemovepasswordComponent {
         })
     }
 
-
+    this.isSend = true
+    setTimeout(() => {
+      this.isSend = false;
+    }, 800);
   }
 }
 
