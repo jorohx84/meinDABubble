@@ -78,7 +78,7 @@
         <div *ngIf="!sharedservice.isChange" class="buttonCont">
             <button (click)="addPerson()">Hinzufügen</button>
         </div>
-        <div *ngIf="openSearch" class="lists memberlist">
+        <div *ngIf="sharedservice.openSearch" class="lists memberlist">
             <div (click)="findMember(index)" [ngClass]="{'channelStyle': isChannelList}" class="listrow"
                 *ngFor="let object of searchList; let index = index">
                 <div *ngIf="!isChannelList" class="imageContainer">
@@ -96,13 +96,14 @@
 
 
     <div id="chat" class="chat-content">
-        <div *ngFor="let message of currentMessages; let index =index" [ngClass]="{'change': isUser(message)}"
-            #chatContainer>
+        <div *ngFor="let message of currentMessages; let index = index; let lastMessage = last"
+            [ngClass]="{'change': isUser(message)}" #chatContainer>
             <div class="divider" *ngIf="isNewDay(message, currentMessages[index - 1])">
                 <div>
                     <p>{{isToday(message.time)? 'Heute' : (message.time | date:'EEEE, d MMMM':'de')}}</p>
                 </div>
             </div>
+            <div #lastMessage *ngIf="lastMessage"></div>
             <div (click)="reactionService.isIconBar=false"
                 (mouseover)="!sharedservice.checkLowerWidth(540) ? sharedservice.menuBarIndex=index:null; reactionService.isReaction=false"
                 (mouseleave)="sharedservice.menuBarIndex=null; reactionService.isIconBar=false"
@@ -168,8 +169,8 @@
                         class="ThumbsUp"><img src="./img/ThumbsUp.svg" alt=""></button>
                     <button (click)="reactionService.toogleIconBar($event)" class="addreaction"><img
                             src="./img/addreaction.svg" alt=""></button>
-                    <button (click)="openThread(message,index, $event)" class="Answer"><img src="./img/Answer.svg"
-                            alt=""></button>
+                    <button *ngIf="!isUser(message)" (click)="openThread(message,index, $event)" class="Answer"><img
+                            src="./img/Answer.svg" alt=""></button>
                     <button (click)="messageService.toggelIsEdit(index, message, 'chat')" class="dots"
                         *ngIf="isUser(message)"><img src="./img/dots.svg" alt=""></button>
 

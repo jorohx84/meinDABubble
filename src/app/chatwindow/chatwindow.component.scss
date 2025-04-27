@@ -290,8 +290,9 @@ section {
 }
 
 .memberlist {
-    top: 170px !important;
-    left: 50px !important;
+    top: 200px !important;
+    left: 80px !important;
+    bottom: unset !important;
     z-index: 10;
     border-radius: 0 30px 30px 30px !important;
 }
@@ -440,7 +441,7 @@ input {
     }
 }
 
-.showMenubar{
+.showMenubar {
     display: flex !important;
 }
 
@@ -606,7 +607,7 @@ input {
         font-size: 16px;
         font-weight: 400;
         width: 100%;
-        word-break: break-all;
+      
     }
 }
 
@@ -714,7 +715,7 @@ textarea:focus {
     border: solid;
     width: 100%;
     max-width: 350px;
-    max-height: 467px;
+    max-height: fit-content;
     border-width: 1px;
     border-color: var(--border-light);
     border-radius: 20px 20px 20px 0px;
@@ -765,8 +766,6 @@ textarea:focus {
     flex-direction: column;
     justify-content: space-between;
     width: calc(100% - 90px);
-
-    height: 151px;
     position: absolute;
     bottom: 300px;
     left: 45px;
@@ -797,8 +796,6 @@ textarea:focus {
 
 .welcomeText {
     width: 100%;
-
-    height: 27px;
 
     a {
         color: var(--purple3);
@@ -893,7 +890,7 @@ textarea:focus {
     display: flex;
     align-items: center;
     width: 100%;
-    max-width: 250px;
+    max-width: fit-content;
     gap: 5px;
 
     >button {
@@ -925,7 +922,7 @@ textarea:focus {
 
     position: absolute;
     right: -180px;
-   top:25px;
+    top: 25px;
     width: 180px;
     height: fit-content;
     border-radius: 0 30px 30px 30px;
@@ -1114,10 +1111,7 @@ textarea:focus {
 }
 
 @media(max-width: 1800px) {
-    .messageFooter {
-        flex-direction: column;
-        align-items: flex-start;
-    }
+   
 }
 
 
@@ -1161,6 +1155,9 @@ textarea:focus {
         justify-content: center;
     }
 
+    .startContainer {
+        bottom: 200px;
+    }
 }
 
 @media(max-width: 1800px) {
@@ -1257,9 +1254,9 @@ textarea:focus {
 
     .addMember {
         display: flex;
-     max-height: 320px;
-
+        max-height: 320px;
         z-index: 1000;
+        position: fixed;
         top: unset;
         right: unset;
         bottom: 0;
@@ -1267,7 +1264,7 @@ textarea:focus {
         max-width: unset;
         border-radius: 30px 30px 0px 0px;
         transform: translateY(100%);
-display: none;
+        display: none;
     }
 
     .lists {
@@ -1281,7 +1278,7 @@ display: none;
         top: unset !important;
         left: 50% !important;
         transform: translateX(-50%) !important;
-        bottom: 170px !important;
+      
         height: 500px !important;
         border-radius: 30px 30px 30px 0px !important;
     }
@@ -1289,14 +1286,19 @@ display: none;
     .iconBar {
         left: 20px !important;
     }
-    .menubar{
+
+    .menubar {
         left: 50%;
         transform: translateX(-50%);
     }
 
-.reactionList{
-    left: 0;
-}
+    .reactionList {
+        left: 0;
+    }
+
+    .startContainer {
+        bottom: 150px;
+    }
 }
 
 @media(max-height: 1000px) {}

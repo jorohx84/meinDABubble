@@ -41,7 +41,7 @@ export class SearchService {
         this.currentList = []
         const INPUT = input.toLocaleLowerCase().trim();
         users.forEach((user: any) => {
-            if (user.name.toLocaleLowerCase().trim().includes(input)) {
+            if (user.name.toLocaleLowerCase().trim().includes(INPUT)) {
                 this.currentList.push(user);
             }
         });

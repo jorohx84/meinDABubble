@@ -1,4 +1,4 @@
-<section >  <!--(click)="reactionService.isReaction=false"  -->
+<section (click)="sharedservice.openSearch=false" >  <!--(click)="reactionService.isReaction=false"  -->
     <div (click)="closeThread()" class="header">
         <img *ngIf="!sharedservice.checkLowerWidth(720)" class="headerLogo" src="./img/1. Logo animation.svg" alt="">
         <div *ngIf="sharedservice.checkLowerWidth(720)" class="devspaceResp" (click)="sharedservice.toogleDevspace()">

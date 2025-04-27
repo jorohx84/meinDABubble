@@ -31,7 +31,8 @@
     </div>
 
     <div class="chat-content">
-        <div *ngFor="let message of currentMessages; let index=index">
+        <div *ngFor="let message of currentMessages; let index=index; let lastMessage=last">
+            <div #lastMessage *ngIf="lastMessage"></div>
             <div class="message">
                 <div (mouseover)="!sharedService.checkLowerWidth(540) ? threadMenuBarIndex = index : null;reactionService.isThreadReaction=false"
                     [ngClass]="{'reverse': index % 2 !== 0}" class="content">
@@ -47,8 +48,8 @@
                         </div>
 
                         <div [ngClass]="{'reverse': index % 2 !== 0}" class="reactions">
-                            <button *ngIf="sharedService.checkLowerWidth(540)" (click)="toggleMenuBar(index)"><img src="./img/addreaction.svg"
-                                    alt=""></button>
+                            <button *ngIf="sharedService.checkLowerWidth(540)" (click)="toggleMenuBar(index)"><img
+                                    src="./img/addreaction.svg" alt=""></button>
                             <div *ngIf="message.reactionLength>0"
                                 (click)="reactionService.findAllReactions(message, currentReciever.id, currentUser.id, 'thread', index)"
                                 class="iconContainer">

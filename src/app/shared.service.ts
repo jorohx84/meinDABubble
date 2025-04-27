@@ -53,6 +53,7 @@ export class SharedService {
     transformSearch: boolean = false;
     editProfile: boolean = false;
     menuBarIndex: number | null = null;
+    openSearch: boolean = false;
     ngOnInit() {
         console.log(window.innerWidth);
 

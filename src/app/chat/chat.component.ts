@@ -60,7 +60,10 @@ export class ChatComponent {
   channels: any[] = [];
   @ViewChild(DevspaceComponent)
   devspaceComponent!: DevspaceComponent;
-
+  // @HostListener('window:scroll', [])
+  // onScroll() {
+  //   this.setViewportHeight();
+  // }
 
   @HostListener('window:resize', [])
   onRezise() {
@@ -98,6 +101,7 @@ export class ChatComponent {
   async ngOnInit() {
     this.setViewportHeight();
     window.addEventListener('focusin', this.handleFocus);
+    // window.addEventListener('scroll', this.setViewportHeight);
     this.loadChannels();
     this.loadUsers();
     this.loadCurrentUser();

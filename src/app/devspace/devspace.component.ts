@@ -166,7 +166,10 @@ export class DevspaceComponent {
 
   showChannelOverlay() {
     this.sharedservice.openOverlayChannel();
-    this.sharedservice.toogleDevspace();
+    if (window.innerWidth < 1050) {
+      this.sharedservice.toogleDevspace();
+    }
+ 
   }
 
   closeThread() {

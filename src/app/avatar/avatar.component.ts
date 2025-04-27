@@ -29,7 +29,17 @@ export class AvatarComponent {
     './img/avatare/avatar6.svg',
   ]
   constructor(public firestore: Firestore) {
-    this.currentUser = this.userservice.user;
+    console.log(this.userservice.user);
+    if (this.userservice.user === undefined) {
+      this.currentUser = this.userservice.user;
+    } else {
+      this.sharedservice.getDataFromLocalStorage('user');
+      this.currentUser = this.sharedservice.data
+      console.log('User aus LS geladen', this.currentUser);
+
+    }
+
+
   }
 
   routeToSignin(path: string) {
@@ -72,6 +82,7 @@ export class AvatarComponent {
         setTimeout(() => {
           this.isCreate = false
         }, 2000);
+       
       })
       .then(() => {
         setTimeout(() => {

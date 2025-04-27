@@ -263,12 +263,14 @@ input::placeholder {
 
 .channelOverlay {
     width: 100vw;
-    height: 100vh;
+    height: 100dvh;
     position: absolute;
     background-color: rgba(0, 0, 0, 0.31);
     display: flex;
     justify-content: center;
     align-items: center;
+    box-sizing: border-box;
+    padding: 20px;
 }
 
 .createChannel {
@@ -570,11 +572,7 @@ cursor: pointer;
         width: 50px;
     }
 
-    .createChannel {
-        height: 100svh;
-        max-height: unset;
-        border-radius: 0;
-    }
+
 }
 
 @media(max-width: 800px) {
@@ -614,6 +612,15 @@ cursor: pointer;
         left: 50% ;
         transform: translate(-50%, -50%);
         height: fit-content;
+    }
+    .createChannel {
+        height: 100dvh;
+        max-height: unset;
+        border-radius: 0;
+    }
+    .channelOverlay{
+        padding: 0;
+        align-items: flex-start;
     }
 }
 

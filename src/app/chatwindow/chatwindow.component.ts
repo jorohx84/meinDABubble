@@ -1,4 +1,4 @@
-import { Component, inject, Injectable, ElementRef, ViewChild, AfterViewInit, AfterViewChecked, ChangeDetectorRef } from '@angular/core';
+import { Component, inject, Injectable, ElementRef, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { SharedService } from '../shared.service';
 import { CommonModule } from '@angular/common';
 import { BehaviorSubject, Subscription } from 'rxjs';
@@ -23,8 +23,8 @@ import { ReactionService } from '../reactions.service';
   templateUrl: './chatwindow.component.html',
   styleUrl: './chatwindow.component.scss'
 })
-export class ChatwindowComponent implements AfterViewChecked {
-  @ViewChild('chatContainer', { static: false }) private chatContainer: ElementRef | undefined;
+export class ChatwindowComponent {
+  @ViewChild('lastMessage', { static: false }) private lastMessageElement?: ElementRef | undefined;
   messageService = inject(MessageService);
   sharedservice = inject(SharedService);
   userService = inject(UserService)
@@ -50,7 +50,7 @@ export class ChatwindowComponent implements AfterViewChecked {
   isYou: boolean = false;
   userID: string = '';
   isSearch: boolean = false;
-  openSearch: boolean = false;
+
   searchInput: string = '';
   searchSubscription: Subscription | null = null;
   loadChannelSubscrition: Subscription | null = null;
@@ -64,9 +64,9 @@ export class ChatwindowComponent implements AfterViewChecked {
   threadLengths: number[] = []; // Array, das die Thread-Längen speichert
   editIndex: number = 0;
 
-  constructor() {
+  constructor(private cdr: ChangeDetectorRef) {
 
-
+    // setTimeout(() => this.scrollToBottom(), 0);
     this.getDataFromDevspace();
     this.loadCurrentWindow();
     //this.sharedservice.getUserFromLocalStorage();
@@ -74,17 +74,15 @@ export class ChatwindowComponent implements AfterViewChecked {
 
   }
   ngAfterViewInit() {
-    this.scrollToBottom();
+    setTimeout(() => this.scrollToBottom(), 0);
   }
-  ngAfterViewChecked() {
-    this.scrollToBottom();  // Hier führst du das Scrollen nach unten durch
-  }
+  // ngAfterViewChecked() {
+  //   this.cdr.detectChanges(); 
+  //   setTimeout(() => this.scrollToBottom(), 0);
+  // }
 
-  scrollToBottom() {
-    if (this.chatContainer && this.chatContainer.nativeElement) {
-      const container = this.chatContainer.nativeElement;
-      container.scrollToBottom = container.scrollHeight;
-    }
+  private scrollToBottom(): void {
+    this.lastMessageElement?.nativeElement.scrollIntoView({ behavior: 'smooth' });
   }
 
   async ngOnInit() {
@@ -92,10 +90,11 @@ export class ChatwindowComponent implements AfterViewChecked {
     await this.loadChannels();
     await this.loadUsers();
     this.loadCurrentWindow();
-
+    setTimeout(() => this.scrollToBottom(), 0);
     this.loadDataSubscription = this.sharedservice.loadChatWindow$.subscribe(() => {
       console.log('arrived');
       console.log(this.currentMessages);
+      this.scrollToBottom();
       /*
       this.currentUser = this.messageService.currentUser;
       this.currentReciever = this.messageService.currentReciever;
@@ -339,6 +338,7 @@ export class ChatwindowComponent implements AfterViewChecked {
     this.isEmpty = false;
     this.message = '';
     this.currentInput = '';
+    this.scrollToBottom();
     event.stopPropagation();
   }
 
@@ -398,7 +398,7 @@ export class ChatwindowComponent implements AfterViewChecked {
   }
 
   showList() {
-    this.openSearch = this.searchService.searchIsOpen;
+    this.sharedservice.openSearch = this.searchService.searchIsOpen;
     this.searchList = this.searchService.currentList;
 
   }
@@ -410,27 +410,27 @@ export class ChatwindowComponent implements AfterViewChecked {
   findMember(index: number) {
     this.searchService.setMember(index);
     this.searchInput = this.searchService.currentMember.name;
-    this.openSearch = false;
+    this.sharedservice.openSearch = false;
   }
   async addPerson() {
-    if (this.searchInput.length>0) {
-      
-    
-    await this.searchService.addMember(this.currentReciever);
-    this.searchInput = '';
-    this.sharedservice.isSearch = false;
-    this.sharedservice.isOverlay = false;
-    await this.loadChannels();
-    const currentChannel = this.channels.find(channel => channel.id === this.currentReciever.id);
-    localStorage.setItem('reciever', JSON.stringify(currentChannel));
-    this.currentReciever = currentChannel;
-    if (this.sharedservice.checkLowerWidth(540)) {
-      console.log('responsive EditChannel');
+    if (this.searchInput.length > 0) {
 
-      this.openEditChannel();
-      this.sharedservice.transformSearch = false;
+
+      await this.searchService.addMember(this.currentReciever);
+      this.searchInput = '';
+      this.sharedservice.isSearch = false;
+      this.sharedservice.isOverlay = false;
+      await this.loadChannels();
+      const currentChannel = this.channels.find(channel => channel.id === this.currentReciever.id);
+      localStorage.setItem('reciever', JSON.stringify(currentChannel));
+      this.currentReciever = currentChannel;
+      if (this.sharedservice.checkLowerWidth(540)) {
+        console.log('responsive EditChannel');
+
+        this.openEditChannel();
+        this.sharedservice.transformSearch = false;
+      }
     }
-  }
   }
 
   openProfile() {

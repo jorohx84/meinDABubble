@@ -8,7 +8,7 @@ import { UserService } from '../user.service';
 import { ChannelService } from '../channel.service';
 import { Firestore, doc, updateDoc, getDocs, onSnapshot, orderBy, query } from '@angular/fire/firestore';
 import { MessageService } from '../message.service';
-import { ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { ReactionService } from '../reactions.service';
 import { addDoc, collection } from 'firebase/firestore';
 @Component({
@@ -18,6 +18,7 @@ import { addDoc, collection } from 'firebase/firestore';
   styleUrl: './thread.component.scss'
 })
 export class ThreadComponent {
+  @ViewChild('lastMessage', { static: false }) private lastMessageElement?: ElementRef | undefined;
   threadSubscription: Subscription | null = null;
   logoutSubscription: Subscription | null = null;
   firestore = inject(Firestore);
@@ -42,7 +43,7 @@ export class ThreadComponent {
   isIconBar: boolean = false;
   threadMenuBarIndex: number | null = null;
 
-  constructor(private cdRef: ChangeDetectorRef) {
+  constructor(private cdr: ChangeDetectorRef) {
 
     this.loadThreadData();
     this.loadThreadMessages();
@@ -54,14 +55,14 @@ export class ThreadComponent {
     // await this.loadUsers();
     //await this.loadChannels();
 
-
+    setTimeout(() => this.scrollToBottom(), 0);
     //this.currentMessages = await this.getThreadData();
     console.log(this.currentMessages);
     this.threadSubscription = this.sharedService.openThread$.subscribe(async (key) => {
       if (key === 'close') {
         this.threadStarts = false;
       } else {
-        await this.startThread()
+        await this.startThread();
       }
 
     })
@@ -77,6 +78,14 @@ export class ThreadComponent {
       this.threadSubscription.unsubscribe();
     }
   }
+
+
+
+  private scrollToBottom(): void {
+    this.lastMessageElement?.nativeElement.scrollIntoView({behavior: 'smooth'});
+  }
+
+
   async startThread() {
     this.threadStarts = true;
     localStorage.setItem('threadStarts', JSON.stringify(this.threadStarts));
@@ -240,7 +249,7 @@ console.log('Daten aus localStorage geladen', this.currentReciever, this.current
     localStorage.setItem('reciever', JSON.stringify(this.currentReciever));
     this.channelService.reloadChannelData(this.currentReciever.id);
 
-
+this.scrollToBottom();
     /*
     localStorage.setItem('reciever', JSON.stringify(this.currentReciever));
     //await this.messageService.updateThreadMessages(this.currentReciever);
