@@ -6,9 +6,10 @@ import { Auth } from '@angular/fire/auth';
 import { UserService } from '../user.service';
 import { Router } from "@angular/router";
 import { SharedService } from '../shared.service';
+import { FooterComponent } from '../footer/footer.component';
 @Component({
   selector: 'app-signin',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, FooterComponent],
   templateUrl: './signin.component.html',
   styleUrl: './signin.component.scss',
 

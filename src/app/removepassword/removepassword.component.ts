@@ -4,10 +4,11 @@ import { FormsModule } from '@angular/forms';
 import { Firestore } from '@angular/fire/firestore';
 import { Auth, sendPasswordResetEmail } from '@angular/fire/auth';
 import { SharedService } from '../shared.service';
+import { FooterComponent } from '../footer/footer.component';
 
 @Component({
   selector: 'app-removepassword',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, FooterComponent],
   templateUrl: './removepassword.component.html',
   styleUrl: './removepassword.component.scss'
 })

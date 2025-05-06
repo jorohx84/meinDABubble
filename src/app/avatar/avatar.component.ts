@@ -6,9 +6,10 @@ import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Firestore, doc, setDoc } from '@angular/fire/firestore';
 import { SharedService } from '../shared.service';
+import { FooterComponent } from '../footer/footer.component';
 @Component({
   selector: 'app-avatar',
-  imports: [CommonModule],
+  imports: [CommonModule, FooterComponent],
   templateUrl: './avatar.component.html',
   styleUrl: './avatar.component.scss'
 })

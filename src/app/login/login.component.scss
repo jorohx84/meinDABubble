@@ -5,6 +5,7 @@ section {
     background-color: var(--bg-color);
     font-family: 'Nunito';
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 
@@ -262,6 +263,10 @@ input:-webkit-autofill {
         transform: translate(0);
     }
 
+}
+
+.footer{
+    margin-top: 30px;
 }
 
 @media(max-width: 670px) {

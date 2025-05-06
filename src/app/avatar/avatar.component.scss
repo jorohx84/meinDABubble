@@ -5,8 +5,13 @@ section {
     background-color: var(--bg-color);
     font-family: 'Nunito';
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+.footer{
+    margin-top: 30px;
 }
 
 .logo {

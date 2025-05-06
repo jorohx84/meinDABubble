@@ -7,11 +7,12 @@ import { signInWithEmailAndPassword, Auth } from '@angular/fire/auth';
 import { UserService } from '../user.service';
 import { Firestore } from '@angular/fire/firestore';
 import { MessageService } from '../message.service';
+import { FooterComponent } from '../footer/footer.component';
 
 
 @Component({
   selector: 'app-login',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, FooterComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
