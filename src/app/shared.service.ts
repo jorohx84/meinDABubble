@@ -54,27 +54,25 @@ export class SharedService {
     editProfile: boolean = false;
     menuBarIndex: number | null = null;
     openSearch: boolean = false;
-    ngOnInit() {
-        console.log(window.innerWidth);
 
+
+    ngOnInit() {
         if (window.innerWidth <= 720) {
             this.resize720 = true;
         }
     }
+
+
     navigateToPath(path: string) {
         this.router.navigate([path]);
     }
+
 
     getUserFromLocalStorage() {
         const storedData = localStorage.getItem('user');
         if (storedData) {
             this.user = JSON.parse(storedData);
-            console.log('Benutzer aus localStorage wiederhergestellt:', this.user);
-
-        } else {
-            console.log('Kein Benutzer im localStorage gefunden');
         }
-
     }
 
     getDataFromLocalStorage(data: any) {
@@ -82,29 +80,25 @@ export class SharedService {
         if (storedData) {
             try {
                 this.data = JSON.parse(storedData);
-                console.log('Daten aus localStorage wiederhergestellt (als JSON):', this.data);
             } catch (e) {
                 this.data = storedData;
-                console.log('Daten aus localStorage wiederhergestellt (als String):', this.data);
             }
             return storedData
         } else {
-            console.log('Keine Daten im localStorage gefunden');
             return null
         }
     }
+
 
     openOverlayChannel() {
         this.openChannelOverlay.next();
     }
 
 
-
     loadChat() {
-        console.log('works');
-
         this.loadChatWindow.next();
     }
+
 
     getReciever(reciever: any, user: any, chat: string) {
         localStorage.setItem('reciever', JSON.stringify(reciever));
@@ -112,45 +106,40 @@ export class SharedService {
         this.chat = chat;
         this.reciever = reciever;
         this.user = user;
-
     }
 
 
 
     setUser(userData: any) {
         this.user = userData;
-        console.log(this.user);
-
     }
+
+
     setReciever(recieverData: any) {
         this.reciever = recieverData;
-        console.log(this.reciever);
-
     }
+
 
     initializeThread(key: string) {
         this.openThread.next(key);
     }
 
-    //openOverlay() {
-    //  this.isOverlay = !this.isOverlay
-    //this.openGeneralOverlay.next();
-    //}
 
     logoutUser() {
         this.logoutObserver.next();
     }
 
+
     profileObserve(key: string) {
         this.profileObserver.next(key);
     }
+
 
     recieverObserve(key: string) {
         this.recieverObserver.next(key);
     }
 
     userObserve() {
-
         this.userObserver.next();
     }
 
@@ -159,24 +148,26 @@ export class SharedService {
         this.closeMember.next();
     }
 
+
     changeAddMember(event: Event) {
         this.isChange = !this.isChange;
         this.isSearch = !this.isSearch;
         this.isOverlay = !this.isOverlay;
-        console.log(this.isChange);
         event.stopPropagation();
     }
+
+
     toggleSearch(event: Event) {
         this.isSearch = !this.isSearch;
         this.isOverlay = !this.isOverlay;
         this.isChange = false;
         event.stopPropagation();
         if (this.checkLowerWidth(540)) {
-
             this.transformSearch = !this.transformSearch
         }
 
     }
+
 
     closeOverlay() {
         this.isChange = false;
@@ -195,10 +186,8 @@ export class SharedService {
     }
 
     closeProfile() {
-        //this.profileObserve('');
         if (this.isRecieverProfile === true) {
             this.isOverlay = false;
-
         }
         this.isRecieverProfile = false;
         this.isMember = false;
@@ -214,7 +203,6 @@ export class SharedService {
         this.isSearch = false;
         this.isChange = false;
         this.isRecieverProfile = true;
-        console.log(receiver);
         this.isMember = true;
         this.currentProfile = receiver;
         this.isLogout = false;
@@ -224,28 +212,28 @@ export class SharedService {
         }
     }
 
+
     toggleLogout() {
         this.isLogout = !this.isLogout;
         this.isOverlay = !this.isOverlay;
-        //this.sharedservice.openOverlay();
     }
+
 
     triggerEditChannel(reciever: any) {
-
-        console.log(reciever);
         this.editObserver.next(reciever);
     }
+
+
     toogleDevspace() {
         this.devSlide = !this.devSlide;
-        localStorage.setItem('devSlide', JSON.stringify(this.devSlide))
-        console.log(this.devSlide);
-        console.log(window.innerWidth);
-
-
+        localStorage.setItem('devSlide', JSON.stringify(this.devSlide));
     }
+
+
     checkLowerWidth(widthToCheck: number) {
         return window.innerWidth < widthToCheck;
     }
+
 
     toggleMenuBar(index: number) {
         if (this.menuBarIndex === index) {
@@ -253,9 +241,6 @@ export class SharedService {
         } else {
             this.menuBarIndex = index
         }
-
-        console.log(this.menuBarIndex);
-
     }
 }
 

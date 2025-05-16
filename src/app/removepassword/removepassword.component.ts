@@ -12,12 +12,15 @@ import { FooterComponent } from '../footer/footer.component';
   templateUrl: './removepassword.component.html',
   styleUrl: './removepassword.component.scss'
 })
+
 export class RemovepasswordComponent {
   input: string = '';
   firestore = inject(Firestore);
   auth = inject(Auth);
   sharedService = inject(SharedService);
   isSend: boolean = false;
+ 
+ 
   reset() {
     if (this.input) {
       const email = this.input;

@@ -43,12 +43,12 @@ export class DevspaceComponent {
   constructor() {
     this.sharedservice.getUserFromLocalStorage();
     this.currentUser = this.sharedservice.user;
-
     this.sharedservice.getDataFromLocalStorage('active');
     this.active = this.sharedservice.data;
     this.sharedservice.getDataFromLocalStorage('directMessages');
     this.message = this.sharedservice.data;
   }
+
 
   async ngOnInit() {
     this.initializedView.emit();
@@ -68,10 +68,7 @@ export class DevspaceComponent {
     this.emptyChannelSubscribtion = this.channelService.loadEmptyChannel$.subscribe(() => {
       this.loadChannels();
     })
-
-
   }
-
 
 
   async loadUsers() {
@@ -82,8 +79,8 @@ export class DevspaceComponent {
     }
   }
 
-  async loadChannels() {
 
+  async loadChannels() {
     try {
       const channelData = await this.channelService.getChannels();
 
@@ -97,8 +94,6 @@ export class DevspaceComponent {
 
 
   async openChannel(index: any) {
-    console.log(index);
-    //hier mus eine funktion im messagesservice aufgerufen werden der die akutellen messages lädt und im ls speichert
     this.currentReceiver = this.channels[index];
     this.currentChat = 'channel';
     this.sharedservice.getReciever(this.currentReceiver, this.currentUser, this.currentChat);
@@ -107,13 +102,10 @@ export class DevspaceComponent {
     if (this.sharedservice.checkLowerWidth(1050)) {
       this.sharedservice.toogleDevspace();
     }
-
   }
 
-  async openPersonalChat(index: any) {
-    console.log(index);
 
-    //hier mus eine funktion im messagesservice aufgerufen werden der die akutellen messages lädt und im ls speichert
+  async openPersonalChat(index: any) {
     this.currentReceiver = this.users[index];
     this.currentChat = 'user';
     this.sharedservice.getReciever(this.currentReceiver, this.currentUser, this.currentChat);
@@ -124,6 +116,7 @@ export class DevspaceComponent {
     }
   }
 
+
   openNewMessage() {
     this.currentChat = 'new';
     this.sharedservice.getReciever(null, this.currentUser, this.currentChat);
@@ -131,74 +124,54 @@ export class DevspaceComponent {
     this.sharedservice.loadChat();
   }
 
+
   toggleActive() {
     this.active = !this.active;
     localStorage.setItem('active', JSON.stringify(this.active));
   }
+
 
   toggleMessage() {
     this.message = !this.message;
     localStorage.setItem('directMessages', JSON.stringify(this.message));
   }
 
+
   isOpen() {
     return this.message === true;
 
   }
 
+
   isActive() {
     return this.active === true;
   }
-  /*
-    openWindow(window: string) {
-      this.userService.loadComponent(window);
-    }
-  
-    openDropdown() {
-      if (this.userService.channelType === 'channel') {
-        this.active = true;
-      }
-      if (this.userService.channelType === 'direct') {
-        this.message = true;
-      }
-    }
-      */
+
 
   showChannelOverlay() {
     this.sharedservice.openOverlayChannel();
     if (window.innerWidth < 1050) {
       this.sharedservice.toogleDevspace();
     }
- 
   }
+
 
   closeThread() {
     this.sharedservice.initializeThread('close')
   }
 
+
   openChats(index: number) {
     const searchedObject = this.searchService.currentList[index];
-    console.log(searchedObject);
     const searchID = searchedObject.id;
-    console.log(searchID);
-
-
     if (this.searchService.isChannel === true) {
       const currentIndex = this.channels.findIndex((object: any) => object.id === searchID);
-      console.log(currentIndex);
       this.openChannel(currentIndex);
     } else {
-
       const currentIndex = this.users.findIndex((object: any) => object.id === searchID);
-      console.log(currentIndex);
       this.openPersonalChat(currentIndex);
     }
     this.sharedservice.devSlide = true;
   }
 
-
-  test() {
-    console.log('juhu es funtkioniert');
-
-  }
 }

@@ -22,29 +22,24 @@ export class UserService {
 
 
     getUser(): User {
-        console.log(this.user);
-        
         return this.user;
     }
 
+
     setUser(user: any) {
         this.user = user;
-        console.log(this.user);
-
     }
+
 
     async setOnlineStatus(status: string) {
         const currentUser = this.getUser();
-        console.log(currentUser);
         if (status === 'login') {
             currentUser.online = true;
         }
         if (status === 'logout') {
             currentUser.online = false;
         }
-
         await this.updateOnlineStatus(currentUser);
-
     }
 
 
@@ -57,19 +52,15 @@ export class UserService {
         }
     }
 
+
     setCurrentUser() {
         onAuthStateChanged(this.auth, (user) => {
             if (user) {
-                this.user = user;
-                console.log('User ist eingeloggt', this.user);
-                
+                this.user = user;            
             } else {
                 this.user = new User(null);
-                console.log('User ist ausgeloggt');
                 localStorage.removeItem('user');
             }
-
-
         });
     }
 
@@ -88,28 +79,19 @@ export class UserService {
         }
     }
 
-    async findCurrentUser(id: string) {
-        console.log(id);
 
+    async findCurrentUser(id: string) {
         this.users = await this.getUsers();
         const user = this.users.find(user => user.id === id);
         if (user) {
-            
             this.userSubject.next(user);
-
             localStorage.setItem('user', JSON.stringify(user));
             return user
         }
     }
 
 
-
-
-
-
     getCurrentUser() {
-        console.log(this.userSubject.value);
-        
         return this.userSubject.value
     }
 
@@ -118,7 +100,6 @@ export class UserService {
         const currentUser = await this.findCurrentUser(this.user.uid);
         const loginTime: string = new Date().toISOString();
         const userDocRef = doc(this.firestore, `users/${currentUser.id}`)
-        console.log(userDocRef);
         await updateDoc(userDocRef, {
             login: loginTime,
         })

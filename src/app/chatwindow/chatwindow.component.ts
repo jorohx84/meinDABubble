@@ -61,75 +61,46 @@ export class ChatwindowComponent {
   searchList: any[] = [];
   isHeaderSearch: boolean = false;
   currentInput: string = '';
-  threadLengths: number[] = []; // Array, das die Thread-Längen speichert
+  threadLengths: number[] = [];
   editIndex: number = 0;
 
   constructor(private cdr: ChangeDetectorRef) {
-
-    // setTimeout(() => this.scrollToBottom(), 0);
     this.getDataFromDevspace();
     this.loadCurrentWindow();
-    //this.sharedservice.getUserFromLocalStorage();
-    //this.userID = this.sharedservice.user.uid;
-
   }
+
+
   ngAfterViewInit() {
     setTimeout(() => this.scrollToBottom(), 0);
   }
-  // ngAfterViewChecked() {
-  //   this.cdr.detectChanges(); 
-  //   setTimeout(() => this.scrollToBottom(), 0);
-  // }
+
 
   private scrollToBottom(): void {
     this.lastMessageElement?.nativeElement.scrollIntoView({ behavior: 'smooth' });
   }
 
   async ngOnInit() {
-
     await this.loadChannels();
     await this.loadUsers();
     this.loadCurrentWindow();
     setTimeout(() => this.scrollToBottom(), 0);
     this.loadDataSubscription = this.sharedservice.loadChatWindow$.subscribe(() => {
-      console.log('arrived');
-      console.log(this.currentMessages);
       this.scrollToBottom();
-      /*
-      this.currentUser = this.messageService.currentUser;
-      this.currentReciever = this.messageService.currentReciever;
-      this.currentChat = this.messageService.currentChat;
-      console.log(this.currentUser);
-      console.log(this.currentReciever);
-      this.messageService.getCurrentMessages(this.currentUser, this.currentReciever, this.currentChat);
-     
-      this.currentMessages = this.messageService.currentMessages;
-      this.sortMessages();
-      this.checkMessages();
-*/
-
       this.getDataFromDevspace();
       this.checkReciever();
       this.loadCurrentWindow();
-
-
       this.currentMessages = this.messageService.currentMessages;
-
     });
+
     this.searchSubscription = this.searchService.openSearchList$.subscribe((key) => {
       if (key = 'new') {
         this.isChannelList = this.searchService.isChannel;
-
-
       }
       this.showList();
     });
 
     this.loadChannelSubscrition = this.channelService.reloadChannel$.subscribe(async () => {
-
       await this.reloadChannels();
-
-
     });
 
     this.memberSubscription = this.sharedservice.closeMember$.subscribe(() => {
@@ -165,10 +136,7 @@ export class ChatwindowComponent {
     this.searchService.getCurrentList(this.currentInput, this.users, this.channels);
     this.isClicked = this.searchService.isSearch;
     this.isHeaderSearch = this.searchService.isSearch
-
     this.currentList = this.searchService.currentList;
-
-
   }
 
   toggelFunction(index: number) {
@@ -182,7 +150,6 @@ export class ChatwindowComponent {
       localStorage.setItem('reciever', JSON.stringify(this.currentReciever));
       this.loadMessages();
       this.loadCurrentWindow();
-
       localStorage.setItem('chat', this.currentChat);
     } else {
       this.getReciever(index);
@@ -228,13 +195,7 @@ export class ChatwindowComponent {
       this.currentChat = 'new';
       localStorage.setItem('chat', this.currentChat);
     }
-    console.log(this.currentReciever);
-
-
-    console.log(this.currentMessages);
-
     this.loadMessages();
-    //loadReactions()
   }
 
 
@@ -263,12 +224,9 @@ export class ChatwindowComponent {
   getList() {
     const containsHash = this.message.includes('#');
     const containsAt = this.message.includes('@');
-
     this.isClicked = containsHash || containsAt;
     this.isChannelList = containsHash;
     const memberList: any = this.getcurrentUserList();
-    console.log(memberList);
-
     this.currentList = containsHash ? this.channels : containsAt ? memberList : [];
 
     // Falls weder # noch @ enthalten sind, isClicked bleibt false und currentList bleibt leer.
@@ -277,7 +235,6 @@ export class ChatwindowComponent {
     }
   }
   getcurrentUserList() {
-    console.log(this.isChannel);
     if (this.isChannel) {
       return this.currentReciever.members;
     } else {
@@ -299,15 +256,11 @@ export class ChatwindowComponent {
   toggleList(event: Event) {
     this.isChannelList = false;
     this.isClicked = !this.isClicked;
-
     if (this.isChannel) {
-      console.log('isChannel');
       this.currentList = this.currentReciever.members;
     } else {
-      console.log('isChat');
       this.currentList = this.users;
     }
-
     event.stopPropagation();
   }
 
@@ -383,7 +336,6 @@ export class ChatwindowComponent {
   }
 
   async openThread(message: any, index: number, event: Event) {
-    console.log(message);
     this.sharedservice.setReciever(this.currentReciever);
     this.sharedservice.setUser(this.currentUser);
     await this.messageService.setMessage(message, index, this.currentReciever);
@@ -425,8 +377,6 @@ export class ChatwindowComponent {
       localStorage.setItem('reciever', JSON.stringify(currentChannel));
       this.currentReciever = currentChannel;
       if (this.sharedservice.checkLowerWidth(540)) {
-        console.log('responsive EditChannel');
-
         this.openEditChannel();
         this.sharedservice.transformSearch = false;
       }
@@ -434,13 +384,11 @@ export class ChatwindowComponent {
   }
 
   openProfile() {
-    //this.sharedservice.openOverlay();
     this.sharedservice.isProfileOpen = true;
     this.sharedservice.isReceiver = true;
     this.sharedservice.isRecieverProfile = true;
     this.sharedservice.currentProfile = this.currentReciever;
     this.sharedservice.isOverlay = true;
-    //this.sharedservice.profileObserve('receiver');
     this.sharedservice.isMember = true;
   }
 
@@ -450,11 +398,5 @@ export class ChatwindowComponent {
     this.sharedservice.isEdit = true;
     this.sharedservice.triggerEditChannel(this.currentReciever);
   }
-  /*
-    toggelIsEdit(index: number) {
-      this.editIndex = index;
-      this.messageService.isEdit = !this.messageService.isEdit;
-    }
-      */
 
 }

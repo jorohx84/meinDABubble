@@ -47,7 +47,6 @@ export class ChatComponent {
   isOverlay: boolean = false;
   channelName: string = '';
   channelDescription: string = '';
-  //private overlaySubscription: Subscription | null = null;
   private profileSubscription: Subscription | null = null;
   private userSubscription: Subscription | null = null;
   isProfileOpen: boolean = false;
@@ -60,10 +59,7 @@ export class ChatComponent {
   channels: any[] = [];
   @ViewChild(DevspaceComponent)
   devspaceComponent!: DevspaceComponent;
-  // @HostListener('window:scroll', [])
-  // onScroll() {
-  //   this.setViewportHeight();
-  // }
+
 
   @HostListener('window:resize', [])
   onRezise() {
@@ -101,17 +97,12 @@ export class ChatComponent {
   async ngOnInit() {
     this.setViewportHeight();
     window.addEventListener('focusin', this.handleFocus);
-    // window.addEventListener('scroll', this.setViewportHeight);
     this.loadChannels();
     this.loadUsers();
     this.loadCurrentUser();
     this.channelSubscription = this.sharedservice.openChannelOverlay$.subscribe(() => {
       this.toggleChannelOverlay();
     })
-
-    //  this.overlaySubscription = this.sharedservice.openGeneralOverlay$.subscribe(() => {
-    //  this.isOverlay = !this.isOverlay;
-    //})
 
     this.profileSubscription = this.sharedservice.profileObserver$.subscribe((key) => {
       this.loadProfile(key);
@@ -132,6 +123,8 @@ export class ChatComponent {
     })
 
   }
+
+
   handleFocus = (e: FocusEvent): void => {
     const target = e.target as HTMLElement;
     if (target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement || target.isContentEditable) {
@@ -156,6 +149,7 @@ export class ChatComponent {
 
   }
 
+
   async loadUsers() {
     try {
       this.users = await this.userService.getUsers();
@@ -164,8 +158,8 @@ export class ChatComponent {
     }
   }
 
-  async loadChannels() {
 
+  async loadChannels() {
     try {
       const channelData = await this.channelService.getChannels();
 
@@ -189,15 +183,11 @@ export class ChatComponent {
     }
   }
 
+
   loadCurrentUser() {
     this.currentUser = this.userservice.getCurrentUser();
-
-
     if (this.currentUser) {
-
-
       console.log('user wurde direkt geladen', this.currentUser);
-
     } else {
       this.sharedservice.getUserFromLocalStorage();
       this.currentUser = this.sharedservice.user
@@ -212,10 +202,10 @@ export class ChatComponent {
     }
   }
 
+
   toggleChannelOverlay() {
     this.showChannel = !this.showChannel;
   }
-
 
 
   toggleProfile() {
@@ -226,14 +216,13 @@ export class ChatComponent {
 
 
   async createChannel() {
-    console.log(this.channelName);
-
     if (!this.channelName) { return }
     const firstMember = this.getMember();
     const newChannel = new Channel(this.channelName, this.channelDescription, this.currentUser.name, this.currentUser.id, [firstMember], [], new Date().toISOString());
     await this.addChannelToFirestore(newChannel);
 
   }
+
 
   async addChannelToFirestore(newChannel: any) {
     try {
@@ -255,6 +244,7 @@ export class ChatComponent {
     }
   }
 
+
   resetChannelWindowAndReload() {
     this.toggleChannelOverlay();
     this.channelName = '';
@@ -263,10 +253,10 @@ export class ChatComponent {
   }
 
 
-
   reloadChannels(newChannelID: any) {
     this.channelService.reloadChannelData(newChannelID);
   }
+
 
   getMember() {
     const member = {
@@ -279,19 +269,14 @@ export class ChatComponent {
     return member
   }
 
-  async logoutUser() {
 
+  async logoutUser() {
     await this.userservice.setOnlineStatus('logout');
     await signOut(this.auth);
     this.emptyLogalStorage();
     this.sharedservice.toggleLogout();
-    //  setTimeout(() => {
     this.sharedservice.navigateToPath('/login');
-    // }, 1000);
-
   }
-
-
 
 
   emptyLogalStorage() {
@@ -305,23 +290,20 @@ export class ChatComponent {
     this.sharedservice.initializeThread('close');
   }
 
+
   closeThread() {
     this.threadIsOpen = false;
   }
 
+
   loadChatWindow(index: number) {
     const searchedObject = this.searchService.currentList[index];
-    console.log(searchedObject);
     const searchID = searchedObject.id;
-    console.log(searchID);
     if (this.searchService.isChannel === true) {
       const currentIndex = this.channels.findIndex((object: any) => object.id === searchID);
-      console.log(currentIndex);
       this.devspaceComponent.openChannel(currentIndex);
     } else {
-
       const currentIndex = this.users.findIndex((object: any) => object.id === searchID);
-      console.log(currentIndex);
       this.devspaceComponent.openPersonalChat(currentIndex);
     }
     this.searchService.isChatSearch = false

@@ -32,8 +32,6 @@ export class LoginComponent {
   async login() {
 
     if (this.guest === false) {
-      console.log('login erfolgreich');
-
       try {
         await signInWithEmailAndPassword(this.auth, this.user.email, this.user.password);
         this.userservice.setOnlineStatus('login');
@@ -44,7 +42,7 @@ export class LoginComponent {
         }, 1000);
 
       } catch (error) {
-        console.log(error);
+        console.error(error);
 
       }
     }
@@ -61,8 +59,6 @@ export class LoginComponent {
     const logo = document.getElementById('logoSmall');
     const logoDiv = document.getElementById('logoDiv');
     setTimeout(() => {
-      console.log('hallo');
-
       logoContainer?.classList.add('moveLeft');
     }, 1000);
     setTimeout(() => {
@@ -83,23 +79,16 @@ export class LoginComponent {
 
   guestLogin() {
     this.guest = true;
-    console.log(this.guest);
     const guestID = this.messageService.generateFirestoreID();
-    console.log(guestID);
-
     const currentUser = {
       name: 'Gast',
       online: true,
       avatar: './img/avatare/avatar2.svg',
       id: guestID,
     }
-
-    console.log(currentUser);
     localStorage.setItem('user', JSON.stringify(currentUser));
     setTimeout(() => {
       this.sharedservice.navigateToPath('/chat');
     }, 1000);
   }
-
-
 }

@@ -33,13 +33,9 @@ export class SigninComponent {
 
   onSubmit(useraccount: NgForm) {
     if (this.isChecked)
-      console.log(this.user);
     this.userservice.setUser(this.user)
-    console.log('Validierung erfolgreich');
     localStorage.setItem('user', JSON.stringify(this.user));
     this.router.navigate(['/avatar']);
-
-
   }
 
 

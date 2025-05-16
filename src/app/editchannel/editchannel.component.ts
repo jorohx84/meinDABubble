@@ -26,22 +26,18 @@ export class EditchannelComponent {
   inputName: string = '';
   inputDescription: string = '';
   channels: any[] = [];
+
   constructor() {
     this.sharedService.getDataFromLocalStorage('reciever');
     this.currentReciever = this.sharedService.data;
     this.sharedService.getDataFromLocalStorage('user');
     this.currentUser = this.sharedService.data
-    console.log(this.currentReciever);
-    console.log(this.currentUser);
-
-
   }
 
 
   ngOnInit() {
     this.editSubscription = this.sharedService.editObserver$.subscribe((reciever: any) => {
       this.currentReciever = reciever;
-      console.log(this.currentReciever);
     })
   }
 
@@ -54,6 +50,7 @@ export class EditchannelComponent {
     }
 
   }
+
 
   async saveEdit(key: string, input: string) {
     const channelDocRef = doc(this.firestore, `channels/${this.currentReciever.id}`);
@@ -70,14 +67,15 @@ export class EditchannelComponent {
     this.sharedService.isOverlay = false;
   }
 
+
   async saveChannelName(input: string, ref: any) {
-    console.log(input);
     await updateDoc(ref, {
       name: input,
     })
   }
+
+
   async saveChannelDescription(input: string, ref: any) {
-    console.log(input);
     await updateDoc(ref, {
       description: input,
     })
@@ -103,7 +101,6 @@ export class EditchannelComponent {
   }
 
   async updateData(members: any[], ref: any, member: any) {
-
     if (members.length === 0) {
       await this.deleteChannel(ref);
     } else {
@@ -112,7 +109,6 @@ export class EditchannelComponent {
       }
       await this.updateMembers(members, ref);
     }
-
     await this.reloadChannelData();
   }
 
@@ -120,7 +116,6 @@ export class EditchannelComponent {
   async deleteChannel(ref: any) {
     try {
       await deleteDoc(ref);
-      console.log('Channel erfolgreich gelöscht');
     } catch (error) {
       console.error('Fehler beim Löschen des Channels:', error);
     }
@@ -130,8 +125,6 @@ export class EditchannelComponent {
 
   async reloadChannelData() {
     await this.loadChannels();
-    console.log(this.channels.length);
-
     if (this.channels.length > 0) {
       const newChannel = this.channels[0];
       this.channelService.reloadChannelData(newChannel.id);

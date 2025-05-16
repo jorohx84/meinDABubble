@@ -17,8 +17,6 @@ export class IntroComponent {
   logoAnimation() {
     const logoContainer = document.getElementById('logoContainer');
     setTimeout(() => {
-      console.log('hallo');
-
       logoContainer?.classList.add('moveLeft');
     }, 1000);
 

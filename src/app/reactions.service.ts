@@ -34,6 +34,8 @@ export class ReactionService {
     reactionIndex: number = 0;
     messageObject: any;
     currentReaction: any;
+
+
     async addReaction(icon: string, message: any, user: any, reciever: any, reactionType: string, chatKey: string) {
         const messageID = message.id;
         const reactor = user;
@@ -74,7 +76,6 @@ export class ReactionService {
         const channelReactionDocRef = collection(this.firestore, `channels/${recieverID}/messages/${messageID}/reactions`);
         const duplicate = await this.checkDuplikate(channelReactionDocRef, user.id, reactionType, recieverID, message.id, '', currentChat, chatKey);
         if (duplicate) {
-            console.log('Duplikat');
             return
         }
         await addDoc(channelReactionDocRef, reaction);
@@ -85,11 +86,9 @@ export class ReactionService {
 
     async addUserReaction(icon: string, message: any, user: any, messageID: string, recieverID: string, currentChat: string, reaction: any, reactionType: string, chatKey: string) {
         const firestoreID = this.messageService.generateFirestoreID();
-        console.log(firestoreID);
         const channelReactionDocRef = collection(this.firestore, `users/${user.id}/messages/${messageID}/reactions`);
         const duplicate = await this.checkDuplikate(channelReactionDocRef, user.id, reactionType, recieverID, message.id, '', currentChat, chatKey);
         if (duplicate) {
-            console.log('Duplikat');
             return
         }
         await this.saveChatReactions(user.id, messageID, reaction, firestoreID, icon, chatKey, currentChat);
@@ -106,7 +105,6 @@ export class ReactionService {
         const threadReactionDocRef = collection(this.firestore, `channels/${recieverID}/messages/${chatMessageID}/thread/${threadID}/reactions`);
         const duplicate = await this.checkDuplikate(threadReactionDocRef, user.id, reactionType, recieverID, chatMessageID, threadID, currentChat, chatKey);
         if (duplicate) {
-            console.log('Duplikat');
             return
         }
         await addDoc(threadReactionDocRef, reaction);
@@ -121,7 +119,6 @@ export class ReactionService {
     }
 
     getReactionObject(reactor: any, icon: string, reactionType: string) {
-        console.log(reactor);
         return {
             name: reactor.name,
             reactorID: reactor.id,
@@ -136,13 +133,10 @@ export class ReactionService {
             const reactions = await this.mapDocs(docRef);
             const duplicate = await this.isDuplikate(reactions, userID, type, recieverID, chatMessageID, threadID, currentChat, chatKey);
             if (duplicate) {
-                console.log('Duplikat', duplicate);
                 return true
             }
-            console.log('kein Duplikat', duplicate);
             return false;
         }
-        console.log('kein User oder DocRef ');
         return true
     }
 
@@ -151,13 +145,9 @@ export class ReactionService {
     async isDuplikate(reactions: any[], userID: string, type: string, recieverID: string, chatMessageID: string, threadID: string, currentChat: string, chatKey: string) {
         const duplicate = reactions.find(reaction => reaction.reactorID === userID);
         if (duplicate) {
-            console.log('Es wurde bereits reagiert', duplicate.docID);
             if (duplicate.type !== type) {
-                console.log('type stimmt nicht überein', type);
                 await this.updateReaction(recieverID, chatMessageID, threadID, currentChat, chatKey, userID, duplicate);
-            } else {
-                console.log('type stimmt überein', type);
-            }
+            } 
             return true
         }
         return false
@@ -235,7 +225,6 @@ export class ReactionService {
         try {
             const querySnapshot = await getDocs(docRef);
             const reactionCount = querySnapshot.size;
-            console.log('Anzahl der Reaktionen:', reactionCount);
             return reactionCount
         } catch (error) {
             console.error('Fehler beim Abrufen der Reaktionen:', error);
@@ -287,12 +276,9 @@ export class ReactionService {
 
     async getCurrentReciever(recieverID: string) {
         const channelData = await this.channelService.getChannels();
-        console.log(channelData);
         channelData.forEach(channel => {
             if (channel.id === recieverID) {
                 this.reciever = channel;
-                console.log(this.reciever);
-
             }
         })
     }

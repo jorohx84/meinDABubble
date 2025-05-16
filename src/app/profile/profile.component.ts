@@ -16,30 +16,26 @@ export class ProfileComponent {
   sharedService = inject(SharedService);
   userService = inject(UserService);
   currentProfile: any;
- 
+
   recieverSubscription: Subscription | null = null;
   isEdit: boolean = false;
   input: string = '';
   constructor() { }
 
   ngOnInit() {
-
     this.recieverSubscription = this.sharedService.recieverObserver$.subscribe(() => {
       this.currentProfile = this.sharedService.currentProfile;
-      
     })
   }
 
 
-
-
-
-  editProfile(){
-this.isEdit=!this.isEdit;
+  editProfile() {
+    this.isEdit = !this.isEdit;
   }
 
-  closeEdit(){
-    this.isEdit=false;
+  
+  closeEdit() {
+    this.isEdit = false;
   }
 
 
@@ -52,8 +48,8 @@ this.isEdit=!this.isEdit;
     this.sharedService.currentProfile = this.currentProfile;
     this.sharedService.userObserve();
     localStorage.setItem('user', JSON.stringify(this.currentProfile));
-    this.input=''
-    this.isEdit=false;
-  
+    this.input = ''
+    this.isEdit = false;
+
   }
 }

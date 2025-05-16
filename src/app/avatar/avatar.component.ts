@@ -29,37 +29,34 @@ export class AvatarComponent {
     './img/avatare/avatar5.svg',
     './img/avatare/avatar6.svg',
   ]
+
+
   constructor(public firestore: Firestore) {
-    console.log(this.userservice.user);
     if (this.userservice.user === undefined) {
       this.currentUser = this.userservice.user;
     } else {
       this.sharedservice.getDataFromLocalStorage('user');
       this.currentUser = this.sharedservice.data
-      console.log('User aus LS geladen', this.currentUser);
-
     }
-
-
   }
 
   routeToSignin(path: string) {
     this.sharedservice.navigateToPath(path)
   }
 
+
   selectAvatar(path: string, index: number) {
     this.image = path;
     this.currentUser.avatar = this.image;
-    console.log(this.currentUser);
     this.checkIndex(index)
   }
+
+
   checkIndex(index: number) {
-
     this.avatarIndex = index;
-    console.log(this.avatarIndex);
-
-
   }
+
+
   async createUser() {
     await createUserWithEmailAndPassword(this.auth, this.currentUser.email, this.currentUser.password)
       .then((userCredential) => {

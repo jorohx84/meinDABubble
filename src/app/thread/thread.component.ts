@@ -44,20 +44,11 @@ export class ThreadComponent {
   threadMenuBarIndex: number | null = null;
 
   constructor(private cdr: ChangeDetectorRef) {
-
     this.loadThreadData();
     this.loadThreadMessages();
-
-    //this.threadStarts = false;
-    // localStorage.setItem('threadStarts', JSON.stringify(this.threadStarts));
   }
   async ngOnInit() {
-    // await this.loadUsers();
-    //await this.loadChannels();
-
     setTimeout(() => this.scrollToBottom(), 0);
-    //this.currentMessages = await this.getThreadData();
-    console.log(this.currentMessages);
     this.threadSubscription = this.sharedService.openThread$.subscribe(async (key) => {
       if (key === 'close') {
         this.threadStarts = false;
@@ -73,6 +64,8 @@ export class ThreadComponent {
     });
 
   }
+
+
   ngOnDestroy() {
     if (this.threadSubscription) {
       this.threadSubscription.unsubscribe();
@@ -80,22 +73,19 @@ export class ThreadComponent {
   }
 
 
-
   private scrollToBottom(): void {
-    this.lastMessageElement?.nativeElement.scrollIntoView({behavior: 'smooth'});
+    this.lastMessageElement?.nativeElement.scrollIntoView({ behavior: 'smooth' });
   }
 
 
   async startThread() {
     this.threadStarts = true;
     localStorage.setItem('threadStarts', JSON.stringify(this.threadStarts));
-
-    //await this.loadUsers();
-    //await this.loadChannels();
     this.loadThreadData();
     this.loadThreadMessages();
-    console.log('openThread ausgelöst!');
+
   }
+
 
   loadThreadData() {
     this.sharedService.getDataFromLocalStorage('threadStarts');
@@ -105,13 +95,8 @@ export class ThreadComponent {
     } else {
       this.reloadDataFromLocalStorage();
     }
-    if (this.currentReciever) {
-      //  this.currentReciever = await this.channelService.setCurrentReciever(this.currentReciever.id);
-      //this.messageService.getThreadData(this.currentReciever);
-    }
-
-
   }
+
 
   async setData() {
     this.currentMessages = this.messageService.currentThreadMessages;
@@ -120,31 +105,10 @@ export class ThreadComponent {
     this.currentIndex = this.messageService.messageIndex;
     this.currentUser = this.sharedService.user;
     this.currentReciever = this.sharedService.reciever;
-    console.log('Daten direkt geladen', this.currentReciever, this.currentUser);
   }
 
 
   reloadDataFromLocalStorage() {
-    /*
-   // Definiere die Keys und die entsprechenden Variablen, die gesetzt werden sollen
-const keysToLoad = [
- { key: 'threadMessages', variable: 'currentMessages' },
- { key: 'user', variable: 'currentUser' },
- { key: 'reciever', variable: 'currentReciever' },
- { key: 'message', variable: 'message' },
- { key: 'messageIndex', variable: 'currentIndex' },
- { key: 'messageID', variable: 'messageID' },
-];
-
-// Iteriere durch die Keys und lade die Daten
-keysToLoad.forEach(({ key, variable }) => {
- this.sharedService.getDataFromLocalStorage(key);
- this[variable] = this.sharedService.data;
-});
-
-console.log('Daten aus localStorage geladen', this.currentReciever, this.currentUser);
-
-*/
     this.sharedService.getDataFromLocalStorage('threadMessages');
     this.sharedService.data;
     this.sharedService.getDataFromLocalStorage('user');
@@ -157,8 +121,6 @@ console.log('Daten aus localStorage geladen', this.currentReciever, this.current
     this.currentIndex = this.sharedService.data
     this.sharedService.getDataFromLocalStorage('messageID');
     this.messageID = this.sharedService.data;
-    console.log('Daten aus localStorage geladen', this.currentReciever, this.currentUser);
-
   }
 
 
@@ -167,18 +129,12 @@ console.log('Daten aus localStorage geladen', this.currentReciever, this.current
       const currentChannel = this.currentList[index];
       this.threadMessage = this.threadMessage + currentChannel?.name;
     } else {
-
       const currentReciever = this.currentReciever.members[index];
-      console.log(currentReciever);
-      console.log(this.threadMessage);
-
       this.threadMessage = this.threadMessage + ' ' + '@' + currentReciever?.name;
     }
     this.isClicked = false;
     event.stopPropagation();
   }
-
-
 
 
   getList(event: Event) {
@@ -192,6 +148,7 @@ console.log('Daten aus localStorage geladen', this.currentReciever, this.current
     }
     event.stopPropagation();
   }
+
 
   async loadUsers() {
     try {
@@ -215,80 +172,32 @@ console.log('Daten aus localStorage geladen', this.currentReciever, this.current
     this.currentList = this.users;
     event.stopPropagation();
   }
-  /*
-    async sendThreadMessage() {
-      const messageObject = new Message(this.currentUser.name || '', this.currentUser.avatar || '', this.threadMessage, this.currentUser.id, this.message.from);
-      const messageData = this.messageService.createMessageData(messageObject);
-      const THREAD = this.currentReciever.messages[this.currentIndex].thread;
-      THREAD.push(messageData);
-      localStorage.setItem('reciever', JSON.stringify(this.currentReciever));
-      await this.messageService.updateThreadMessages(this.currentReciever);
-      this.message = this.currentReciever.messages[this.currentIndex];
-      localStorage.setItem('message', JSON.stringify(this.message));
-      this.threadMessage = '';
-      this.channelService.reloadChannelData(this.currentReciever.id);
-    }
-  */
+
 
   async sendThreadMessage() {
     const messageObject = new Message(this.currentUser.name || '', this.currentUser.avatar || '', this.threadMessage, this.currentUser.id, this.message.from);
     const messageData = this.messageService.createMessageData(messageObject);
-    //const THREAD = this.currentReciever.messages[this.currentIndex].thread;
-    //const messagesDocRef = collection(this.firestore, `channels/${this.currentReciever.id}/messages/`);
-
     this.getMessageID();
-
     const messagesDocRef = collection(this.firestore, `channels/${this.currentReciever.id}/messages/${this.messageID}/thread`);
-    console.log(messagesDocRef);
     await addDoc(messagesDocRef, messageData);
-
     this.loadThreadMessages();
     await this.saveThreadLenght();
     this.threadMessage = '';
-
     localStorage.setItem('reciever', JSON.stringify(this.currentReciever));
     this.channelService.reloadChannelData(this.currentReciever.id);
-
-this.scrollToBottom();
-    /*
-    localStorage.setItem('reciever', JSON.stringify(this.currentReciever));
-    //await this.messageService.updateThreadMessages(this.currentReciever);
-    this.message = this.currentReciever.messages[this.currentIndex];
-    localStorage.setItem('message', JSON.stringify(this.message));
-    this.threadMessage = '';
-    
-  */
+    this.scrollToBottom();
   }
+
 
   getMessageID() {
     if (this.messageService.message) {
       this.messageID = this.messageService.message.id
-      console.log('messageID geladen');
     } else {
       this.sharedService.getDataFromLocalStorage('messageID');
       this.messageID = this.sharedService.data;
-      console.log('messageID aus dem localStorage geladen');
-
     }
-    console.log(this.messageID);
-
   }
-  /*
-    async loadChannelData() {
-      try {
-        const messagesCollection = collection(this.firestore, `channels/${this.currentReciever.id}/messages/`);
-        const userSnapshot = await getDocs(messagesCollection);
-        return userSnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-      } catch (error) {
-        console.error('Error loading users:', error);
-        throw error;
-      }
-  
-    }
-  */
+
 
   async loadThreadMessages() {
     this.getMessageID()
@@ -300,8 +209,6 @@ this.scrollToBottom();
           id: doc.id,
           ...doc.data(),
         }));
-        console.log('Nachrichten nach Zeit sortiert:', messages);
-
         this.currentMessages = messages;
         localStorage.setItem('threadMessages', JSON.stringify(messages));
 
@@ -315,15 +222,8 @@ this.scrollToBottom();
 
 
   async saveThreadLenght() {
-    console.log(this.messageID);
-    console.log(this.message);
     const lastIndex = this.currentMessages.length - 1;
-    console.log(lastIndex);
     const lastMessage = this.currentMessages[lastIndex];
-    console.log(lastMessage);
-    console.log(lastMessage.time);
-
-
     const ref = doc(this.firestore, `channels/${this.currentReciever.id}/messages/${this.messageID}`);
     await updateDoc(ref, {
       threadLength: this.currentMessages.length,
@@ -331,22 +231,25 @@ this.scrollToBottom();
     })
   }
 
+
   closeThread() {
     this.sharedService.initializeThread('close');
     this.threadStarts = false;
     localStorage.setItem('threadStarts', JSON.stringify(this.threadStarts));
   }
 
+
   isUser(message: any) {
     return message.from === this.currentUser.id;
   }
+
 
   toogleIconBar() {
     this.isIconBar = !this.isIconBar;
   }
 
+
   toggleMenuBar(index: number) {
-    console.log(index);
     if (this.threadMenuBarIndex === index) {
       this.threadMenuBarIndex = null;
     } else {

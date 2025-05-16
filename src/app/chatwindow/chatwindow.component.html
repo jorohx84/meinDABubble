@@ -135,12 +135,12 @@
 
 
                         </div>
-                        <!--REATCIONS-->
+           
                         <div [ngClass]="{'reactionReverse': isUser(message)}" class="reactions">
                             <button *ngIf="sharedservice.checkLowerWidth(540)"
                                 (click)="sharedservice.toggleMenuBar(index)"><img src="./img/addreaction.svg"
                                     alt=""></button>
-                            <!---->
+                         
                             <div *ngIf="message.reactionLength>0"
                                 (click)="reactionService.findAllReactions(message, currentReciever.id, currentUser.id, 'chat', index)"
                                 class="iconContainer">
@@ -155,7 +155,7 @@
                                 </div>
                             </div>
                         </div>
-                        <!--REATCIONS-->
+                   
                     </div>
                 </div>
                 <div (click)="reactionService.isIconBar=false"
